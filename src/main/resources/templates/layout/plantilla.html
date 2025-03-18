@@ -15,74 +15,60 @@
     </head>
     <body>
         <header th:fragment="header" class="header">
-            <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
-                <div class="container">
-                    <a th:href="@{/}" class="navbar-brand">[[#{aplicacion.titulo}]]</a>
-                    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <ul class="navbar-nav">
-                            <li class="nav-item px-2">
-                                <a class="nav-link" th:href="@{/servicios/listado}">[[#{plantilla.servicios}]]</a>
-                            </li>
-                            <li class="nav-item px-2">
-                                <a class="nav-link" th:href="@{/agendarCita/listado}">[[#{plantilla.agendarCita}]]</a>
-                            </li>
-                            <li class="nav-item px-2">
-                                <a class="nav-link" th:href="@{/especialidades/listado}">[[#{plantilla.especialidades}]]</a>
-                            </li>
-                            <li class="nav-item px-2">
-                                <a class="nav-link" th:href="@{/doctores/listado}">[[#{plantilla.doctores}]]</a>
-                            </li>
-                            <li class="nav-item px-2">
-                                <a class="nav-link" th:href="@{/usuario/listado}">[[#{plantilla.usuarios}]]</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Lang</a>
-                                <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li>
-                                        <a class="dropdown-item"  th:href="@{/(lang=es)}">ES</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" th:href="@{/(lang=en)}">EN</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
+            <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+                <a th:href="@{/}" class="navbar-brand">
+                    <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>[[#{aplicacion.titulo}]]</h1>
+                </a>
+                <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto p-4 p-lg-0">
+                        <a th:href="@{/}" class="nav-item nav-link active" style="color: black">Home</a>
+                        <a th:href="@{/}" class="nav-item nav-link" style="color: black">About</a>
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" th:href="@{/servicios/listado}" style="color: black">[[#{plantilla.servicios}]]</a>
+                            <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                                <a th:href="@{/}" class="dropdown-item" style="color: black">Feature</a>
+                                <a th:href="@{/}" class="dropdown-item" style="color: black">Our Doctor</a>
+                                <a th:href="@{/}" class="dropdown-item" style="color: black">Appointment</a>
+                                <a th:href="@{/}" class="dropdown-item" style="color: black">Testimonial</a>
+                                <a th:href="@{/}" class="dropdown-item" style="color: black">404 Page</a>
+                            </div>
+                        </div>
 
-                        <div>
+                        <a th:href="@{/especialidades/listado}" class="nav-item nav-link" style="color: black">[[#{plantilla.especialidades}]]</a>
+                        <a th:href="@{/doctores/listado}" class="nav-item nav-link" style="color: black">[[#{plantilla.doctores}]]</a>
+                        <a th:href="@{/usuario/listado}" class="nav-item nav-link" style="color: black">[[#{plantilla.usuarios}]]</a>
+
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color: black">Lang</a>                            
+                            <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                                <a class="dropdown-item"  th:href="@{/(lang=es)}">ES</a>
+                                <a class="dropdown-item" th:href="@{/(lang=en)}">EN</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
                             <ul class="navbar-nav">
                                 <li class="nav-item text-white my-auto">
                                     <img th:src="@{${session.usuarioImagen}}" alt="your image" height="40" class="rounded-circle"/>
-                                    <span sec:authentication='name'>Santi</span>
-                                    <span> | </span>
-                                    <span sec:authentication='principal.authorities'>Roles</span>
+                                    <span sec:authentication='name' style="color: black">Santi</span>
+                                    <span style="color: black"> | </span>
+                                    <span sec:authentication='principal.authorities' style="color: black">Roles</span>
                                 </li>
                                 <li class="nav-item my-auto">
                                     <form method="post" th:action="@{/logout}">
-                                        <button class="btn btn-dark">
+                                        <button class="btn btn-dark" style="margin-right: 10px">
                                             <i class="fas fa-sign-out-alt"></i>
                                         </button>
                                     </form>
                                 </li>                            
                             </ul>
                         </div>
-
-                    </div>
+                    <a th:href="@{/agendarCita/listado}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
                 </div>
             </nav>
-            <section id="main-header" class="py-2 bg-success text-white">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h1>[[#{plantilla.suTienda}]]</h1>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </header>
         <footer th:fragment="footer" class="bg-info text-white mt-5 p-2">
             <div class="container">
