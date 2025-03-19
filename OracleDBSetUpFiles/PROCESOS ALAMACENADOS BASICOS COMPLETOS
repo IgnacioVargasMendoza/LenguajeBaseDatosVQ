@@ -1,0 +1,1296 @@
+--PROCESOS AL MACENADOS BASICOS COMPLETOS
+CREATE OR REPLACE PROCEDURE Insert_Usuario(
+    p_id_usuario IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_primer_apellido IN VARCHAR2,
+    p_segundo_apellido IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_contrasena IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_USUARIOS_TB (id_usuario, nombre, primer_apellido, segundo_apellido, correo, contrasena, activo)
+    VALUES (p_id_usuario, p_nombre, p_primer_apellido, p_segundo_apellido, p_correo, p_contrasena, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Usuario(
+    p_id_usuario IN NUMBER,
+    p_nombre OUT VARCHAR2,
+    p_primer_apellido OUT VARCHAR2,
+    p_segundo_apellido OUT VARCHAR2,
+    p_correo OUT VARCHAR2,
+    p_contrasena OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre, primer_apellido, segundo_apellido, correo, contrasena, activo
+    INTO p_nombre, p_primer_apellido, p_segundo_apellido, p_correo, p_contrasena, p_activo
+    FROM FIDE_USUARIOS_TB
+    WHERE id_usuario = p_id_usuario;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Usuario(
+    p_id_usuario IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_primer_apellido IN VARCHAR2,
+    p_segundo_apellido IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_contrasena IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_USUARIOS_TB
+    SET nombre = p_nombre,
+    primer_apellido = p_primer_apellido,
+        segundo_apellido = p_segundo_apellido,
+        correo = p_correo,
+        contrasena = p_contrasena,
+        activo = p_activo
+    WHERE id_usuario = p_id_usuario;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Usuario(
+    p_id_usuario IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_USUARIOS_TB
+    WHERE id_usuario = p_id_usuario;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Rol(
+    p_id_rol IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_ROL_TB (id_rol, nombre, activo)
+    VALUES (p_id_rol, p_nombre, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Rol(
+    p_id_rol IN NUMBER,
+    p_nombre OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre, activo
+    INTO p_nombre, p_activo
+    FROM FIDE_ROL_TB
+    WHERE id_rol = p_id_rol;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Rol(
+    p_id_rol IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_ROL_TB
+    SET nombre = p_nombre,
+        activo = p_activo
+    WHERE id_rol = p_id_rol;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Rol(
+    p_id_rol IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_ROL_TB
+    WHERE id_rol = p_id_rol;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_UsuarioRol(
+    p_id_rol IN NUMBER,
+    p_id_usuario IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_USUARIO_ROL_TB (id_rol, id_usuario)
+    VALUES (p_id_rol, p_id_usuario);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_UsuarioRol(
+    p_id_rol IN NUMBER,
+    p_id_usuario IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT * FROM FIDE_USUARIO_ROL_TB
+    WHERE id_rol = p_id_rol AND id_usuario = p_id_usuario;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_UsuarioRol(
+    p_id_rol IN NUMBER,
+    p_id_usuario IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_USUARIO_ROL_TB
+    WHERE id_rol = p_id_rol AND id_usuario = p_id_usuario;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Notificacion(
+    p_id_notificacion IN NUMBER,
+    p_mensaje IN VARCHAR2,
+    p_tipo IN VARCHAR2,
+    p_fecha_envio IN DATE,
+    p_activo IN NUMBER,
+    p_id_usuario IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_NOTIFICACIONES_TB (id_notificacion, mensaje, tipo, fecha_envio, activo, id_usuario)
+    VALUES (p_id_notificacion, p_mensaje, p_tipo, p_fecha_envio, p_activo, p_id_usuario);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Notificacion(
+    p_id_notificacion IN NUMBER,
+    p_mensaje OUT VARCHAR2,
+    p_tipo OUT VARCHAR2,
+    p_fecha_envio OUT DATE,
+    p_activo OUT NUMBER,
+    p_id_usuario OUT NUMBER
+) AS
+BEGIN
+    SELECT mensaje, tipo, fecha_envio, activo, id_usuario
+    INTO p_mensaje, p_tipo, p_fecha_envio, p_activo, p_id_usuario
+    FROM FIDE_NOTIFICACIONES_TB
+    WHERE id_notificacion = p_id_notificacion;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Notificacion(
+    p_id_notificacion IN NUMBER,
+    p_mensaje IN VARCHAR2,
+    p_tipo IN VARCHAR2,
+    p_fecha_envio IN DATE,
+    p_activo IN NUMBER,
+    p_id_usuario IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_NOTIFICACIONES_TB
+    SET mensaje = p_mensaje,
+        tipo = p_tipo,
+        fecha_envio = p_fecha_envio,
+        activo = p_activo,
+        id_usuario = p_id_usuario
+    WHERE id_notificacion = p_id_notificacion;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Notificacion(
+    p_id_notificacion IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_NOTIFICACIONES_TB
+    WHERE id_notificacion = p_id_notificacion;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Doctor(
+    p_id_doctor IN NUMBER,
+    p_telefono IN VARCHAR2,
+    p_numerolicencia IN VARCHAR2,
+    p_id_usuario IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_DOCTORES_TB (id_doctor, telefono, numerolicencia, id_usuario, activo)
+    VALUES (p_id_doctor, p_telefono, p_numerolicencia, p_id_usuario, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Doctor(
+    p_id_doctor IN NUMBER,
+    p_telefono OUT VARCHAR2,
+    p_numerolicencia OUT VARCHAR2,
+    p_id_usuario OUT NUMBER,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT telefono, numerolicencia, id_usuario, activo
+    INTO p_telefono, p_numerolicencia, p_id_usuario, p_activo
+    FROM FIDE_DOCTORES_TB
+    WHERE id_doctor = p_id_doctor;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Doctor(
+    p_id_doctor IN NUMBER,
+    p_telefono IN VARCHAR2,
+    p_numerolicencia IN VARCHAR2,
+    p_id_usuario IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_DOCTORES_TB
+    SET telefono = p_telefono,
+        numerolicencia = p_numerolicencia,
+        id_usuario = p_id_usuario,
+        activo = p_activo
+    WHERE id_doctor = p_id_doctor;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Doctor(
+    p_id_doctor IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_DOCTORES_TB
+    WHERE id_doctor = p_id_doctor;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Paciente(
+    p_id_paciente IN NUMBER,
+    p_fecha_nacimiento IN DATE,
+    p_numero_seguro IN VARCHAR2,
+    p_direccion IN VARCHAR2,
+    p_telefono IN VARCHAR2,
+    p_id_usuario IN NUMBER,
+    p_activo IN NUMBER,
+    p_id_direccion IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_PACIENTES_TB (id_paciente, fecha_nacimiento, numero_seguro, direccion, telefono, id_usuario, activo, id_direccion)
+    VALUES (p_id_paciente, p_fecha_nacimiento, p_numero_seguro, p_direccion, p_telefono, p_id_usuario, p_activo, p_id_direccion);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Paciente(
+    p_id_paciente IN NUMBER,
+    p_fecha_nacimiento OUT DATE,
+    p_numero_seguro OUT VARCHAR2,
+    p_direccion OUT VARCHAR2,
+    p_telefono OUT VARCHAR2,
+    p_id_usuario OUT NUMBER,
+    p_activo OUT NUMBER,
+    p_id_direccion OUT NUMBER
+) AS
+BEGIN
+    SELECT fecha_nacimiento, numero_seguro, direccion, telefono, id_usuario, activo, id_direccion
+    INTO p_fecha_nacimiento, p_numero_seguro, p_direccion, p_telefono, p_id_usuario, p_activo, p_id_direccion
+    FROM FIDE_PACIENTES_TB
+    WHERE id_paciente = p_id_paciente;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Paciente(
+    p_id_paciente IN NUMBER,
+    p_fecha_nacimiento IN DATE,
+    p_numero_seguro IN VARCHAR2,
+    p_direccion IN VARCHAR2,
+    p_telefono IN VARCHAR2,
+    p_id_usuario IN NUMBER,
+    p_activo IN NUMBER,
+    p_id_direccion IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_PACIENTES_TB
+    SET fecha_nacimiento = p_fecha_nacimiento,
+        numero_seguro = p_numero_seguro,
+        direccion = p_direccion,
+        telefono = p_telefono,
+        id_usuario = p_id_usuario,
+        activo = p_activo,
+        id_direccion = p_id_direccion
+    WHERE id_paciente = p_id_paciente;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Paciente(
+    p_id_paciente IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_PACIENTES_TB
+    WHERE id_paciente = p_id_paciente;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Direccion(
+    p_id_direccion IN NUMBER,
+    p_pais IN VARCHAR2,
+    p_canton IN VARCHAR2,
+    p_distrito IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_DIRECCION_TB (id_direccion, pais, canton, distrito, activo)
+    VALUES (p_id_direccion, p_pais, p_canton, p_distrito, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Direccion(
+    p_id_direccion IN NUMBER,
+    p_pais OUT VARCHAR2,
+    p_canton OUT VARCHAR2,
+    p_distrito OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT pais, canton, distrito, activo
+    INTO p_pais, p_canton, p_distrito, p_activo
+    FROM FIDE_DIRECCION_TB
+    WHERE id_direccion = p_id_direccion;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Direccion(
+    p_id_direccion IN NUMBER,
+    p_pais IN VARCHAR2,
+    p_canton IN VARCHAR2,
+    p_distrito IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_DIRECCION_TB
+    SET pais = p_pais,
+        canton = p_canton,
+        distrito = p_distrito,
+        activo = p_activo
+    WHERE id_direccion = p_id_direccion;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Direccion(
+    p_id_direccion IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_DIRECCION_TB
+    WHERE id_direccion = p_id_direccion;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Disponibilidad(
+    p_id_disponibilidad IN NUMBER,
+    p_dia IN VARCHAR2,
+    p_hora_inicio IN DATE,
+    p_hora_fin IN DATE,
+    p_activo IN NUMBER,
+    p_id_doctor IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_DISPONIBILIDAD_TB (id_disponibilidad, dia, hora_inicio, hora_fin, activo, id_doctor)
+    VALUES (p_id_disponibilidad, p_dia, p_hora_inicio, p_hora_fin, p_activo, p_id_doctor);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Disponibilidad(
+    p_id_disponibilidad IN NUMBER,
+    p_dia OUT VARCHAR2,
+    p_hora_inicio OUT DATE,
+    p_hora_fin OUT DATE,
+    p_activo OUT NUMBER,
+    p_id_doctor OUT NUMBER
+) AS
+BEGIN
+    SELECT dia, hora_inicio, hora_fin, activo, id_doctor
+    INTO p_dia, p_hora_inicio, p_hora_fin, p_activo, p_id_doctor
+    FROM FIDE_DISPONIBILIDAD_TB
+    WHERE id_disponibilidad = p_id_disponibilidad;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Disponibilidad(
+    p_id_disponibilidad IN NUMBER,
+    p_dia IN VARCHAR2,
+    p_hora_inicio IN DATE,
+    p_hora_fin IN DATE,
+    p_activo IN NUMBER,
+    p_id_doctor IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_DISPONIBILIDAD_TB
+    SET dia = p_dia,
+        hora_inicio = p_hora_inicio,
+        hora_fin = p_hora_fin,
+        activo = p_activo,
+        id_doctor = p_id_doctor
+    WHERE id_disponibilidad = p_id_disponibilidad;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Disponibilidad(
+    p_id_disponibilidad IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_DISPONIBILIDAD_TB
+    WHERE id_disponibilidad = p_id_disponibilidad;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Especialidad(
+    p_id_especialidad IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_ESPECIALIDADES_TB (id_especialidad, nombre, descripcion, activo)
+    VALUES (p_id_especialidad, p_nombre, p_descripcion, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Especialidad(
+    p_id_especialidad IN NUMBER,
+    p_nombre OUT VARCHAR2,
+    p_descripcion OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre, descripcion, activo
+    INTO p_nombre, p_descripcion, p_activo
+    FROM FIDE_ESPECIALIDADES_TB
+    WHERE id_especialidad = p_id_especialidad;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Especialidad(
+    p_id_especialidad IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_ESPECIALIDADES_TB
+    SET nombre = p_nombre,
+        descripcion = p_descripcion,
+        activo = p_activo
+    WHERE id_especialidad = p_id_especialidad;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Especialidad(
+    p_id_especialidad IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_ESPECIALIDADES_TB
+    WHERE id_especialidad = p_id_especialidad;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_DoctorEspecialidad(
+    p_id_especialidad IN NUMBER,
+    p_id_doctor IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_DOCTORES_ESPECIALIDADES_TB (id_especialidad, id_doctor)
+    VALUES (p_id_especialidad, p_id_doctor);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_DoctorEspecialidad(
+    p_id_especialidad IN NUMBER,
+    p_id_doctor IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT * FROM FIDE_DOCTORES_ESPECIALIDADES_TB
+    WHERE id_especialidad = p_id_especialidad AND id_doctor = p_id_doctor;
+END;
+/
+CREATE OR REPLACE PROCEDURE Update_DoctorEspecialidad(
+    p_id_especialidad IN NUMBER,
+    p_id_doctor IN NUMBER,
+    p_new_id_especialidad IN NUMBER,
+    p_new_id_doctor IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_DOCTORES_ESPECIALIDADES_TB
+    SET id_especialidad = p_new_id_especialidad,
+        id_doctor = p_new_id_doctor
+    WHERE id_especialidad = p_id_especialidad
+      AND id_doctor = p_id_doctor;
+END;
+/
+CREATE OR REPLACE PROCEDURE Delete_DoctorEspecialidad(
+    p_id_especialidad IN NUMBER,
+    p_id_doctor IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_DOCTORES_ESPECIALIDADES_TB
+    WHERE id_especialidad = p_id_especialidad AND id_doctor = p_id_doctor;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Subespecialidad(
+    p_id_subespecialidad IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_id_especialidad IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_SUBESPECIALIDAD_TB (id_subespecialidad, nombre, descripcion, id_especialidad, activo)
+    VALUES (p_id_subespecialidad, p_nombre, p_descripcion, p_id_especialidad, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Subespecialidad(
+    p_id_subespecialidad IN NUMBER,
+    p_nombre OUT VARCHAR2,
+    p_descripcion OUT VARCHAR2,
+    p_id_especialidad OUT NUMBER,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre, descripcion, id_especialidad, activo
+    INTO p_nombre, p_descripcion, p_id_especialidad, p_activo
+    FROM FIDE_SUBESPECIALIDAD_TB
+    WHERE id_subespecialidad = p_id_subespecialidad;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Subespecialidad(
+    p_id_subespecialidad IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_id_especialidad IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_SUBESPECIALIDAD_TB
+    SET nombre = p_nombre,
+        descripcion = p_descripcion,
+        id_especialidad = p_id_especialidad,
+        activo = p_activo
+    WHERE id_subespecialidad = p_id_subespecialidad;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Subespecialidad(
+    p_id_subespecialidad IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_SUBESPECIALIDAD_TB
+    WHERE id_subespecialidad = p_id_subespecialidad;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Servicio(
+    p_id_servicio IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_SERVICIO_TB (id_servicio, nombre, descripcion, activo)
+    VALUES (p_id_servicio, p_nombre, p_descripcion, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Servicio(
+    p_id_servicio IN NUMBER,
+    p_nombre OUT VARCHAR2,
+    p_descripcion OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre, descripcion, activo
+    INTO p_nombre, p_descripcion, p_activo
+    FROM FIDE_SERVICIO_TB
+    WHERE id_servicio = p_id_servicio;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Servicio(
+    p_id_servicio IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_SERVICIO_TB
+    SET nombre = p_nombre,
+        descripcion = p_descripcion,
+        activo = p_activo
+    WHERE id_servicio = p_id_servicio;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Servicio(
+    p_id_servicio IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_SERVICIO_TB
+    WHERE id_servicio = p_id_servicio;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_ServicioEspecialidad(
+    p_id_servicio IN NUMBER,
+    p_id_especialidad IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_SERVICIO_ESPECIALIDAD_TB (id_servicio, id_especialidad)
+    VALUES (p_id_servicio, p_id_especialidad);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_ServicioEspecialidad(
+    p_id_servicio IN NUMBER,
+    p_id_especialidad IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT * FROM FIDE_SERVICIO_ESPECIALIDAD_TB
+    WHERE id_servicio = p_id_servicio AND id_especialidad = p_id_especialidad;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_ServicioEspecialidad(
+    p_id_servicio IN NUMBER,
+    p_id_especialidad IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_SERVICIO_ESPECIALIDAD_TB
+    WHERE id_servicio = p_id_servicio AND id_especialidad = p_id_especialidad;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Procedimiento(
+    p_id_procedimiento IN NUMBER,
+    p_nombre_procedimiento IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_tipo_procedimiento IN VARCHAR2,
+    p_riesgo IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_PROCEDIMIENTOS_TB (id_procedimiento, nombre_procedimiento, DESCRIPTION, tipo_procedimiento, riesgo, activo)
+    VALUES (p_id_procedimiento, p_nombre_procedimiento, p_descripcion, p_tipo_procedimiento, p_riesgo, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Procedimiento(
+    p_id_procedimiento IN NUMBER,
+    p_nombre_procedimiento OUT VARCHAR2,
+    p_descripcion OUT VARCHAR2,
+    p_tipo_procedimiento OUT VARCHAR2,
+    p_riesgo OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre_procedimiento, DESCRIPTION, tipo_procedimiento, riesgo, activo
+    INTO p_nombre_procedimiento, p_descripcion, p_tipo_procedimiento, p_riesgo, p_activo
+    FROM FIDE_PROCEDIMIENTOS_TB
+    WHERE id_procedimiento = p_id_procedimiento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Procedimiento(
+    p_id_procedimiento IN NUMBER,
+    p_nombre_procedimiento IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_tipo_procedimiento IN VARCHAR2,
+    p_riesgo IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_PROCEDIMIENTOS_TB
+    SET nombre_procedimiento = p_nombre_procedimiento,
+        DESCRIPTION  = p_descripcion,
+        tipo_procedimiento = p_tipo_procedimiento,
+        riesgo = p_riesgo,
+        activo = p_activo
+    WHERE id_procedimiento = p_id_procedimiento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Procedimiento(
+    p_id_procedimiento IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_PROCEDIMIENTOS_TB
+    WHERE id_procedimiento = p_id_procedimiento;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Tratamiento(
+    p_id_tratamiento IN NUMBER,
+    p_descripcion IN VARCHAR2,
+    p_fecha_inicio IN DATE,
+    p_fecha_fin IN DATE,
+    p_activo IN NUMBER,
+    p_id_paciente IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_TRATAMIENTOS_TB (id_tratamiento, descripcion, fecha_inicio, fecha_fin, activo, id_paciente)
+    VALUES (p_id_tratamiento, p_descripcion, p_fecha_inicio, p_fecha_fin, p_activo, p_id_paciente);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Tratamiento(
+    p_id_tratamiento IN NUMBER,
+    p_descripcion OUT VARCHAR2,
+    p_fecha_inicio OUT DATE,
+    p_fecha_fin OUT DATE,
+    p_activo OUT NUMBER,
+    p_id_paciente OUT NUMBER
+) AS
+BEGIN
+    SELECT descripcion, fecha_inicio, fecha_fin, activo, id_paciente
+    INTO p_descripcion, p_fecha_inicio, p_fecha_fin, p_activo, p_id_paciente
+    FROM FIDE_TRATAMIENTOS_TB
+    WHERE id_tratamiento = p_id_tratamiento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Tratamiento(
+    p_id_tratamiento IN NUMBER,
+    p_descripcion IN VARCHAR2,
+    p_fecha_inicio IN DATE,
+    p_fecha_fin IN DATE,
+    p_activo IN NUMBER,
+    p_id_paciente IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_TRATAMIENTOS_TB
+    SET descripcion = p_descripcion,
+        fecha_inicio = p_fecha_inicio,
+        fecha_fin = p_fecha_fin,
+        activo = p_activo,
+        id_paciente = p_id_paciente
+    WHERE id_tratamiento = p_id_tratamiento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Tratamiento(
+    p_id_tratamiento IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_TRATAMIENTOS_TB
+    WHERE id_tratamiento = p_id_tratamiento;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_TratamientoProcedimiento(
+    p_id_tratamiento IN NUMBER,
+    p_id_procedimiento IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_TRATAMIENTOS_PROCEDIMIENTOS_TB (id_tratamiento, id_procedimiento)
+    VALUES (p_id_tratamiento, p_id_procedimiento);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_TratamientoProcedimiento(
+    p_id_tratamiento IN NUMBER,
+    p_id_procedimiento IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT * FROM FIDE_TRATAMIENTOS_PROCEDIMIENTOS_TB
+    WHERE id_tratamiento = p_id_tratamiento AND id_procedimiento = p_id_procedimiento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_TratamientoProcedimiento(
+    p_id_tratamiento IN NUMBER,
+    p_id_procedimiento IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_TRATAMIENTOS_PROCEDIMIENTOS_TB
+    WHERE id_tratamiento = p_id_tratamiento AND id_procedimiento = p_id_procedimiento;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Cita(
+    p_id_cita IN NUMBER,
+    p_fecha IN DATE,
+    p_hora_cita IN VARCHAR2,
+    p_id_estado_cita IN NUMBER,
+    p_id_doctor IN NUMBER,
+    p_id_paciente IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_CITAS_TB (id_cita, fecha, hora_cita, id_estado_cita, id_doctor, id_paciente, activo)
+    VALUES (p_id_cita, p_fecha, p_hora_cita, p_id_estado_cita, p_id_doctor, p_id_paciente, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Cita(
+    p_id_cita IN NUMBER,
+    p_fecha OUT DATE,
+    p_hora_cita OUT VARCHAR2,
+    p_id_estado_cita OUT NUMBER,
+    p_id_doctor OUT NUMBER,
+    p_id_paciente OUT NUMBER,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT fecha, hora_cita, id_estado_cita, id_doctor, id_paciente, activo
+    INTO p_fecha, p_hora_cita, p_id_estado_cita, p_id_doctor, p_id_paciente, p_activo
+    FROM FIDE_CITAS_TB
+    WHERE id_cita = p_id_cita;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Cita(
+    p_id_cita IN NUMBER,
+    p_fecha IN DATE,
+    p_hora_cita IN VARCHAR2,
+    p_id_estado_cita IN NUMBER,
+    p_id_doctor IN NUMBER,
+    p_id_paciente IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_CITAS_TB
+    SET fecha = p_fecha,
+        hora_cita = p_hora_cita,
+        id_estado_cita = p_id_estado_cita,
+        id_doctor = p_id_doctor,
+        id_paciente = p_id_paciente,
+        activo = p_activo
+    WHERE id_cita = p_id_cita;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Cita(
+    p_id_cita IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_CITAS_TB
+    WHERE id_cita = p_id_cita;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_CitaTratamiento(
+    p_id_cita IN NUMBER,
+    p_id_tratamiento IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_CITAS_TRATAMIENTOS_TB (id_cita, id_tratamiento)
+    VALUES (p_id_cita, p_id_tratamiento);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_CitaTratamiento(
+    p_id_cita IN NUMBER,
+    p_id_tratamiento IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT * FROM FIDE_CITAS_TRATAMIENTOS_TB
+    WHERE id_cita = p_id_cita AND id_tratamiento = p_id_tratamiento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_CitaTratamiento(
+    p_id_cita IN NUMBER,
+    p_id_tratamiento IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_CITAS_TRATAMIENTOS_TB
+    WHERE id_cita = p_id_cita AND id_tratamiento = p_id_tratamiento;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_CitaProcedimiento(
+    p_id_cita IN NUMBER,
+    p_id_procedimiento IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_CITAS_PROCEDIMIENTOS_TB (id_cita, id_procedimiento)
+    VALUES (p_id_cita, p_id_procedimiento);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_CitaProcedimiento(
+    p_id_cita IN NUMBER,
+    p_id_procedimiento IN NUMBER,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT * FROM FIDE_CITAS_PROCEDIMIENTOS_TB
+    WHERE id_cita = p_id_cita AND id_procedimiento = p_id_procedimiento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_CitaProcedimiento(
+    p_id_cita IN NUMBER,
+    p_id_procedimiento IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_CITAS_PROCEDIMIENTOS_TB
+    WHERE id_cita = p_id_cita AND id_procedimiento = p_id_procedimiento;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_EstadoCita(
+    p_id_estado IN NUMBER,
+    p_nombre_estado IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_ESTADOS_CITA_TB (id_estado, nombre_estado, activo)
+    VALUES (p_id_estado, p_nombre_estado, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_EstadoCita(
+    p_id_estado IN NUMBER,
+    p_nombre_estado OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre_estado, activo
+    INTO p_nombre_estado, p_activo
+    FROM FIDE_ESTADOS_CITA_TB
+    WHERE id_estado = p_id_estado;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_EstadoCita(
+    p_id_estado IN NUMBER,
+    p_nombre_estado IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_ESTADOS_CITA_TB
+    SET nombre_estado = p_nombre_estado,
+        activo = p_activo
+    WHERE id_estado = p_id_estado;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_EstadoCita(
+    p_id_estado IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_ESTADOS_CITA_TB
+    WHERE id_estado = p_id_estado;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_CostoCita(
+    p_id_costo IN NUMBER,
+    p_id_cita IN NUMBER,
+    p_monto IN NUMBER,
+    p_descripcion IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_COSTOS_CITA_TB (id_costo, id_cita, monto, descripcion, activo)
+    VALUES (p_id_costo, p_id_cita, p_monto, p_descripcion, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_CostoCita(
+    p_id_costo IN NUMBER,
+    p_id_cita OUT NUMBER,
+    p_monto OUT NUMBER,
+    p_descripcion OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT id_cita, monto, descripcion, activo
+    INTO p_id_cita, p_monto, p_descripcion, p_activo
+    FROM FIDE_COSTOS_CITA_TB
+    WHERE id_costo = p_id_costo;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_CostoCita(
+    p_id_costo IN NUMBER,
+    p_id_cita IN NUMBER,
+    p_monto IN NUMBER,
+    p_descripcion IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_COSTOS_CITA_TB
+    SET id_cita = p_id_cita,
+        monto = p_monto,
+        descripcion = p_descripcion,
+        activo = p_activo
+    WHERE id_costo = p_id_costo;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_CostoCita(
+    p_id_costo IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_COSTOS_CITA_TB
+    WHERE id_costo = p_id_costo;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_HistorialCita(
+    p_id_historial IN NUMBER,
+    p_id_cita IN NUMBER,
+    p_fecha_cambio IN DATE,
+    p_id_estado_anterior IN NUMBER,
+    p_id_estado_nuevo IN NUMBER,
+    p_observaciones IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_HISTORIAL_CITAS_TB (id_historial, id_cita, fecha_cambio, id_estado_anterior, id_estado_nuevo, observaciones, activo)
+    VALUES (p_id_historial, p_id_cita, p_fecha_cambio, p_id_estado_anterior, p_id_estado_nuevo, p_observaciones, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_HistorialCita(
+    p_id_historial IN NUMBER,
+    p_id_cita OUT NUMBER,
+    p_fecha_cambio OUT DATE,
+    p_id_estado_anterior OUT NUMBER,
+    p_id_estado_nuevo OUT NUMBER,
+    p_observaciones OUT VARCHAR2,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT id_cita, fecha_cambio, id_estado_anterior, id_estado_nuevo, observaciones, activo
+    INTO p_id_cita, p_fecha_cambio, p_id_estado_anterior, p_id_estado_nuevo, p_observaciones, p_activo
+    FROM FIDE_HISTORIAL_CITAS_TB
+    WHERE id_historial = p_id_historial;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_HistorialCita(
+    p_id_historial IN NUMBER,
+    p_id_cita IN NUMBER,
+    p_fecha_cambio IN DATE,
+    p_id_estado_anterior IN NUMBER,
+    p_id_estado_nuevo IN NUMBER,
+    p_observaciones IN VARCHAR2,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_HISTORIAL_CITAS_TB
+    SET id_cita = p_id_cita,
+        fecha_cambio = p_fecha_cambio,
+        id_estado_anterior = p_id_estado_anterior,
+        id_estado_nuevo = p_id_estado_nuevo,
+        observaciones = p_observaciones,
+        activo = p_activo
+    WHERE id_historial = p_id_historial;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_HistorialCita(
+    p_id_historial IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_HISTORIAL_CITAS_TB
+    WHERE id_historial = p_id_historial;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Medicamento(
+    p_id_medicamento IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_precio IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_MEDICAMENTOS_TB (id_medicamento, nombre, descripcion, precio, activo)
+    VALUES (p_id_medicamento, p_nombre, p_descripcion, p_precio, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Medicamento(
+    p_id_medicamento IN NUMBER,
+    p_nombre OUT VARCHAR2,
+    p_descripcion OUT VARCHAR2,
+    p_precio OUT NUMBER,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT nombre, descripcion, precio, activo
+    INTO p_nombre, p_descripcion, p_precio, p_activo
+    FROM FIDE_MEDICAMENTOS_TB
+    WHERE id_medicamento = p_id_medicamento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Medicamento(
+    p_id_medicamento IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_descripcion IN VARCHAR2,
+    p_precio IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_MEDICAMENTOS_TB
+    SET nombre = p_nombre,
+        descripcion = p_descripcion,
+        precio = p_precio,
+        activo = p_activo
+    WHERE id_medicamento = p_id_medicamento;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Medicamento(
+    p_id_medicamento IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_MEDICAMENTOS_TB
+    WHERE id_medicamento = p_id_medicamento;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_InventarioMedicamento(
+    p_id_inventario IN NUMBER,
+    p_id_medicamento IN NUMBER,
+    p_cantidad IN NUMBER,
+    p_fecha_ultima_actualizacion IN DATE,
+    p_observaciones IN VARCHAR2
+) AS
+BEGIN
+    INSERT INTO FIDE_INVENTARIO_MEDICAMENTOS_TB (id_inventario, id_medicamento, cantidad, fecha_ultima_actualizacion, observaciones)
+    VALUES (p_id_inventario, p_id_medicamento, p_cantidad, p_fecha_ultima_actualizacion, p_observaciones);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_InventarioMedicamento(
+    p_id_inventario IN NUMBER,
+    p_id_medicamento OUT NUMBER,
+    p_cantidad OUT NUMBER,
+    p_fecha_ultima_actualizacion OUT DATE,
+    p_observaciones OUT VARCHAR2
+) AS
+BEGIN
+    SELECT id_medicamento, cantidad, fecha_ultima_actualizacion, observaciones
+    INTO p_id_medicamento, p_cantidad, p_fecha_ultima_actualizacion, p_observaciones
+    FROM FIDE_INVENTARIO_MEDICAMENTOS_TB
+    WHERE id_inventario = p_id_inventario;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_InventarioMedicamento(
+    p_id_inventario IN NUMBER,
+    p_id_medicamento IN NUMBER,
+    p_cantidad IN NUMBER,
+    p_fecha_ultima_actualizacion IN DATE,
+    p_observaciones IN VARCHAR2
+) AS
+BEGIN
+    UPDATE FIDE_INVENTARIO_MEDICAMENTOS_TB
+    SET id_medicamento = p_id_medicamento,
+        cantidad = p_cantidad,
+        fecha_ultima_actualizacion = p_fecha_ultima_actualizacion,
+        observaciones = p_observaciones
+    WHERE id_inventario = p_id_inventario;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_InventarioMedicamento(
+    p_id_inventario IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_INVENTARIO_MEDICAMENTOS_TB
+    WHERE id_inventario = p_id_inventario;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_Factura(
+    p_id_factura IN NUMBER,
+    p_numero_factura IN VARCHAR2,
+    p_fecha_emision IN DATE,
+    p_fecha_vencimiento IN DATE,
+    p_monto_total IN NUMBER,
+    p_estado_pago IN VARCHAR2,
+    p_id_paciente IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_FACTURAS_TB (id_factura, numero_factura, fecha_emision, fecha_vencimiento, monto_total, estado_pago, id_paciente, activo)
+    VALUES (p_id_factura, p_numero_factura, p_fecha_emision, p_fecha_vencimiento, p_monto_total, p_estado_pago, p_id_paciente, p_activo);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_Factura(
+    p_id_factura IN NUMBER,
+    p_numero_factura OUT VARCHAR2,
+    p_fecha_emision OUT DATE,
+    p_fecha_vencimiento OUT DATE,
+    p_monto_total OUT NUMBER,
+    p_estado_pago OUT VARCHAR2,
+    p_id_paciente OUT NUMBER,
+    p_activo OUT NUMBER
+) AS
+BEGIN
+    SELECT numero_factura, fecha_emision, fecha_vencimiento, monto_total, estado_pago, id_paciente, activo
+    INTO p_numero_factura, p_fecha_emision, p_fecha_vencimiento, p_monto_total, p_estado_pago, p_id_paciente, p_activo
+    FROM FIDE_FACTURAS_TB
+    WHERE id_factura = p_id_factura;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_Factura(
+    p_id_factura IN NUMBER,
+    p_numero_factura IN VARCHAR2,
+    p_fecha_emision IN DATE,
+    p_fecha_vencimiento IN DATE,
+    p_monto_total IN NUMBER,
+    p_estado_pago IN VARCHAR2,
+    p_id_paciente IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_FACTURAS_TB
+    SET numero_factura = p_numero_factura,
+        fecha_emision = p_fecha_emision,
+        fecha_vencimiento = p_fecha_vencimiento,
+        monto_total = p_monto_total,
+        estado_pago = p_estado_pago,
+        id_paciente = p_id_paciente,
+        activo = p_activo
+    WHERE id_factura = p_id_factura;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_Factura(
+    p_id_factura IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_FACTURAS_TB
+    WHERE id_factura = p_id_factura;
+END;
+/
+CREATE OR REPLACE PROCEDURE Insert_FacturaDetalle(
+    p_id_factura IN NUMBER,
+    p_id_costo IN NUMBER,
+    p_monto IN NUMBER,
+    p_descripcion IN VARCHAR2
+) AS
+BEGIN
+    INSERT INTO FIDE_FACTURAS_DETALLE_TB (id_factura, id_costo, monto, descripcion)
+    VALUES (p_id_factura, p_id_costo, p_monto, p_descripcion);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Obtener_FacturaDetalle(
+    p_id_factura IN NUMBER,
+    p_id_costo IN NUMBER,
+    p_monto OUT NUMBER,
+    p_descripcion OUT VARCHAR2
+) AS
+BEGIN
+    SELECT monto, descripcion
+    INTO p_monto, p_descripcion
+    FROM FIDE_FACTURAS_DETALLE_TB
+    WHERE id_factura = p_id_factura AND id_costo = p_id_costo;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Update_FacturaDetalle(
+    p_id_factura IN NUMBER,
+    p_id_costo IN NUMBER,
+    p_monto IN NUMBER,
+    p_descripcion IN VARCHAR2
+) AS
+BEGIN
+    UPDATE FIDE_FACTURAS_DETALLE_TB
+    SET monto = p_monto,
+        descripcion = p_descripcion
+    WHERE id_factura = p_id_factura AND id_costo = p_id_costo;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Delete_FacturaDetalle(
+    p_id_factura IN NUMBER,
+    p_id_costo IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_FACTURAS_DETALLE_TB
+    WHERE id_factura = p_id_factura AND id_costo = p_id_costo;
+END;
+/
