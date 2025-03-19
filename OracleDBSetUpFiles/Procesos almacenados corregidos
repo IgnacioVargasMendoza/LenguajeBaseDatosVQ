@@ -1,0 +1,293 @@
+CREATE OR REPLACE PROCEDURE FIDE_Insertar_Doctor_SP(
+    p_id_doctor FIDE_Doctores_TB.ID_DOCTOR%TYPE,
+    p_telefono FIDE_Doctores_TB.telefono%TYPE,
+    p_numerolicencia FIDE_Doctores_TB.numerolicencia%TYPE,
+    p_id_usuario FIDE_Doctores_TB.id_usuario%TYPE,
+    p_activo FIDE_Doctores_TB.activo%TYPE
+) IS
+BEGIN
+    INSERT INTO FIDE_Doctores_TB (ID_DOCTOR, telefono, numerolicencia, id_usuario, activo)
+    VALUES (p_id_doctor, p_telefono, p_numerolicencia, p_id_usuario, p_activo);
+    COMMIT;
+EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('Error: El doctor ya existe en la base de datos.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema al insertar el doctor, Contacte a TI: ' || SQLERRM);
+END;
+/
+CREATE OR REPLACE PROCEDURE FIDE_Actualizar_Doctor_SP(
+    p_id_doctor FIDE_Doctores_TB.ID_DOCTOR%TYPE,
+    p_telefono FIDE_Doctores_TB.telefono%TYPE,
+    p_numerolicencia FIDE_Doctores_TB.numerolicencia%TYPE,
+    p_id_usuario FIDE_Doctores_TB.id_usuario%TYPE,
+    p_activo FIDE_Doctores_TB.activo%TYPE
+) IS
+BEGIN
+    UPDATE FIDE_Doctores_TB
+    SET telefono = p_telefono,
+        numerolicencia = p_numerolicencia,
+        id_usuario = p_id_usuario,
+        activo = p_activo
+    WHERE ID_DOCTOR = p_id_doctor;
+    COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error: No se encontró el doctor para actualizar.');
+    WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Se encontró más de un doctor con ese ID.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema al actualizar el doctor, contacte a TI ' || SQLERRM);
+END;
+/
+CREATE OR REPLACE PROCEDURE FIDE_Eliminar_Doctor_SP(
+    p_id_doctor FIDE_Doctores_TB.ID_DOCTOR%TYPE
+) IS
+BEGIN
+    UPDATE FIDE_Doctores_TB
+    SET activo = 0
+    WHERE ID_DOCTOR = p_id_doctor;
+    COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error: No se encontró el doctor para eliminar.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema al eliminar el doctor, CONTACTE A TI: ' || SQLERRM);
+END;
+/
+CREATE OR REPLACE PROCEDURE FIDE_Insertar_Especialidad_SP(
+    p_id_especialidad FIDE_Especialidades_TB.id_especialidad%TYPE,
+    p_nombre FIDE_Especialidades_TB.nombre%TYPE,
+    p_activo FIDE_Especialidades_TB.activo%TYPE
+) IS
+BEGIN
+    INSERT INTO FIDE_Especialidades_TB (id_especialidad, nombre, activo)
+    VALUES (p_id_especialidad, p_nombre, p_activo);
+    COMMIT;
+EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ya existe una especialidad con ese ID.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema al insertar, contactar a TI: ' || SQLERRM);
+END;
+
+/
+CREATE OR REPLACE PROCEDURE FIDE_Actualizar_Especialidad_SP(
+    p_id_especialidad FIDE_Especialidades_TB.id_especialidad%TYPE,
+    p_nombre FIDE_Especialidades_TB.nombre%TYPE,
+    p_activo FIDE_Especialidades_TB.activo%TYPE
+) IS
+BEGIN
+    UPDATE FIDE_Especialidades_TB
+    SET nombre = p_nombre,  -- corregido el nombre de la columna
+        activo = p_activo
+    WHERE id_especialidad = p_id_especialidad;
+    COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error: No se encontró la especialidad para actualizar.');
+    WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Se encontró más de una especialidad con ese ID.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema, contactar a TI: ' || SQLERRM);
+END;
+
+/
+CREATE OR REPLACE PROCEDURE FIDE_Eliminar_Especialidad_SP(
+    p_id_especialidad FIDE_Especialidades_TB.id_especialidad%TYPE
+) IS
+BEGIN
+    UPDATE FIDE_Especialidades_TB
+    SET activo = 0
+    WHERE id_especialidad = p_id_especialidad;
+    COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error: No se encontró la especialidad para eliminar.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema, contactar a TI: ' || SQLERRM);
+END;
+/
+CREATE OR REPLACE PROCEDURE FIDE_Insertar_Doctor_Especialidad_SP(
+    p_id_especialidad FIDE_DOCTORES_ESPECIALIDADES_TB.ID_ESPECIALIDAD%TYPE,
+    p_id_doctor FIDE_DOCTORES_ESPECIALIDADES_TB.ID_DOCTOR%TYPE
+) IS
+BEGIN
+    INSERT INTO FIDE_DOCTORES_ESPECIALIDADES_TB (ID_ESPECIALIDAD, ID_DOCTOR)
+    VALUES (p_id_especialidad, p_id_doctor);
+    COMMIT;
+EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ya existe una relación doctor-especialidad con esos IDs.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema, contactar a TI: ' || SQLERRM);
+END;
+
+/
+CREATE OR REPLACE PROCEDURE FIDE_Actualizar_Doctor_Especialidad_SP(
+    p_id_especialidad FIDE_DOCTORES_ESPECIALIDADES_TB.ID_ESPECIALIDAD%TYPE,
+    p_id_doctor FIDE_DOCTORES_ESPECIALIDADES_TB.ID_DOCTOR%TYPE
+) IS
+BEGIN
+    UPDATE FIDE_DOCTORES_ESPECIALIDADES_TB
+    SET ID_ESPECIALIDAD = p_id_especialidad,
+        ID_DOCTOR = p_id_doctor
+    WHERE ID_ESPECIALIDAD = p_id_especialidad AND ID_DOCTOR = p_id_doctor;
+    COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error: No se encontró la relación doctor especialidad para actualizar.');
+    WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Se encontraron más de una relación doctor especialidad con esos IDs.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema, contactar a TI: ' || SQLERRM);
+END;
+/
+CREATE OR REPLACE PROCEDURE FIDE_Eliminar_Doctor_Especialidad_SP(
+    p_id_especialidad FIDE_DOCTORES_ESPECIALIDADES_TB.ID_ESPECIALIDAD%TYPE,
+    p_id_doctor FIDE_DOCTORES_ESPECIALIDADES_TB.ID_DOCTOR%TYPE
+) IS
+BEGIN
+    DELETE FROM FIDE_DOCTORES_ESPECIALIDADES_TB
+    WHERE ID_ESPECIALIDAD = p_id_especialidad AND ID_DOCTOR = p_id_doctor;
+    COMMIT;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Error: No se encontró la relación doctor-especialidad para eliminar.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: Ocurrió un problema, contactar a TI: ' || SQLERRM);
+END;
+/
+
+
+
+
+
+
+
+
+
+
+CREATE OR REPLACE PROCEDURE INSERTAR_DOCTOR (
+    p_telefono IN VARCHAR2,
+    p_numerolicencia IN VARCHAR2,
+    p_id_usuario IN NUMBER,
+    p_activo IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_DOCTORES_TB (telefono, numerolicencia, id_usuario, activo)
+    VALUES (p_telefono, p_numerolicencia, p_id_usuario, p_activo);
+    COMMIT;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_ESPECIALIDAD_DOCTOR (
+    p_id_doctor IN NUMBER,
+    p_id_especialidad IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_Doctores_Especialidades_TB
+    SET id_especialidad = p_id_especialidad
+    WHERE id_doctor = p_id_doctor;
+    COMMIT;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE REGISTRAR_TRATAMIENTO_MEDICAMENTO (
+    p_id_procedimiento IN NUMBER,
+    p_id_tratamiento IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_TRATAMIENTOS_PROCEDIMIENTOS_TB (id_procedimiento, id_tratamiento)
+    VALUES (p_id_procedimiento, p_id_tratamiento);
+    COMMIT;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE OBTENER_DOCTORES_ACTIVOS (
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT id_doctor, telefono, numerolicencia, id_usuario, activo
+    FROM FIDE_Doctores_TB
+    WHERE activo = 1;
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE CAMBIAR_ESTADO_CITA (
+    p_id_cita IN NUMBER,
+    p_id_estado IN NUMBER
+) AS
+BEGIN
+    UPDATE FIDE_CITAS_TB
+    SET id_estado_cita = p_id_estado
+    WHERE id_cita = p_id_cita;
+    COMMIT;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE ELIMINAR_MEDICAMENTO (
+    p_id_medicamento IN NUMBER
+) AS
+BEGIN
+    DELETE FROM FIDE_Medicamentos_TB
+    WHERE id_medicamento = p_id_medicamento;
+    COMMIT;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE INSERTAR_PACIENTE (
+    p_id_paciente IN NUMBER,
+    p_fecha_nacimiento IN DATE,
+    p_numero_seguro IN VARCHAR2,
+    p_direccion IN VARCHAR2,
+    p_telefono IN VARCHAR2,
+    p_id_usuario IN NUMBER,
+    p_activo IN NUMBER,
+    p_id_direccion IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_PACIENTES_TB (id_paciente, fecha_nacimiento, numero_seguro, direccion, telefono, id_usuario, activo, id_direccion)
+    VALUES (p_id_paciente, p_fecha_nacimiento, p_numero_seguro, p_direccion, p_telefono, p_id_usuario, p_activo, p_id_direccion);
+    COMMIT;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE OBTENER_PACIENTES_ACTIVOS (
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT id_paciente, fecha_nacimiento, numero_seguro, direccion, telefono, id_usuario, activo, id_direccion
+    FROM FIDE_Pacientes_TB
+    WHERE activo = 1;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE ENVIAR_NOTIFICACION (
+    p_id_notificacion IN NUMBER,
+    p_mensaje IN VARCHAR2,
+    p_tipo IN VARCHAR2,
+    p_fecha_envio IN DATE,
+    p_activo IN NUMBER,
+    p_id_usuario IN NUMBER
+) AS
+BEGIN
+    INSERT INTO FIDE_Notificaciones_TB (id_notificacion, mensaje, tipo, fecha_envio, activo, id_usuario)
+    VALUES (p_id_notificacion, p_mensaje, p_tipo, p_fecha_envio, p_activo, p_id_usuario);
+    COMMIT;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE OBTENER_USUARIOS_POR_ROL (
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+    SELECT ID_USUARIO, NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO, CORREO, ACTIVO
+    FROM FIDE_USUARIOS_TB;
+END;
