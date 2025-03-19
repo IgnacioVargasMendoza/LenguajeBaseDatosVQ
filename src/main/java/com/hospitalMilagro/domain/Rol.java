@@ -6,8 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
@@ -33,7 +32,7 @@ public class Rol implements Serializable{
         @Column(name = "ACTIVO")
         private short activo;
         
-        @OneToMany
-        @JoinColumn(name = "ID_ROL")
-        private List<UsuarioRol> usuarioRol;
+        @ManyToMany(mappedBy = "roles")
+        private List<Usuario> usuarios;
+        
 }

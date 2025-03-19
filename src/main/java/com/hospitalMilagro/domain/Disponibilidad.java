@@ -6,6 +6,7 @@ package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
@@ -29,11 +30,11 @@ public class Disponibilidad implements Serializable {
 
     @Column(name = "HORA_INICIO")
     @Temporal(TemporalType.TIME)
-    private java.util.Date horaInicio;
+    private Date horaInicio;
 
     @Column(name = "HORA_FIN")
     @Temporal(TemporalType.TIME)
-    private java.util.Date horaFin;
+    private Date horaFin;
 
     @ManyToOne
     @JoinColumn(name = "ACTIVO", nullable = false)

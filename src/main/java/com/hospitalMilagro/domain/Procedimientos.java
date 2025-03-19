@@ -6,12 +6,14 @@ package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import lombok.Data;
 
 /**
  *
  * @author tanyr
  */
 @Entity
+@Data
 @Table(name = "FIDE_PROCEDIMIENTOS_TB")
 public class Procedimientos implements Serializable {
 

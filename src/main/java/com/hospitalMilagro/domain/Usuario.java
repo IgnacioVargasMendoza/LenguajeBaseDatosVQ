@@ -7,7 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
@@ -41,12 +42,14 @@ public class Usuario implements Serializable {
     private String contrasena;
     @Column(name = "ACTIVO")
     private byte activo;
-    @Column(name = "ID_ROL")
-    private short id_rol;
     
     //Relacion con tabla intermedia de UsuarioRol: muchos usuarios pueden tener un mismo rol
-    @OneToMany
-    @JoinColumn(name ="ID_USUARIO", nullable = false)
-    private List<UsuarioRol> usuarioRol;
+    @ManyToMany
+    @JoinTable(
+            name ="FIDE_USUARIO_ROL_TB",
+            joinColumns = @JoinColumn(name="ID_USUARIO"),
+            inverseJoinColumns = @JoinColumn(name="ID_ROL")            
+    )
+    private List<Rol> roles;
     
 }
