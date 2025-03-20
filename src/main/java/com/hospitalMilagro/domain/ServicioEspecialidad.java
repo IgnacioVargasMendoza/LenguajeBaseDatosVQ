@@ -1,9 +1,7 @@
 package com.hospitalMilagro.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.Data;
 
 /**
@@ -13,13 +11,17 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "FIDE_SERVICIO_ESPECIALIDAD_TB")
-public class ServicioEspecialidad {
+public class ServicioEspecialidad implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @Id
     @ManyToOne
     @JoinColumn(name = "ID_SERVICIO", nullable = false)
     private Servicio servicio;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "ID_ESPECIALIDAD", nullable = false)
-    private Especialidades especialidad;
+    private Especialidad especialidad;
 }

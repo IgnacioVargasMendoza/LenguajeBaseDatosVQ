@@ -1,9 +1,7 @@
 package com.hospitalMilagro.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.Data;
 
 /**
@@ -12,16 +10,18 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "FIDE_CITAS_TRATAMIENTOS_TB")
-public class CitaTratamiento {
+@Table(name = "FIDE_CITA_TRATAMIENTO_TB")
+public class CitaTratamiento implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @Id
     @ManyToOne
     @JoinColumn(name = "ID_CITA", nullable = false)
     private Citas cita;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "ID_TRATAMIENTO", nullable = false)
     private Tratamientos tratamiento;
 }
-
-

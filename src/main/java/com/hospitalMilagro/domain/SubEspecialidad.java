@@ -1,17 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.hospitalMilagro.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.Data;
 
 /**
@@ -21,26 +11,25 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "FIDE_SUBESPECIALIDAD_TB")
+public class SubEspecialidad implements Serializable {
 
-public class SubEspecialidad {
-    
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_SUBESPECIALIDAD", nullable = false)
-    private Long idSubespecialidad;
+    private Long idSubEspecialidad;
 
-    @Column(name = "NOMBRE", nullable = false, length = 50)
+    @Column(name = "NOMBRE", length = 50, nullable = false)
     private String nombre;
 
-    @Column(name = "DESCRIPCION", length = 2000)
+    @Column(name = "DESCRIPCION", length = 5000, nullable = true)
     private String descripcion;
-
-    @Column(name = "ACTIVO", nullable = false)
-    private Short activo;
 
     @ManyToOne
     @JoinColumn(name = "ID_ESPECIALIDAD", nullable = false)
     private Especialidad especialidad;
+
+    @Column(name = "ACTIVO", nullable = false)
+    private Short activo;
 }
-    

@@ -1,33 +1,32 @@
 package com.hospitalMilagro.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.Data;
 
 /**
  *
  * @author tanyr
  */
-
 @Data
 @Entity
-@Table(name = "FIDE_FACTURAS_DETALLE_TB")
-public class FacturaDetalle {
+@Table(name = "FIDE_FACTURA_DETALLE_TB")
+public class FacturaDetalle implements Serializable {
 
-    @Column(name = "MONTO", nullable = false)
-    private Double monto;
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "DESCRIPCION", length = 2000)
-    private String descripcion;
-
-    @ManyToOne
-    @JoinColumn(name = "ID_FACTURA", nullable = false)
-    private Factura factura;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_FACTURA", nullable = false)
+    private Long idFactura;
 
     @ManyToOne
     @JoinColumn(name = "ID_COSTO", nullable = false)
-    private Costo costoCita;
+    private Costo costo;
+
+    @Column(name = "MONTO", precision = 10, scale = 2, nullable = false)
+    private Double monto;
+
+    @Column(name = "DESCRIPCION", length = 2000, nullable = true)
+    private String descripcion;
 }

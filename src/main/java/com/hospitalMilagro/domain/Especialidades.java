@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
@@ -24,10 +20,12 @@ public class Especialidades implements Serializable {
     @Column(name = "ID_ESPECIALIDAD", nullable = false)
     private Long idEspecialidad;
 
-    @Column(name = "NOMBRE_ESPECIALIDAD", length = 50, nullable = false)
-    private String nombreEspecialidad;
+    @Column(name = "NOMBRE", length = 50, nullable = false)
+    private String nombre;
+
+    @Column(name = "DESCRIPCION", length = 5000)
+    private String descripcion;
 
     @Column(name = "ACTIVO", nullable = false)
     private Short activo;
-
 }
