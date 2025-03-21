@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
@@ -21,23 +17,34 @@ public class Tratamientos implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_TRATAMIENTO", nullable = false)
+    @Column(name = "ID_TRATAMIENTO", 
+            nullable = false)
     private Long idTratamiento;
 
-    @Column(name = "NOMBRE_TRATAMIENTO", nullable = false, length = 20)
+    @Column(name = "NOMBRE_TRATAMIENTO", 
+            nullable = false, 
+            length = 20)
     private String nombreTratamiento;
 
-    @Column(name = "DESCRIPTION", nullable = false, length = 1000)
+    @Column(name = "DESCRIPTION", 
+            nullable = false, 
+            length = 1000)
     private String description;
 
-    @Column(name = "COSTO", nullable = false, precision = 10, scale = 2)
+    @Column(name = "COSTO", 
+            nullable = false, 
+            precision = 10, 
+            scale = 2)
     private Double costo;
 
-    @Column(name = "ACTIVO", nullable = false, precision = 1)
+    @Column(name = "ACTIVO", 
+            nullable = false, 
+            precision = 1)
     private Integer activo;
 
     @ManyToOne
-    @JoinColumn(name = "ID_INVENTARIO", nullable = false)
-    private InventarioMedicamentos inventario;
+    @JoinColumn(name = "ID_PACIENTE", 
+            nullable = false)
+    private Paciente paciente;
 
 }

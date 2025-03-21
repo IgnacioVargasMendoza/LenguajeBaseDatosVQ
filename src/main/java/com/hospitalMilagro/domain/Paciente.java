@@ -3,6 +3,7 @@ package com.hospitalMilagro.domain;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -58,5 +59,10 @@ public class Paciente implements Serializable {
             insertable=true,
             updatable=true)
     private Direccion direccion;
+    
+    //--
+    @OneToMany(mappedBy = "paciente")
+    private List<Tratamientos> tratamientos;
+    
 
 }
