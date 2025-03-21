@@ -5,54 +5,65 @@
         <meta charset="UTF-8">
     </head>
     <body>
-        <section th:fragment="agendarCita">
-            <div class="container mt-5">
-                <h2 class="text-center mb-4">Agendar una Cita Médica</h2>
-                <form>
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre del Paciente</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre" required>
-                    </div>
+        <section th:fragment="listadoCitas">
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Correo Electrónico</label>
-                        <input type="email" class="form-control" id="email" placeholder="ejemplo@correo.com" required>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[#{cita.listado}]]</h4>
+                            </div>
+                            <div th:if="${citas != null and !citas.empty}">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>[[#{cita.nombrePaciente}]]</th>
+                                            <th>[[#{cita.emailPaciente}]]</th>
+                                            <th>[[#{cita.fechaHora}]]</th>
+                                            <th>[[#{cita.motivo}]]</th>
+                                            <th>[[#{cita.medico}]]</th>
+                                            <th>[[#{cita.activa}]]</th>
+                                            <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="c : ${citas}">
+                                            <td>[[${c.idCita}]]</td>
+                                            <td>[[${c.nombrePaciente}]]</td>
+                                            <td>[[${c.emailPaciente}]]</td>
+                                            <td>[[${c.fechaHora}]]</td>
+                                            <td>[[${c.motivo}]]</td>
+                                            <td>[[${c.medico.nombre}]]</td>
+                                            <td th:text="${c.activa} ? 'Activa' : 'Inactiva'" />
+                                            <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                                <a th:href="@{/cita/eliminar/}+${c.idCita}"
+                                                   class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a>
+                                                <a th:href="@{/cita/modificar/}+${c.idCita}"
+                                                   class="btn btn-success">
+                                                    <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${citas == null or citas.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="telefono" class="form-label">Teléfono</label>
-                        <input type="tel" class="form-control" id="telefono" placeholder="Ingrese su teléfono" required>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-success text-white mb-3">
+                            <div class="card-body">
+                                <h3>[[#{cita.total}]]</h3>
+                                <h4 class="fs-2"><i class="fas fa-calendar"></i> [[${totalCitas}]]</h4>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="fecha" class="form-label">Fecha de la Cita</label>
-                        <input type="date" class="form-control" id="fecha" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="hora" class="form-label">Hora de la Cita</label>
-                        <input type="time" class="form-control" id="hora" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="motivo" class="form-label">Motivo de la Consulta</label>
-                        <textarea class="form-control" id="motivo" rows="3" placeholder="Describa el motivo de la consulta" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="doctor" class="form-label">Seleccione un Médico</label>
-                        <select class="form-select" id="doctor" required>
-                            <option selected disabled>Seleccione un médico</option>
-                            <option value="Dr. Pérez">Dr. Pérez - Cardiología</option>
-                            <option value="Dra. Gómez">Dra. Gómez - Pediatría</option>
-                            <option value="Dr. Ramírez">Dr. Ramírez - Dermatología</option>
-                        </select>
-                    </div>
-
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Agendar Cita</button>
-                    </div>
-                </form>
-            </div>      
+                </div>
+            </div>
         </section>
 
     </body>
