@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.hospitalMilagro.domain;
 
 import jakarta.persistence.CascadeType;
@@ -11,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
@@ -41,8 +38,9 @@ public class Especialidad {
     private Short activo;
 
     // Relación con DoctorEspecialidad (muchos a muchos con Doctor)
-    @OneToMany(mappedBy = "especialidad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<DoctoresEspecialidades> doctores;
+    @ManyToMany(mappedBy = "especialidades", 
+            cascade = CascadeType.ALL)
+    private List<Doctores> doctores;
 
     // Relación con ServicioEspecialidad (muchos a muchos con Servicio)
     @OneToMany(mappedBy = "especialidad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

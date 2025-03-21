@@ -22,22 +22,22 @@ public class Disponibilidad implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_DISPONIBILIDAD", nullable = false)
+    @Column(name = "ID_DISPONIBILIDAD",
+            nullable = false)
     private Long idDisponibilidad;
 
-    @Column(name = "DIA", length = 30, nullable = false)
+    @Column(name = "DIA",
+            length = 30,
+            nullable = false)
     private String dia;
 
     @Column(name = "HORA_INICIO")
-    @Temporal(TemporalType.TIME)
     private Date horaInicio;
 
     @Column(name = "HORA_FIN")
-    @Temporal(TemporalType.TIME)
     private Date horaFin;
 
-    @ManyToOne
-    @JoinColumn(name = "ACTIVO", nullable = false)
+    @Column(name = "ACTIVO")
     private Short activo;
 
     @ManyToOne

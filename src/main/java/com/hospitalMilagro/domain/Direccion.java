@@ -1,4 +1,3 @@
-
 package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
@@ -31,6 +30,6 @@ public class Direccion implements Serializable {
     private String distrito;
 
     @Column(name = "ACTIVO", nullable = false)
-    private Short activo;
-
+    private short activo;
+    
 }

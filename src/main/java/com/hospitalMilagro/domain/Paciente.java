@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
@@ -22,31 +18,45 @@ public class Paciente implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_PACIENTE", nullable = false)
+    @Column(name = "ID_PACIENTE",
+            nullable = false)
     private Long idPaciente;
 
-    @Column(name = "FECHA_NACIMIENTO", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Column(name = "FECHA_NACIMIENTO",
+            nullable = false)
     private Date fechaNacimiento;
 
-    @Column(name = "NUMERO_SEGURO", length = 50)
+    @Column(name = "NUMERO_SEGURO",
+            length = 50)
     private String numeroSeguro;
 
-    @Column(name = "DIRECCION", length = 255, nullable = false)
-    private String direccion;
-
-    @Column(name = "TELEFONO", length = 15, nullable = false)
+    @Column(name = "TELEFONO",
+            length = 15,
+            nullable = false)
     private String telefono;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_USUARIO")
+    @Column(name = "ACTIVO",
+            nullable = false)
+    private short activo;
+    
+    // -- Asociaciones con otras entidades --
+    
+    //Relacion con la tabla usuario 1:1
+    @OneToOne
+    @JoinColumn(
+            name = "ID_USUARIO",
+            referencedColumnName = "ID_USUARIO",
+            insertable = false,
+            updatable = false
+    )
     private Usuario usuario;
 
-    @Column(name = "ACTIVO", nullable = false)
-    private Short activo;
-
-    @ManyToOne
-    @JoinColumn(name = "ID_DIRECCION", nullable = false)
-    private Direccion direccionFK;
+    //--Relacion entre paciente y direccion. N:1 Muchas direcciones pertenecen a un mismo usuario
+    @ManyToOne()
+    @JoinColumn(name = "ID_DIRECCION",
+            referencedColumnName="ID_DIRECCION",
+            insertable=true,
+            updatable=true)
+    private Direccion direccion;
 
 }
