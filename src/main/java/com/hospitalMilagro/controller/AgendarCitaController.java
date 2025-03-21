@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AgendarCitaController {
     @GetMapping("/agendarCita")
     public String agendarCita() {
-        return "agendarCita";
+        return "/agendarCita";
     }
 }

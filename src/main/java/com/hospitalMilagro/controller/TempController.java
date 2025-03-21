@@ -18,6 +18,6 @@ public class TempController {
     
     @GetMapping("/doctor")
     public String doctor() {
-        return "doctor";
+        return "/doctor/listado";
     }
 }
