@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title></title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <!-- 1 nuevo.html fragmento que se utiliza para el registro inicial de un usuario nuevo -->
+        <section th:fragment="nuevo">
+            <div class="row p-2 justify-content-center">
+                
+                <div class="col-md-3">
+                    <a href="/login" class="btn btn-primary">
+                        <i class="fas fa-arrow-left">[[#{accion.regresar}]]</i>
+                    </a>
+                </div>
+                
+                <div class="row p-2 justify-content-center">
+                    <div class="col-md-3">
+                        <form method="POST"
+                              th:action="@{/registro/crear}" 
+                              th:object="${FIDE_USUARIOS_TB}"
+                              class="was-validated">                          
+                            <div class="card">
+                                <div class="card-header bg-primary text-center text-white">
+                                    <h4>[[#{usuario.agregar}]]</h4>
+                                </div>
+                                <div class="card-body">
+
+
+                                    <div class="form-group mb-3">
+                                        <label>[[#{usuario.nombre}]]</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               name="nombre"
+                                               maxlength="20"
+                                               required="true">
+                                               <!--th:field="*{nombre}">-->
+                                               
+                                               
+                                               
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label>[[#{usuario.primerApellido}]]</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               name="apellidos"
+                                               maxlength="30"
+                                               required="true">
+                                               <!--th:field="*{primerApellido}"-->
+                                               
+                                    </div>
+                                    
+                                    <div class="form-group mb-3">
+                                        <label>[[#{usuario.segundoApellido}]]</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               name="apellidos" 
+                                               maxlength="30"
+                                               required="true">
+                                               <!--th:field="*{segundoApellido}"-->
+                                               
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label>[[#{usuario.correo}]]</label>
+                                        <input type="email" 
+                                               class="form-control" 
+                                               name="correo" 
+                                               maxlength="40"
+                                               required="true">
+                                               <!--th:field="*{correo}"-->
+                                               
+                                    </div>
+                                    
+                                    <div class="form-group mb-3">
+                                        <label>[[#{usuario.password}]]</label>
+                                        <input type="password" 
+                                               class="form-control" 
+                                               name="correo" 
+                                               maxlength="40"
+                                               required="true"> 
+                                            <!--th:field="*{contrasena}"-->
+                                    </div>
+
+                                </div>
+                                <div class="card-footer text-center text-white">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-envelope"></i> [[#{usuario.activacion}]]
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 2 salida.html fragmento que se utiliza para mostrar mensajes al usuario -->
+        <section th:fragment="salida">
+            <div class="row p-5 justify-content-center">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header bg-primary text-center">
+                            <h4>[[${titulo}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>[[${mensaje}]]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 3 activa.html fragmento que se utiliza para terminar el registro de un nuevom usuario -->
+        <section th:fragment="activa">
+            <div class="row p-2 justify-content-center">
+                <div class="col-md-3">
+                    <form method="POST"
+                          th:action="@{/registro/habilitar}" 
+                          th:object="${usuario}"
+                          enctype="mulipart/form-data"
+                          class="was-validated"> 
+                        <input type="hidden" name="idUsuario" th:field="*{idUsuario}"/>
+                        <div class="card">
+                            <div class="card-header bg-primary text-center text-white">
+                                <h4>[[#{registro.activar}]]</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group mb-3">
+                                    <label>[[#{usuario.username}]]</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           name="username" 
+                                           <!--th:field="*{username}"-->
+                                           maxlength="20"
+                                           required="true">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label>[[#{usuario.nombre}]]</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           name="nombre" 
+                                           <!--th:field="*{nombre}"-->
+                                           maxlength="20"
+                                           required="true">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label>[[#{usuario.apellidos}]]</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           name="apellidos" 
+                                           <!--th:field="*{apellidos}"-->
+                                           maxlength="30"
+                                           required="true">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label>[[#{usuario.correo}]]</label>
+                                    <input type="email" 
+                                           class="form-control" 
+                                           name="correo" 
+                                           <!--th:field="*{correo}"-->
+                                           maxlength="40"
+                                           required="true">
+                                </div>
+
+
+
+                                <div class="form-group mb-3">
+                                    <label>[[#{usuario.telefono}]]</label>
+                                    <input type="tel" 
+                                           class="form-control" 
+                                           name="telefono" 
+                                           <!--th:field="*{telefono}"-->
+                                           maxlength="15">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label>[[#{usuario.password}]]</label>
+                                    <input type="password" 
+                                           class="form-control" 
+                                           name="password" 
+                                           <!--th:field="*{password}"-->
+                                           maxlength="15"
+                                           required="true">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label>[[#{usuario.imagen}]]</label>
+                                    <input class="form-control" type="file" name="imagenFile"
+                                           onchange="readURL(this);" />
+                                    <img id="blah" th:src="@{${usuario.rutaImagen}}" alt="your image" height="200"/>
+                                </div>
+
+
+
+                            </div>
+                            <div class="card-footer text-center text-white">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-user-plus"></i> [[#{usuario.activacion}]]
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </body>
+</html>

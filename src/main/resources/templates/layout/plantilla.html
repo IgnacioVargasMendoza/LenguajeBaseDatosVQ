@@ -70,6 +70,63 @@
                 </div>
             </nav>
         </header>
+        
+        //CAROUSEL CONTAINER
+        <section th:fragment="carousel">
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" style="text-align: center">
+                        <img src="/img/carousel-1.jpg" height="500px"  alt="...">
+                    </div>
+                    <div class="carousel-item" style="text-align: center">
+                        <img src="/img/carousel-2.jpg" height="500px"  alt="...">
+                    </div>
+                    <div class="carousel-item" style="text-align: center">
+                        <img src="/img/carousel-3.jpg" height="500px"  alt="...">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </section>
+        
+        //INFO CONTAINER
+        <section th:fragment="header-info">
+            <div class="container-fluid header bg-primary p-0 mb-5">
+                <div class="row g-0 align-items-center flex-column-reverse flex-lg-row">
+                    <div class="col-lg-6 p-5 wow fadeIn" data-wow-delay="0.1s" style="margin: auto">
+                        <h1 class="display-4 text-white mb-5" style="text-align: center;">[[#{plantilla.header}]]</h1>
+                        <div class="row g-4">
+                            <div class="col-sm-4">
+                                <div class="border-start border-light ps-4">
+                                    <h2 class="text-white mb-1" data-toggle="counter-up">123</h2>
+                                    <p class="text-light mb-0">Expert Doctors</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="border-start border-light ps-4">
+                                    <h2 class="text-white mb-1" data-toggle="counter-up">1234</h2>
+                                    <p class="text-light mb-0">Medical Stuff</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="border-start border-light ps-4">
+                                    <h2 class="text-white mb-1" data-toggle="counter-up">12345</h2>
+                                    <p class="text-light mb-0">Total Patients</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
         <footer th:fragment="footer" class="bg-info text-white mt-5 p-2">
             <div class="container">
                 <div class="col">
