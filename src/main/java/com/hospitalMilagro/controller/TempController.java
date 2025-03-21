@@ -8,16 +8,16 @@ public class TempController {
     
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "/login";
     }
     
    @GetMapping("/usuario")
     public String usuario() {
-        return "usuario";
+        return "/usuario";
     }
     
     @GetMapping("/doctor")
     public String doctor() {
-        return "/doctor/listado";
+        return "/doctor";
     }
 }
