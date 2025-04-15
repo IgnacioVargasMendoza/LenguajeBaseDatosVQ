@@ -2,17 +2,9 @@ package com.hospitalMilagro.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.List;
 import lombok.Data;
 
 /**
@@ -52,24 +44,5 @@ public class Usuario implements Serializable {
     private String accion;
     @Column(name = "ACTIVO")
     private byte activo;
-
-    // -- Asociasiones con otras Entidades --
-    //Relacion con tabla intermedia de UsuarioRol: muchos usuarios pueden tener un mismo rol
-    @ManyToMany
-    @JoinTable(
-            name = "FIDE_USUARIO_ROL_TB",
-            joinColumns = @JoinColumn(name = "ID_USUARIO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_ROL")
-    )
-    private List<Rol> roles;
-
-    @OneToOne(mappedBy = "usuario")
-    private Paciente paciente;
-
-    @OneToOne(mappedBy = "usuario")
-    private Doctores doctor;
-    
-    @OneToMany(mappedBy = "usuario")
-    private List<Notificaciones> notificaciones;
 
 }

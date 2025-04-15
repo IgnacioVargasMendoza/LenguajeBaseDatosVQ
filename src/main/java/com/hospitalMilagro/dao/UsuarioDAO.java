@@ -23,27 +23,7 @@ public interface UsuarioDAO extends CrudRepository<Usuario, Long> {
         @Param("p_correo") String correo,
         @Param("p_contrasena") String contrasena
     );
-<<<<<<< HEAD
 
-    @Procedure(procedureName = "Obtener_Usuario")
-     Usuario obtenerUsuario(
-        @Param("usuario") Usuario usuario
-    );
-
-    @Procedure(procedureName = "Update_Usuario")
-    void updateUsuario(
-        @Param("p_id_usuario") Long idUsuario,
-        @Param("p_nombre") String nombre,
-        @Param("p_primer_apellido") String primerApellido,
-        @Param("p_segundo_apellido") String segundoApellido,
-        @Param("p_correo") String correo,
-        @Param("p_contrasena") String contrasena,
-        @Param("p_activo") Integer activo
-    );
-
-    @Procedure(procedureName = "Delete_Usuario")
-    void deleteUsuario(@Param("p_id_usuario") Long idUsuario);
-=======
     
 //    @Procedure(procedureName = "Obtener_Usuario")
 //    Usuario obtenerUsuario(@Param("p_id_usuario") Long idUsuario);
@@ -61,6 +41,6 @@ public interface UsuarioDAO extends CrudRepository<Usuario, Long> {
 //
 //    @Procedure(procedureName = "Delete_Usuario")
 //    void deleteUsuario(@Param("p_id_usuario") Long idUsuario);
->>>>>>> eb0ccdcbb09307fed780277f84667e5db88130aa
+
 }
 
