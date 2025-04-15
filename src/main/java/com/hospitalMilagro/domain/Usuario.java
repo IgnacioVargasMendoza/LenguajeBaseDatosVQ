@@ -27,7 +27,6 @@ public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USUARIO")
     private Long idUsuario;
 
@@ -41,6 +40,16 @@ public class Usuario implements Serializable {
     private String correo;
     @Column(name = "CONTRASENA")
     private String contrasena;
+    @Column(name = "CREATION_DATE")
+    private String creationDate;
+    @Column(name = "CREATED_BY")
+    private String createdBy;
+    @Column(name = "LAST_UPDATE")
+    private String lastUpdate;
+    @Column(name = "LAST_UPDATE_BY")
+    private String lastUpdateBy;
+    @Column(name = "ACCION")
+    private String accion;
     @Column(name = "ACTIVO")
     private byte activo;
 
