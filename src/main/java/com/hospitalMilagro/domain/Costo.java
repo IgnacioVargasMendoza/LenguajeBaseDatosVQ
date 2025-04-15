@@ -26,15 +26,11 @@ public class Costo implements Serializable {
     private String description;
 
     @Column(name = "MONTO", nullable = false, precision = 10, scale = 2)
-    private Double monto;
+    private double monto;
 
     @Column(name = "FECHA_REGISTRO", nullable = false)
-    @Temporal(TemporalType.DATE)
     private Date fechaRegistro;
 
-    @Column(name = "ID_PROCEDIMIENTO", nullable = false)
-    private Long idProcedimiento;
-
     @Column(name = "ACTIVO", nullable = false, precision = 1)
-    private Integer activo;
+    private short activo;
 }

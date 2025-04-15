@@ -2,6 +2,7 @@ package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -46,5 +47,26 @@ public class Tratamientos implements Serializable {
     @JoinColumn(name = "ID_PACIENTE", 
             nullable = false)
     private Paciente paciente;
+    
+    @ManyToMany(mappedBy="tratamientos")
+    private List<Citas> citas;
+    
+    @ManyToMany()
+    @JoinTable(
+            name = "FIDE_TRATAMIENTOS_MEDICAMENTOS_TB",
+            joinColumns= @JoinColumn(name="ID_MEDICAMENTO"),
+            inverseJoinColumns = @JoinColumn(name="ID_TRATAMIENTO")
+            
+    )
+    private List<Medicamentos> medicamentos;
+    
+    @ManyToMany()
+    @JoinTable(
+            name = "FIDE_TRATAMIENTOS_PROCEDIMIENTOS_TB",
+            joinColumns= @JoinColumn(name="ID_MEDICAMENTO"),
+            inverseJoinColumns = @JoinColumn(name="ID_PROCEDIMIENTO")
+            
+    )
+    private List<Procedimientos> procedimientos;
 
 }

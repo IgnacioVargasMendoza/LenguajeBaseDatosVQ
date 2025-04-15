@@ -6,6 +6,7 @@ package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -36,9 +37,13 @@ public class Procedimientos implements Serializable {
     @Column(name = "RIESGO", nullable = true, length = 10)
     private String riesgo;
 
+    @ManyToMany(mappedBy="procedimientos")
+    private List<Citas> citas;
+        
+    @ManyToMany(mappedBy="procedimientos")
+    private List<Tratamientos> tratamientos;
+         
     @Column(name = "ACTIVO", nullable = false, precision = 1)
     private Integer activo;
 
-    @Column(name = "ID_TRATAMIENTO", nullable = false)
-    private Long idTratamiento;
 }

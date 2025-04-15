@@ -1,8 +1,9 @@
-
 package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -21,36 +22,56 @@ public class Citas implements Serializable {
     @Column(name = "ID_CITA", nullable = false)
     private Long idCita;
 
-    @Column(name = "FECHA", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private java.util.Date fecha;
+    @Column(name = "FECHA",
+            nullable = false)
+    private Date fecha;
 
-    @Column(name = "HORA_CITA", nullable = false, length = 10)
+    @Column(name = "HORA_CITA",
+            nullable = false,
+            length = 10)
     private String horaCita;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_DISPONIBILIDAD", nullable = false)
-    private Disponibilidad disponibilidad;
-
-    @ManyToOne
-    @JoinColumn(name = "ID_COSTO", nullable = false)
+    @OneToOne(mappedBy = "cita")
     private Costo costo;
+    
+    @ManyToMany
+    @JoinTable(
+            name = "FIDE_CITAS_PROCEDIMIENTOS",
+            joinColumns = @JoinColumn(name = "ID_CITA"),
+            inverseJoinColumns = @JoinColumn(name = "ID_PROCEDIMIENTO")
+    )
+    private List<Procedimientos> procedimientos;
+    
+    @ManyToMany
+    @JoinTable(
+            name = "FIDE_CITAS_TRATAMIENTOS",
+            joinColumns = @JoinColumn(name = "ID_CITA"),
+            inverseJoinColumns = @JoinColumn(name = "ID_TRATAMIENTO")
+    )
+    private List<Tratamientos> tratamientos;
+ 
 
     @ManyToOne
-    @JoinColumn(name = "ID_PACIENTE", nullable = false)
+    @JoinColumn(name = "ID_PACIENTE",
+            nullable = false)
     private Paciente paciente;
-
     @ManyToOne
+<<<<<<< Updated upstream
     @JoinColumn(name = "ID_DOCTOR", nullable = false)
     private Doctores doctor;
 
     @ManyToOne
     @JoinColumn(name = "ID_ESTADO", nullable = false)
+=======
+    @JoinColumn(name = "ID_ESTADO",
+            nullable = false)
+>>>>>>> Stashed changes
     private EstadoCitas estado;
 
     @ManyToOne
-    @JoinColumn(name = "ID_PROCEDIMIENTO", nullable = false)
-    private Procedimientos procedimiento;
+    @JoinColumn(name = "ID_DOCTOR",
+            nullable = false)
+    private Doctores doctor;
 
     @Column(name = "ACTIVO", nullable = false)
     private Short activo;

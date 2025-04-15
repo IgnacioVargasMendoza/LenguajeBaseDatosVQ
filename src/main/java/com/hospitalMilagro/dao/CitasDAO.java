@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package com.hospitalMilagro.dao;
 
 import com.hospitalMilagro.domain.Citas;
@@ -16,7 +12,7 @@ import org.springframework.data.repository.query.Param;
  */
 public interface CitasDAO extends JpaRepository<Citas, Long> {
     
-     @Procedure(procedureName = "Insert_Cita")
+    @Procedure(procedureName = "FIDE_CITAS_TB")
     void insertCita(
         @Param("p_id_cita") Long idCita,
         @Param("p_fecha") Date fecha,

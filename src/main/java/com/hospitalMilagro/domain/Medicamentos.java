@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.hospitalMilagro.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -29,6 +26,9 @@ public class Medicamentos implements Serializable {
 
     @Column(name = "DESCRIPTION", length = 50, nullable = false)
     private String descripcion;
+    
+    @ManyToMany(mappedBy="medicamentos")
+    private List<Tratamientos> tratamientos;
 
     @Column(name = "ACTIVO", nullable = false)
     private Short activo;

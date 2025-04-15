@@ -5,7 +5,19 @@
         <meta charset="UTF-8">
     </head>
     <body>
+<<<<<<< Updated upstream
         <section th:fragment="listadoCitas">
+=======
+        <section th:fragment="agendarCita">
+            <div class="container mt-5">
+                <h2 class="text-center mb-4">Agendar una Cita Médica</h2>
+                <form th:action ="@{/agendarCita/guardar}" th:object="${cita}"
+                      method="POST" class="was-validated">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre del Paciente</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre" required>
+                    </div>
+>>>>>>> Stashed changes
 
             <div class="container">
                 <div class="row">
@@ -54,6 +66,7 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< Updated upstream
                     <div class="col-md-3">
                         <div class="card text-center bg-success text-white mb-3">
                             <div class="card-body">
@@ -64,6 +77,35 @@
                     </div>
                 </div>
             </div>
+=======
+
+
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha de la Cita</label>
+                        <input type="date" class="form-control" id="fecha" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hora" class="form-label">Hora de la Cita</label>
+                        <input type="time" class="form-control" id="hora" name="hora" required>
+                    </div>
+
+                    
+                    <div class="mb-3">
+                        <label for="doctor" class="form-label">Seleccione un Médico</label>
+                        <select class="form-select" id="doctor" name="doctor" required="true">
+                            <option selected disabled>Seleccione un médico</option>
+                            <option value="1">Dr. Pérez - Cardiología</option>
+                            <option value="2">Dra. Gómez - Pediatría</option>
+                            <option value="3">Dr. Ramírez - Dermatología</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Agendar Cita</button>
+                    </div>
+                </form>
+            </div>      
+>>>>>>> Stashed changes
         </section>
 
     </body>

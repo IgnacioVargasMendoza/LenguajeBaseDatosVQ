@@ -1,13 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
-package com.hospitalMilagro.service;
 
-/**
- *
- * @author tanyr
- */
+package com.hospitalMilagro.service;
+import com.hospitalMilagro.domain.Citas;
+
+        
 public interface CitasService {
+    
+    public void insertarCita(Citas cita);
     
 }
