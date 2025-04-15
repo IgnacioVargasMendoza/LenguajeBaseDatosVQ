@@ -14,7 +14,7 @@ public class IndexController {
     @RequestMapping("/")
     public String page(Model model) {
         model.addAttribute("attribute", "value");
-        return "/index";
+        return "/login";
     }
     
 }
