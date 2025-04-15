@@ -35,7 +35,7 @@ public class Usuario implements Serializable {
     private String nombre;
     @Column(name = "PRIMER_APELLIDO")
     private String primerApellido;
-    @Column(name = "SEGUNDO_APPELLIDO")
+    @Column(name = "SEGUNDO_APELLIDO")
     private String segundoApellido;
     @Column(name = "CORREO")
     private String correo;

@@ -45,10 +45,6 @@ public class Citas implements Serializable {
     private Doctores doctor;
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO", nullable = false)
-    private Usuario usuario;
-
-    @ManyToOne
     @JoinColumn(name = "ID_ESTADO", nullable = false)
     private EstadoCitas estado;
 

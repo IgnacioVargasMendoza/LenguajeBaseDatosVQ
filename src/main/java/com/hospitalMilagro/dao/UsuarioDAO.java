@@ -29,14 +29,8 @@ public interface UsuarioDAO extends JpaRepository<Usuario, Long> {
     );
 
     @Procedure(procedureName = "Obtener_Usuario")
-    void obtenerUsuario(
-        @Param("p_id_usuario") Long idUsuario,
-        @Param("p_nombre") String nombre,
-        @Param("p_primer_apellido") String primerApellido,
-        @Param("p_segundo_apellido") String segundoApellido,
-        @Param("p_correo") String correo,
-        @Param("p_contrasena") String contrasena,
-        @Param("p_activo") Integer activo
+     Usuario obtenerUsuario(
+        @Param("usuario") Usuario usuario
     );
 
     @Procedure(procedureName = "Update_Usuario")

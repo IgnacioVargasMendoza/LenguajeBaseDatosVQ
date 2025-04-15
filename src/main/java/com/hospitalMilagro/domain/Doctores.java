@@ -1,6 +1,5 @@
 package com.hospitalMilagro.domain;
 
-import static com.fasterxml.jackson.databind.util.ClassUtil.name;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -32,11 +31,6 @@ public class Doctores implements Serializable {
             nullable = false,
             unique = true)
     private String numeroLicencia;
-
-    @Column(name = "ID_USUARIO",
-            nullable = false, 
-            unique = true)
-    private Long idUsuario;
 
     @Column(name = "ACTIVO", 
             nullable = false)
