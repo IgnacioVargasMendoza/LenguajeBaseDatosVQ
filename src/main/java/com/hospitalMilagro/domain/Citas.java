@@ -57,11 +57,16 @@ public class Citas implements Serializable {
     private Paciente paciente;
     @ManyToOne
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     @JoinColumn(name = "ID_DOCTOR", nullable = false)
     private Doctores doctor;
 
     @ManyToOne
     @JoinColumn(name = "ID_ESTADO", nullable = false)
+=======
+    @JoinColumn(name = "ID_ESTADO",
+            nullable = false)
+>>>>>>> Stashed changes
 =======
     @JoinColumn(name = "ID_ESTADO",
             nullable = false)
