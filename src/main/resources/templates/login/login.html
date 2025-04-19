@@ -6,8 +6,7 @@
     </head>
     <body>
         <header th:replace="~{layout/plantilla :: header}"/>
-        <h1 style="text-align: center">Inicio de Sesion</h1>
-
+            <h1 style="text-align: center">Inicio de Sesion</h1>
         <div class="container" style="justify-content: center;width: 500px">
             <div class="row align-items-center"> 
                     <div class="card">
@@ -33,9 +32,9 @@
                                         <a class="btn btn-primary" th:href="@{/registro/nuevo}" role="button">
                                             <i class="fas fa-user-plus"></i>[[#{accion.registrar}]]
                                         </a>
-                                    <button class="btn" style="background-color: #0d6efd; width: 200px; margin: auto" type="submit">
-                                        <span class="btn" style="color: white"><i class="fas fa-sign-in-alt"></i>[[#{login.login}]]</span>
-                                    </button>
+                                        <a class="btn btn-primary" th:href="@{/index}" role="button">
+                                            <i class="fas fa-user-plus"></i>[[#{login.login}]]
+                                        </a>
                                 </div>
 
                             </form>                            
@@ -45,7 +44,8 @@
                         <h3>[[#{error.login}]]</h3>
                     </div>
                 </div>
-            </div>           
+            </div>
+                   
         <footer th:replace="~{layout/plantilla :: footer}"/>          
     </body>
 </html>
