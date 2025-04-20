@@ -40,8 +40,10 @@ public class Usuario implements Serializable {
     private String lastUpdate;
     @Column(name = "LAST_UPDATE_BY")
     private String lastUpdateBy;
+    
     @Column(name = "ACCION")
     private String accion;
+    
     @Column(name = "ACTIVO")
     private byte activo;
 

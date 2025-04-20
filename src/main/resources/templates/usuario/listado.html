@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
     <head th:replace="~{layout/plantilla :: head}">
-        <title>TechShop</title>
+        <title>TODO supply a title</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <header th:replace="~{layout/plantilla :: header}"></header>
-
-        <section th:replace="~{producto/fragmentos :: botonesAgregar}"></section>
-        <section th:replace="~{producto/fragmentos :: agregarProducto}"></section>
-        <section th:replace="~{producto/fragmentos :: listadoProductos}"></section>
-
-        <footer th:replace="~{layout/plantilla :: footer}"></footer>
-
+        <header th:replace="~{layout/plantilla :: header}"/>
+        
+        <section th:replace="~{usuario/fragmentos :: listadoUsuarios}"></section>
+        
+        <footer th:replace="~{layout/plantilla :: footer}"/> 
     </body>
 </html>

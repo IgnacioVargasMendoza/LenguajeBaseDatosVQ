@@ -199,7 +199,6 @@
             </div>
         </section>
         <section th:fragment="listadoUsuarios">
-
             <div class="container">
                 <div class="row">
                     <div class="col-md-9">
@@ -207,8 +206,8 @@
                             <div class="card-header">
                                 <h4>[[#{usuario.listado}]]</h4>
                             </div>
-                            <div th:if="${productos != null and !productos.empty}">
-                                <table class="table table-striped table-hover">
+                            <div th:if="${listaUsuarios != null and !listaUsuarios.empty}">
+<!--                                <table class="table table-striped table-hover">
                                     <thead class="table-dark">
                                         <tr><th>#</th>
                                             <th>[[#{producto.descripcion}]]</th>
@@ -218,7 +217,7 @@
                                             <th>[[#{producto.categoria}]]</th>
                                             <th>[[#{producto.activo}]]</th>
                                             <th>[[#{producto.rutaImagen}]]</th>
-                                            <th sec:authorize="hasRole('ROLE_ADMIN')"></th>
+                                            <th ></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -245,9 +244,9 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table>-->
                             </div>
-                            <div class="text-center p-2" th:if="${productos == null or productos.empty}">
+                            <div class="text-center p-2" th:if="${listaUsuarios == null or listaUsuarios.empty}">
                                 <span>[[#{lista.vacia}]]</span>
                             </div>
                         </div>
