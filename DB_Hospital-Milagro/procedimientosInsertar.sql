@@ -451,5 +451,24 @@ BEGIN
     );
     COMMIT;
 END FIDE_REGISTRAR_HISTORIAL_CITA_SP;
+/
 
+--CREAR CITA
+CREATE OR REPLACE PROCEDURE FIDE_CREAR_CITA_SP(
+    p_fecha FIDE_CITAS_TB.FECHA%TYPE,
+    p_hora_cita FIDE_CITAS_TB.HORA_CITA%TYPE,
+    p_estado_cita FIDE_CITAS_TB.ID_ESTADO_CITA%TYPE,
+    p_doctor FIDE_CITAS_TB.ID_DOCTOR%TYPE,
+    p_paciente FIDE_CITAS_TB.ID_PACIENTE%TYPE
+    
+) AS
+BEGIN
+    INSERT INTO FIDE_CITAS_TB (
+         FECHA, HORA_CITA, ID_ESTADO_CITA, ID_DOCTOR, ID_PACIENTE
+    ) VALUES (
+    p_fecha, p_hora_cita, p_estado_cita, p_doctor, p_paciente     
+    );
+    COMMIT;
+END FIDE_CREAR_CITA_SP;
+/
 
