@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -41,7 +42,7 @@ public class Usuario implements Serializable {
     @Column(name = "LAST_UPDATE_BY")
     private String lastUpdateBy;
     
-    @Column(name = "ACCION")
+    @Transient
     private String accion;
     
     @Column(name = "ACTIVO")

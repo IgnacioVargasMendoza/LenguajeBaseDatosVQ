@@ -13,15 +13,15 @@ public class AgendarCitaServiceImpl implements AgendarCitaService{
     @Autowired
     private AgendarCitaDAO agendarCitaDao;
     
-    @Override
-    @Transactional
-    public void insertarCita(AgendarCita agendarCita) {
-        agendarCitaDao.insertCita(
-                agendarCita.getFecha(), 
-                agendarCita.getHoraCita(), 
-                agendarCita.getIdEstadoCita(), 
-                agendarCita.getIdDoctor(), 
-                agendarCita.getIdPaciente());
-    }
+//    @Override
+//    @Transactional
+//    public void insertarCita(AgendarCita agendarCita) {
+//        agendarCitaDao.insertCita(
+//                agendarCita.getFecha(), 
+//                agendarCita.getHoraCita(), 
+//                agendarCita.getIdEstadoCita(), 
+//                agendarCita.getIdDoctor(), 
+//                agendarCita.getIdPaciente());
+//    }
     
 }
