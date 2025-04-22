@@ -16,7 +16,7 @@
                                 sec:authorize="hasRole('ROLE_ADMIN')"
                                 class="btn btn-primary btn-block" 
                                 data-bs-toggle="modal" 
-                                data-bs-target="#agregarProducto">
+                                data-bs-target="#agregarUsuario">
                             <i class="fas fa-plus"></i> [[#{usuario.agregar}]]
                         </button>
                     </div>
@@ -25,7 +25,7 @@
         </section>
         <!-- 2 Fragmento para agregar producto, es la ventana modal -->
         <section th:fragment="agregarUsuario">
-            <div id="agregarProducto" 
+            <div id="agregarUsuario" 
                  class="modal fade" 
                  tabindex="-1" 
                  aria-labelledby="exampleModalLabel" 
@@ -33,59 +33,39 @@
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header bg-info text-white">
-                            <h5 class="modal-title">[[#{producto.agregar}]]</h5>
+                            <h5 class="modal-title">[[#{usuario.agregar}]]</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div> 
-                        <form th:action="@{/producto/guardar}"
-                              th:object="${producto}"
+                        <form th:action="@{/usuario/guardar}"
+                              th:object="${usuario}"
                               method="POST" 
                               class="was-validated" 
                               enctype="multipart/form-data">
                             <div class="modal-body">
 
                                 <div class="mb-3">
-                                    <label for="categoria">[[#{producto.categoria}]]</label>
-                                    <select class="form-select" name="categoria.idCategoria">
-                                        <option th:each="c : ${categorias}" th:value="${c.idCategoria}">[[${c.descripcion}]]</option>
-                                    </select>
+                                    <label>[[#{usuario.nombre}]]</label>
+                                    <input type="text" class="form-control" name="nombre" maxlength="20" required="true"/>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="descripcion">[[#{producto.descripcion}]]</label>
-                                    <input type="text" class="form-control" 
-                                           name="descripcion" required="true"/>
+                                <div class="form-group mb-3">
+                                        <label>[[#{usuario.primerApellido}]]</label>
+                                        <input type="text" class="form-control" name="primerApellido" maxlength="30" required="true"/>    
+                                    </div>
+
+                                <div class="form-group mb-3">
+                                        <label>[[#{usuario.segundoApellido}]]</label>
+                                        <input type="text" class="form-control" name="segundoApellido" maxlength="30" required="true"/>      
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="detalle">[[#{producto.detalle}]]</label>
-                                    <textarea class="form-control" name="detalle" rows="3"></textarea>
+                                <div class="form-group mb-3">
+                                        <label>[[#{usuario.correo}]]</label>
+                                        <input type="email" class="form-control" name="correo" maxlength="40" required="true"/>    
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="precio">[[#{producto.precio}]]</label>
-                                    <input type="number" class="form-control" 
-                                           name="precio" required="true"/>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="existencias">[[#{producto.existencias}]]</label>
-                                    <input type="number" class="form-control" 
-                                           name="existencias" required="true"/>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="activo">[[#{producto.activo}]]</label>
-                                    <input class="form-check-input" type="checkbox" 
-                                           name="activo" id="activo"/>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="imagen">[[#{producto.rutaImagen}]]</label>
-                                    <input class="form-control" 
-                                           type="file" 
-                                           name="imagenFile" 
-                                           onchange="readURL(this);"/>
-                                    <img id="blah" src="#" alt="your image" height="200"/>
+                                <div class="form-group mb-3">
+                                        <label>[[#{usuario.password}]]</label>
+                                        <input type="password" class="form-control" name="contrasena" maxlength="40" required="true"/> 
                                 </div>
 
                             </div>

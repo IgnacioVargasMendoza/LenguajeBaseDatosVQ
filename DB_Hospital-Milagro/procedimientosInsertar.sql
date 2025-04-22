@@ -15,6 +15,7 @@ BEGIN
     );
     COMMIT;
 END FIDE_CREAR_USUARIO_SP;
+
 /
 CREATE OR REPLACE PROCEDURE FIDE_REGISTRAR_PAIS_SP(
     p_nombre fide_paises_tb.nombre%TYPE
@@ -46,13 +47,13 @@ END FIDE_REGISTRAR_PROVINCIA_SP;
 
 CREATE OR REPLACE PROCEDURE FIDE_REGISTRAR_CANTON_SP(
     p_nombre fide_cantones_tb.nombre%TYPE,
-    p_id_provincia fide_cantones_tb.id_provincia%TYPE
+    p_id_pais fide_paises_tb.id_pais%TYPE
 ) AS
 BEGIN
     INSERT INTO FIDE_CANTONES_TB (
-         NOMBRE, ID_PROVINCIA
+         NOMBRE, ID_PAIS
     ) VALUES (
-         p_nombre, p_id_provincia
+         p_nombre, p_id_pais
     );
     COMMIT;
 END FIDE_REGISTRAR_CANTON_SP;
@@ -72,16 +73,15 @@ END FIDE_REGISTRAR_DISTRITO_SP;
 /
 
 CREATE OR REPLACE PROCEDURE FIDE_REGISTRAR_DIRECCION_SP(
-    p_id_pais fide_direccion_tb.id_pais%TYPE,
-    p_id_provincia fide_direccion_tb.id_provincia%TYPE,
-    p_id_canton fide_direccion_tb.id_canton%TYPE,
-    p_id_distrito fide_direccion_tb.id_distrito%TYPE
+    p_id_pais fide_paises_tb.id_pais%TYPE,
+    p_id_canton fide_cantones_tb.id_canton%TYPE,
+    p_id_distrito fide_distritos_tb.id_distrito%TYPE
 ) AS
 BEGIN
     INSERT INTO FIDE_DIRECCION_TB (
-  ID_PAIS,ID_PROVINCIA, ID_CANTON, ID_DISTRITO
+  ID_PAIS, ID_CANTON, ID_DISTRITO
     ) VALUES (
-      p_id_pais, p_id_provincia, p_id_canton, p_id_distrito
+      p_id_pais, p_id_canton, p_id_distrito
     );
     COMMIT;
 END FIDE_REGISTRAR_DIRECCION_SP;

@@ -216,23 +216,25 @@ n<!DOCTYPE html>
                                             <th>[[#{doctor.numLicencia}]]</th>
                                             <th>[[#{doctor.idUsuario}]]</th>
                                             <th>[[#{doctor.idDireccion}]]</th>
+                                            <th>[[#{usuario.activo}]]</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="doctor : ${listaDoctores}">
-                                            <th>[[#{doctor.idDoctor}]]</th>
-                                            <th>[[#{doctor.telefono}]]</th>
-                                            <th>[[#{doctor.numLicencia}]]</th>
-                                            <th>[[#{doctor.idUsuario}]]</th>
-                                            <th>[[#{doctor.idDireccion}]]</th>
+                                            <td>[[${doctor.idDoctor}]]</td>
+                                            <td>[[${doctor.telefono}]]</td>
+                                            <td>[[${doctor.numLicencia}]]</td>
+                                            <td>[[${doctor.idUsuario}]]</td>
+                                            <td>[[${doctor.idDireccion}]]</td>
+                                            <td [[${usuario.activo}]]/>
                                             
                                             <td>
-                                                <a th:href="@{/producto/eliminar/}+${p.idProducto}"
+                                                <a th:href="@{/producto/eliminar/}+${doctor.idDoctor}"
 
                                                    class="btn btn-danger">
                                                     <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a>
-                                                <a th:href="@{/producto/modificar/}+${p.idProducto}"
+                                                <a th:href="@{/producto/modificar/}+${doctor.idDoctor}"
 
                                                    class="btn btn-success">
                                                     <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]</a>

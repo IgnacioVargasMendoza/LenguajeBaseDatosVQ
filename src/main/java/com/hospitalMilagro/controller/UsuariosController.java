@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -23,6 +24,18 @@ public class UsuariosController {
         model.addAttribute("listaUsuarios", listaUsuarios);
         
         return "/usuario/listado";
+    }
+    
+    @GetMapping("/nuevo")
+    public String nuevo(Model model, Usuario usuario){
+        model = model.addAttribute("usuario", new Usuario());
+        return "listado/nuevo";
+    }
+    
+    @PostMapping("/guardar")
+    public String nuevo(Usuario usuario){
+        usuarioService.insertarUsuario(usuario);
+        return "redirect:/usuario/listado?titulo=Registro Exitoso&mensaje=Su cuenta ha sido creada correctamente";
     }
     
 }
