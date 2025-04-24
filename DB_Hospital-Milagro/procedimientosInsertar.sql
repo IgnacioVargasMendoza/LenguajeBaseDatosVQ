@@ -391,8 +391,8 @@ END FIDE_CREAR_ROL_SP;
 /
 --FUNCIONA
 CREATE OR REPLACE PROCEDURE FIDE_ASIGNAR_ROL_USUARIO_SP(
-    p_id_rol fide_usuario_rol_tb.id_usuario%TYPE,
-    p_id_usuario fide_usuario_rol_tb.id_rol%TYPE
+    p_id_rol fide_rol_tb.id_rol%TYPE,
+    p_id_usuario fide_usuarios_tb.id_usuario%TYPE
 ) AS
 BEGIN
     INSERT INTO FIDE_USUARIO_ROL_TB (
@@ -471,4 +471,23 @@ BEGIN
     COMMIT;
 END FIDE_CREAR_CITA_SP;
 /
+
+
+
+--PROCEDIMIENTO PARA AUTENTICAR UN USUARIO
+CREATE OR REPLACE PROCEDURE FIDE_AUTENTICAR_USUARIO_SP(
+    p_nombre fide_usuarios_tb.nombre%TYPE,
+    p_contrasena fide_usuarios_tb.contrasena%TYPE,
+    p_usuario_id OUT fide_usuarios_tb.id_usuario%TYPE,
+    p_existe OUT NUMBER
+) AS
+BEGIN
+    SELECT ID_USUARIO INTO p_usuario_id 
+    FROM FIDE_USUARIOS_TB
+    WHERE NOMBRE = p_nombre
+    AND CONTRASENA = p_contrasena
+    AND ACTIVO=1;
+    
+    p_existe:=1;
+END FIDE_AUTENTICAR_USUARIO_SP;
 
