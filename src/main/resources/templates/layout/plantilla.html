@@ -72,7 +72,7 @@
                             <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                         </a>
                     </div>
-                    <a th:href="@{/agendarCita/agendarCita}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
+                    <a th:href="@{/agendarCita/agendarCita}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block border border-white shadow-sm">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
                 </div>
             </nav>
         </header>
@@ -82,13 +82,13 @@
             <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active" style="text-align: center">
-                        <img src="/img/carousel-1.jpg" height="500px"  alt="...">
+                        <img th:src="@{/img/carousel-1.jpg}" height="500px"  alt="...">
                     </div>
                     <div class="carousel-item" style="text-align: center">
-                        <img src="/img/carousel-2.jpg" height="500px"  alt="...">
+                        <img th:src="@{/img/carousel-2.jpg}" height="500px"  alt="...">
                     </div>
                     <div class="carousel-item" style="text-align: center">
-                        <img src="/img/carousel-3.jpg" height="500px"  alt="...">
+                        <img th:src="@{/img/carousel-3.jpg}" height="500px"  alt="...">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">

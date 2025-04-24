@@ -14,12 +14,7 @@ public interface UsuarioService {
     
     public List<Usuario> listaUsuarios();
     
-    /**
-     * Método para autenticar un usuario con su nombre y contraseña
-     * @param nombre El nombre del usuario
-     * @param contrasena La contraseña del usuario
-     * @return El usuario autenticado o null si las credenciales son inválidas
-     */
+    
     public Usuario autenticarUsuario(String nombre, String contrasena);
     
     
