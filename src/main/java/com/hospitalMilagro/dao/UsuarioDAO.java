@@ -2,6 +2,7 @@ package com.hospitalMilagro.dao;
 
 import com.hospitalMilagro.domain.Usuario;
 import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -28,6 +29,18 @@ public interface UsuarioDAO extends CrudRepository<Usuario, Long> {
     @Procedure(procedureName = "FIDE_LISTAR_USUARIOS_SP" , refCursor = true, outputParameterName = "LISTA_USUARIOS")
     List<Usuario> listaUsuarios();
  
-
+    /**
+     * Método para autenticar un usuario mediante procedimiento almacenado
+     * @param nombre Nombre del usuario
+     * @param contrasena Contraseña del usuario
+     */
+    @Procedure(name = "autenticarUsuario", procedureName = "FIDE_AUTENTICAR_USUARIO_SP")
+    void autenticarUsuario(
+        @Param("p_nombre") String nombre,
+        @Param("p_contrasena") String contrasena,
+        @Param("p_usuario_id") Object usuarioId,
+        @Param("p_existe") Object existe
+    );
+    
 }
 

@@ -3,9 +3,14 @@ package com.hospitalMilagro.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 /**
@@ -47,5 +52,12 @@ public class Usuario implements Serializable {
     
     @Column(name = "ACTIVO")
     private byte activo;
-
+    
+    @ManyToMany
+    @JoinTable(
+        name = "FIDE_USUARIO_ROL_TB",
+        joinColumns = @JoinColumn(name = "ID_USUARIO"),
+        inverseJoinColumns = @JoinColumn(name = "ID_ROL")
+    )
+    private Set<Rol> roles = new HashSet<>();
 }

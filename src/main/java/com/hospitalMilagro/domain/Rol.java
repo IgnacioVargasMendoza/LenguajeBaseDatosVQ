@@ -1,4 +1,3 @@
-
 package com.hospitalMilagro.domain;
 
 import jakarta.persistence.Column;
@@ -6,8 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 /**
@@ -29,6 +31,8 @@ public class Rol implements Serializable{
         private String nombreRol;
         @Column(name = "ACTIVO")
         private short activo;
-
+        
+        @ManyToMany(mappedBy = "roles")
+        private Set<Usuario> usuarios = new HashSet<>();
         
 }
