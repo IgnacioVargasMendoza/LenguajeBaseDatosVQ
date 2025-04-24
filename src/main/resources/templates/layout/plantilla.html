@@ -16,7 +16,7 @@
     <body>
         <header th:fragment="header" class="header">
             <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
-                <a th:href="@{/}" class="navbar-brand">
+                <a th:href="@{/index}" class="navbar-brand">
                     <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>[[#{aplicacion.titulo}]]</h1>
                 </a>
                 <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -24,8 +24,8 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto p-4 p-lg-0">
-                        <a th:href="@{/index}" class="nav-item nav-link active" style="color: black">Home</a>
-                        <a th:href="@{/about/about}" class="nav-item nav-link" style="color: black">About</a>
+                        <a th:href="@{/index}" class="nav-item nav-link active" style="color: black">[[#{plantilla.inicio}]]</a>
+                        <a th:href="@{/about/about}" class="nav-item nav-link" style="color: black">[[#{plantilla.acerca}]]</a>
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" th:href="@{/servicios/listado}" style="color: black">[[#{plantilla.servicios}]]</a>
                             <div class="dropdown-menu rounded-0 rounded-bottom m-0">
@@ -49,23 +49,29 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                            <ul class="navbar-nav">
-                                <li class="nav-item text-white my-auto">
-                                    <img th:src="@{${session.usuarioImagen}}" alt="your image" height="40" class="rounded-circle"/>
-                                    <span sec:authentication='name' style="color: black">Santi</span>
-                                    <span style="color: black"> | </span>
-                                    <span sec:authentication='principal.authorities' style="color: black">Roles</span>
-                                </li>
-                                <li class="nav-item my-auto">
-                                    <form method="post" th:action="@{/logout}">
-                                        <button class="btn btn-dark" style="margin-right: 10px">
-                                            <i class="fas fa-sign-out-alt"></i>
-                                        </button>
-                                    </form>
-                                </li>                            
-                            </ul>
-                        </div>
+                    <!-- Información del usuario en sesión -->
+                    <div th:if="${session.usuario != null}">
+                        <ul class="navbar-nav">
+                            <li class="nav-item text-white my-auto d-flex align-items-center">
+                                <i class="fas fa-user-circle fa-2x me-2" style="color: #3498db;"></i>
+                                <div>
+                                    <span style="color: black; font-weight: bold;" th:text="${session.usuario.nombre}">Usuario</span>
+                                    <span style="color: black; font-size: 0.8em; display: block;" th:text="${session.usuario.correo}">correo@ejemplo.com</span>
+                                </div>
+                                <div class="ms-3">
+                                    <a th:href="@{/login/logout}" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-sign-out-alt"></i> Salir
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Botón de login cuando no hay sesión -->
+                    <div th:unless="${session.usuario != null}" class="me-3">
+                        <a th:href="@{/login}" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </a>
+                    </div>
                     <a th:href="@{/agendarCita/agendarCita}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
                 </div>
             </nav>
@@ -127,12 +133,128 @@
             </div>
         </section>
         
-        <footer th:fragment="footer" class="bg-info text-white mt-5 p-2">
-            <div class="container">
-                <div class="col">
-                    <p class="lead text-center">
-                        &COPY [[#{plantilla.derechos}]]
-                    </p>
+        <section th:fragment= "feature">
+            <div class="container-fluid bg-primary overflow-hidden px-lg-0" style="margin: 6rem 0;">
+                <div class="container feature px-lg-0">
+                    <div class="row g-0 mx-lg-0">
+                        <div class="col-lg-6 feature-text py-5 wow fadeIn" data-wow-delay="0.1s">
+                            <div class="p-lg-5 ps-lg-0">
+                                <p class="d-inline-block border rounded-pill text-light py-1 px-4">[[#{plantilla.features.tittle}]]</p>
+                                <h1 class="text-white mb-4">[[#{plantilla.features.subTittle}]]</h1>
+                                <p class="text-white mb-4 pb-2">[[#{plantilla.features.description}]]</p>
+                                <div class="row g-4">
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-light" style="width: 55px; height: 55px;">
+                                                <i class="fa fa-user-md text-primary"></i>
+                                            </div>
+                                            <div class="ms-4">
+                                                <p class="text-white mb-2">[[#{plantilla.features.firstCrTittle}]]</p>
+                                                <h5 class="text-white mb-0">[[#{plantilla.features.firstCr}]]</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-light" style="width: 55px; height: 55px;">
+                                                <i class="fa fa-check text-primary"></i>
+                                            </div>
+                                            <div class="ms-4">
+                                                <p class="text-white mb-2">[[#{plantilla.features.secondCrTittle}]]</p>
+                                                <h5 class="text-white mb-0">[[#{plantilla.features.secondCr}]]</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-light" style="width: 55px; height: 55px;">
+                                                <i class="fa fa-comment-medical text-primary"></i>
+                                            </div>
+                                            <div class="ms-4">
+                                                <p class="text-white mb-2">[[#{plantilla.features.thirdCrTittle}]]</p>
+                                                <h5 class="text-white mb-0">[[#{plantilla.features.thirdCr}]]</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-light" style="width: 55px; height: 55px;">
+                                                <i class="fa fa-headphones text-primary"></i>
+                                            </div>
+                                            <div class="ms-4">
+                                                <p class="text-white mb-2">[[#{plantilla.features.forthCrTittle}]]</p>
+                                                <h5 class="text-white mb-0">[[#{plantilla.features.forthCr}]]</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 pe-lg-0 wow fadeIn" data-wow-delay="0.5s" style="min-height: 400px;">
+                            <div class="position-relative h-100">
+                                <img class="position-absolute img-fluid w-100 h-100" th:src="@{/img/feature.jpg}" style="object-fit: cover;" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        
+        
+        <footer th:fragment="footer">
+            <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+                <div class="container py-5">
+                    <div class="row g-5">
+                        <div class="col-lg-3 col-md-6">
+                            <h5 class="text-light mb-4">Address</h5>
+                            <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+                            <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                            <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                            <div class="d-flex pt-2">
+                                <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-twitter"></i></a>
+                                <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-facebook-f"></i></a>
+                                <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-youtube"></i></a>
+                                <a class="btn btn-outline-light btn-social rounded-circle" href=""><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-light mb-4">Services</h5>
+                        <a class="btn btn-link" href="">Cardiology</a>
+                        <a class="btn btn-link" href="">Pulmonary</a>
+                        <a class="btn btn-link" href="">Neurology</a>
+                        <a class="btn btn-link" href="">Orthopedics</a>
+                        <a class="btn btn-link" href="">Laboratory</a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-light mb-4">Quick Links</h5>
+                        <a class="btn btn-link" href="">About Us</a>
+                        <a class="btn btn-link" href="">Contact Us</a>
+                        <a class="btn btn-link" href="">Our Services</a>
+                        <a class="btn btn-link" href="">Terms & Condition</a>
+                        <a class="btn btn-link" href="">Support</a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-light mb-4">Newsletter</h5>
+                        <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                        <div class="position-relative mx-auto" style="max-width: 400px;">
+                            <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+                            <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="copyright">
+                        <div class="row">
+                            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                                &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
+                            </div>
+                            <div class="col-md-6 text-center text-md-end">
+                                Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>

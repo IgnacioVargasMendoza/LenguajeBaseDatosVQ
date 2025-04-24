@@ -60,6 +60,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                             new SqlOutParameter("p_existe", Types.NUMERIC)
                     );
             
+                    
             // Parámetros de entrada
             Map<String, Object> inParams = new HashMap<>();
             inParams.put("p_nombre", nombre);

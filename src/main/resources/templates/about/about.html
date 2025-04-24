@@ -7,7 +7,27 @@
     </head>
     <body>
         <header th:replace="~{layout/plantilla :: header}"/>
-        <div>ABOUT</div>
+        <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="d-flex flex-column">
+                        <img class="img-fluid rounded w-75 align-self-end" th:src="@{/img/about-1.jpg}" alt="About Image 1">
+                        <img class="img-fluid rounded w-50 bg-white pt-3 pe-3" th:src="@{/img/about-2.jpg}" alt="About Image 2" style="margin-top: -25%;">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    <p class="d-inline-block border rounded-pill py-1 px-4">[[#{plantilla.acerca}]]</p>
+                    <h1 class="mb-4">[[#{plantilla.about.tittle}]]</h1>
+                    <p>[[#{plantilla.about.firstP}]]</p>
+                    <p class="mb-4">[[#{plantilla.about.secondP}]]</p>
+                    <p><i class="far fa-check-circle text-primary me-3"></i>[[#{plantilla.about.opt1}]]</p>
+                    <p><i class="far fa-check-circle text-primary me-3"></i>[[#{plantilla.about.opt2}]]</p>
+                    <p><i class="far fa-check-circle text-primary me-3"></i>[[#{plantilla.about.opt3}]]</p>
+                </div>
+            </div>
+        </div>
+    </div>
         <footer th:replace="~{layout/plantilla :: footer}"/> 
     </body>
 </html>
