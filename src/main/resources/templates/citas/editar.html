@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout/plantilla :: head">
+        <title>Editar Cita</title>
+    </head>
+    <body>
+        <header th:replace="layout/plantilla :: header"/>
+        
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4><i class="fas fa-calendar-alt"></i> Editar Cita</h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/citas/actualizar}" method="POST" th:object="${cita}">
+                        <input type="hidden" th:field="*{idCita}" />
+                        
+                        <div class="form-group mb-3">
+                            <label for="idPaciente" class="form-label">Paciente:</label>
+                            <select class="form-select" th:field="*{idPaciente}" id="idPaciente" required>
+                                <option value="">Seleccione un paciente</option>
+                                <option th:each="paciente : ${pacientes}" 
+                                        th:value="${paciente.idPaciente}" 
+                                        th:text="${paciente.nombreUsuario}"
+                                        th:selected="${paciente.idPaciente == cita.idPaciente}"></option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="idDoctor" class="form-label">Doctor:</label>
+                            <select class="form-select" th:field="*{idDoctor}" id="idDoctor" required>
+                                <option value="">Seleccione un doctor</option>
+                                <option th:each="doctor : ${doctores}" 
+                                        th:value="${doctor.idDoctor}" 
+                                        th:text="${doctor.nombreUsuario}"
+                                        th:selected="${doctor.idDoctor == cita.idDoctor}"></option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="fecha" class="form-label">Fecha:</label>
+                            <input type="date" class="form-control" th:field="*{fecha}" id="fecha" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="horaCita" class="form-label">Hora:</label>
+                            <input type="time" class="form-control" th:field="*{horaCita}" id="horaCita" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="idEstadoCita" class="form-label">Estado:</label>
+                            <select class="form-select" th:field="*{idEstadoCita}" id="idEstadoCita" required>
+                                <option value="">Seleccione un estado</option>
+                                <option th:each="estado : ${estadosCita}" 
+                                        th:value="${estado.idEstadoCita}" 
+                                        th:text="${estado.nombreEstado}"
+                                        th:selected="${estado.idEstadoCita == cita.idEstadoCita}"></option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a th:href="@{/citas/listado}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Actualizar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <footer th:replace="layout/plantilla :: footer"/>
+    </body>
+</html> 

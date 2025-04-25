@@ -10,13 +10,9 @@ PROCEDURE FIDE_CREAR_USUARIO_SP(
 PROCEDURE FIDE_REGISTRAR_PAIS_SP(
     p_nombre fide_paises_tb.nombre%TYPE
 );
-PROCEDURE FIDE_REGISTRAR_PROVINCIA_SP (
-    p_nombre   fide_provincias_tb.nombre%TYPE,
-    p_id_pais  fide_provincias_tb.id_pais%TYPE
-);
+
 PROCEDURE FIDE_REGISTRAR_CANTON_SP(
-    p_nombre fide_cantones_tb.nombre%TYPE,
-    p_id_provincia fide_cantones_tb.id_provincia%TYPE
+    p_nombre fide_cantones_tb.nombre%TYPE
 );
 PROCEDURE FIDE_REGISTRAR_DISTRITO_SP(
     p_nombre fide_distritos_tb.nombre%TYPE,
@@ -24,7 +20,6 @@ PROCEDURE FIDE_REGISTRAR_DISTRITO_SP(
 );
 PROCEDURE FIDE_REGISTRAR_DIRECCION_SP(
     p_id_pais fide_direccion_tb.id_pais%TYPE,
-    p_id_provincia fide_direccion_tb.id_provincia%TYPE,
     p_id_canton fide_direccion_tb.id_canton%TYPE,
     p_id_distrito fide_direccion_tb.id_distrito%TYPE
 );
@@ -118,8 +113,6 @@ PROCEDURE FIDE_GENERAR_FACTURA_SP(
 );
 PROCEDURE FIDE_AGREGAR_DISPONIBILIDAD_SP(
     p_dia fide_disponibilidad_tb.dia%TYPE,
-    p_hora_inicio fide_disponibilidad_tb.hora_inicio%TYPE,
-    p_hora_fin fide_disponibilidad_tb.hora_fin%TYPE,
     p_id_doctor fide_disponibilidad_tb.id_doctor%TYPE
 );
 PROCEDURE FIDE_CREAR_ROL_SP(
@@ -212,15 +205,10 @@ PROCEDURE FIDE_ACTUALIZAR_PAIS_TB_SP(
     p_id_pais fide_paises_tb.id_pais%TYPE,
     p_nombre fide_paises_tb.nombre%TYPE
 );
-PROCEDURE FIDE_ACTUALIZAR_PROVINCIA_TB_SP(
-    p_id_provincia fide_provincias_tb.id_provincia%TYPE,
-    p_nombre   fide_provincias_tb.nombre%TYPE,
-    p_id_pais  fide_provincias_tb.id_pais%TYPE
-);
+
 PROCEDURE FIDE_ACTUALIZAR_CANTON_TB_SP(
     p_id_canton fide_cantones_tb.id_canton%TYPE,
-    p_nombre fide_cantones_tb.nombre%TYPE,
-    p_id_provincia fide_cantones_tb.id_provincia%TYPE
+    p_nombre fide_cantones_tb.nombre%TYPE
 );
 PROCEDURE FIDE_ACTUALIZAR_DISTRITO_TB_SP(
     p_id_distrito fide_distritos_tb.id_distrito%TYPE,
@@ -230,15 +218,12 @@ PROCEDURE FIDE_ACTUALIZAR_DISTRITO_TB_SP(
 PROCEDURE FIDE_ACTUALIZAR_DIRECCION_TB_SP(
     p_id_direccion fide_direccion_tb.id_direccion%TYPE,
     p_id_pais fide_direccion_tb.id_direccion%TYPE,
-    p_id_provincia fide_direccion_tb.id_provincia%TYPE,
     p_id_canton fide_direccion_tb.id_canton%TYPE,
     p_id_distrito fide_direccion_tb.id_distrito%TYPE
 );
 PROCEDURE FIDE_ACTUALIZAR_DISPONIBILIDAD_TB_SP(
     p_id_disponibilidad fide_disponibilidad_tb.id_disponibilidad%TYPE,
     p_dia fide_disponibilidad_tb.dia%TYPE,
-    p_hora_inicio fide_disponibilidad_tb.hora_inicio%TYPE,
-    p_hora_fin fide_disponibilidad_tb.hora_fin%TYPE,
     p_id_doctor fide_disponibilidad_tb.id_doctor%TYPE
 );
 PROCEDURE FIDE_ACTUALIZAR_USUARIO_TB_SP(
@@ -335,9 +320,6 @@ PROCEDURE FIDE_DESACTIVAR_TRATAMIENTO_MEDICAMENTO_TB_SP(
 );
 PROCEDURE FIDE_DESACTIVAR_PAIS_TB_SP(
     p_id_pais fide_paises_tb.id_pais%TYPE
-);
-PROCEDURE FIDE_DESACTIVAR_PROVINCIA_TB_SP(
-    p_id_provincia fide_provincias_tb.id_provincia%TYPE
 );
 PROCEDURE FIDE_DESACTIVAR_CANTON_TB_SP(
     p_id_canton fide_cantones_tb.id_canton%TYPE

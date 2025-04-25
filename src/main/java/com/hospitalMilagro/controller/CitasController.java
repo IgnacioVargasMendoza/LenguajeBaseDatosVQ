@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -176,6 +177,85 @@ public class CitasController {
             redirectAttributes.addFlashAttribute("mensaje", "Error al agendar cita: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipo", "error");
             redirectAttributes.addFlashAttribute("error_detalle", e.toString());
+        }
+        return "redirect:/citas/listado";
+    }
+    
+    @GetMapping("/eliminar/{id}")
+    public String eliminarCita(@PathVariable("id") Long idCita, RedirectAttributes redirectAttributes) {
+        try {
+            logger.info("Eliminando cita con ID: " + idCita);
+            // Inactivar cita usando procedimiento almacenado
+            jdbcTemplate.update("BEGIN FIDE_DESACTIVAR_CITA_TB_SP(?); END;", idCita);
+            
+            redirectAttributes.addFlashAttribute("mensaje", "Cita eliminada con éxito");
+            redirectAttributes.addFlashAttribute("tipo", "success");
+        } catch (Exception e) {
+            logger.severe("Error al eliminar cita: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("mensaje", "Error al eliminar cita: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipo", "error");
+        }
+        return "redirect:/citas/listado";
+    }
+    
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEdicion(@PathVariable("id") Long idCita, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            // Obtener cita por ID
+            AgendarCita cita = null;
+            List<AgendarCita> citas = agendarCitaService.listaCitas();
+            for (AgendarCita c : citas) {
+                if (c.getIdCita().equals(idCita)) {
+                    cita = c;
+                    break;
+                }
+            }
+            
+            if (cita != null) {
+                List<Doctor> doctores = doctorService.listaDoctores();
+                List<Paciente> pacientes = pacienteService.listaPacientes();
+                List<EstadoCita> estadosCita = estadoCitaService.listaEstadosCita();
+                
+                model.addAttribute("cita", cita);
+                model.addAttribute("doctores", doctores);
+                model.addAttribute("pacientes", pacientes);
+                model.addAttribute("estadosCita", estadosCita);
+                model.addAttribute("editMode", true);
+                
+                return "/citas/editar";
+            } else {
+                redirectAttributes.addFlashAttribute("mensaje", "No se encontró la cita con ID: " + idCita);
+                redirectAttributes.addFlashAttribute("tipo", "error");
+                return "redirect:/citas/listado";
+            }
+        } catch (Exception e) {
+            logger.severe("Error al cargar formulario de edición: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("mensaje", "Error al cargar el formulario de edición: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipo", "error");
+            return "redirect:/citas/listado";
+        }
+    }
+    
+    @PostMapping("/actualizar")
+    public String actualizarCita(AgendarCita cita, RedirectAttributes redirectAttributes) {
+        try {
+            logger.info("Actualizando cita con ID: " + cita.getIdCita());
+            
+            // Actualizar cita usando procedimiento almacenado
+            jdbcTemplate.update("BEGIN FIDE_ACTUALIZAR_CITA_TB_SP(?, ?, ?, ?, ?, ?); END;",
+                    cita.getIdCita(),
+                    new SimpleDateFormat("dd/MM/yyyy").format(cita.getFecha()), // Formato esperado por el SP
+                    cita.getHoraCita(),
+                    cita.getIdEstadoCita(),
+                    cita.getIdDoctor(),
+                    cita.getIdPaciente());
+            
+            redirectAttributes.addFlashAttribute("mensaje", "Cita actualizada con éxito");
+            redirectAttributes.addFlashAttribute("tipo", "success");
+        } catch (Exception e) {
+            logger.severe("Error al actualizar cita: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("mensaje", "Error al actualizar cita: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipo", "error");
         }
         return "redirect:/citas/listado";
     }
