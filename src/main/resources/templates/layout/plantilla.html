@@ -248,11 +248,6 @@
                             <div class="dropdown-menu rounded-0 rounded-bottom m-0">
                                 <a th:href="@{/citas/listado}" class="dropdown-item">Agendar Citas</a>
                                 <a th:href="@{/paciente/listado}" class="dropdown-item">Gestión de Pacientes</a>
-                                <a th:href="@{/}" class="dropdown-item">Feature</a>
-                                <a th:href="@{/}" class="dropdown-item">Our Doctor</a>
-                                <a th:href="@{/}" class="dropdown-item">Appointment</a>
-                                <a th:href="@{/}" class="dropdown-item">Testimonial</a>
-                                <a th:href="@{/}" class="dropdown-item">404 Page</a>
                             </div>
                         </div>
 
@@ -301,7 +296,7 @@
                 <div class="hero-content container text-center">
                     <h1 class="display-4 mb-5">[[#{plantilla.header}]]</h1>
                     <div class="mb-4">
-                        <a id="agendarCitaBtn" th:if="${session.usuario != null}" th:href="@{/agendarCita/agendarCita}" class="btn rounded-4 py-4 px-lg-5">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
+                        <a id="agendarCitaBtn" th:if="${session.usuario != null}" th:href="@{/citas/listado}" data-bs-target="#agendarCitaModal" class="btn rounded-4 py-4 px-lg-5">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
                     </div>
                 </div>
             </div>
