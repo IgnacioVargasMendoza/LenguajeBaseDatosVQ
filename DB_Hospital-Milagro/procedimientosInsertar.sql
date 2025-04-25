@@ -1,4 +1,4 @@
-n---FUNCIONA
+---FUNCIONA
 CREATE OR REPLACE PROCEDURE FIDE_CREAR_USUARIO_SP(
     p_nombre FIDE_USUARIOS_TB.NOMBRE%TYPE,
     p_primer_apellido fide_usuarios_tb.primer_apellido%TYPE,
