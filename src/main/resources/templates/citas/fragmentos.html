@@ -45,6 +45,12 @@
                                                     <span th:unless="${cita.activo == 1}" class="badge bg-danger rounded-pill">Inactivo</span>
                                                 </td>
                                                 <td class="text-center">
+                                                    <a href="#" 
+                                                       data-bs-toggle="modal" 
+                                                       th:data-bs-target="'#detallesCitaModal' + ${cita.idCita}"
+                                                       class="btn btn-info">
+                                                        <i class="fas fa-file-invoice"></i> <span class="d-none d-md-inline">Factura</span>
+                                                    </a>
                                                     <a th:href="@{/citas/eliminar/}+${cita.idCita}"
                                                        class="btn btn-danger">
                                                         <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
@@ -129,6 +135,113 @@
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal para detalles de cita (factura) -->
+        <section th:fragment="detallesCita">
+            <div th:each="cita : ${citas}">
+                <div th:id="'detallesCitaModal' + ${cita.idCita}" class="modal fade" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-info text-white">
+                                <h5 class="modal-title">
+                                    <i class="fas fa-file-invoice me-2"></i> Factura de Cita #[[${cita.idCita}]]
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="limpiarBackdrop()"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <!-- Encabezado de la factura -->
+                                    <div class="row mb-4">
+                                        <div class="col-6">
+                                            <h3 class="text-primary mb-3">Hospital El Milagro</h3>
+                                            <p>San José, Costa Rica</p>
+                                            <p>Tel: +506 2222-3333</p>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <h5>Factura de Atención Médica</h5>
+                                            <p>Fecha: [[${#dates.format(cita.fecha, 'dd/MM/yyyy')}]]</p>
+                                            <p>Hora: [[${cita.horaCita}]]</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+                                    
+                                    <!-- Información del paciente y médico -->
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <h5 class="text-primary">Información del Paciente</h5>
+                                            <p><strong>Nombre:</strong> [[${cita.nombrePaciente}]]</p>
+                                            <p><strong>ID:</strong> [[${cita.idPaciente}]]</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <h5 class="text-primary">Información del Doctor</h5>
+                                            <p><strong>Nombre:</strong> [[${cita.nombreDoctor}]]</p>
+                                            <p><strong>ID:</strong> [[${cita.idDoctor}]]</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+                                    
+                                    <!-- Detalles de la cita -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <h5 class="text-primary">Detalles de la Cita</h5>
+                                            <table class="table table-bordered">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Concepto</th>
+                                                        <th class="text-end">Valor</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>ID de Cita</td>
+                                                        <td class="text-end">[[${cita.idCita}]]</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Fecha</td>
+                                                        <td class="text-end">[[${#dates.format(cita.fecha, 'dd/MM/yyyy')}]]</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Hora</td>
+                                                        <td class="text-end">[[${cita.horaCita}]]</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Estado</td>
+                                                        <td class="text-end">[[${cita.nombreEstadoCita}]]</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Activo</td>
+                                                        <td class="text-end">
+                                                            <span th:if="${cita.activo == 1}" class="badge bg-success rounded-pill">Sí</span>
+                                                            <span th:unless="${cita.activo == 1}" class="badge bg-danger rounded-pill">No</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Pie de factura -->
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <p class="text-muted">Gracias por confiar en Hospital El Milagro</p>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="limpiarBackdrop()">Cerrar</button>
+                                <button type="button" class="btn btn-primary" onclick="window.print()">
+                                    <i class="fas fa-print me-1"></i> Imprimir
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
