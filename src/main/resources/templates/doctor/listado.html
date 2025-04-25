@@ -2,13 +2,15 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
     <head th:replace="~{layout/plantilla :: head}">
-        <title>TechShop</title>
+        <title>Hospital el Milagro - Doctores</title>
         <meta charset="UTF-8">
     </head>
     <body>
         <header th:replace="~{layout/plantilla :: header}"></header>
 
-        <section th:replace="~{doctor/fragmentos :: listadoDoctores}"></section>
+        <main>
+            <section th:replace="~{doctor/fragmentos :: listadoDoctores}"></section>
+        </main>
 
         <footer th:replace="~{layout/plantilla :: footer}"></footer>
 

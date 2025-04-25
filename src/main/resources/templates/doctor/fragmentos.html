@@ -199,63 +199,63 @@ n<!DOCTYPE html>
             </div>
         </section>
         <section th:fragment="listadoDoctores">
-
-            <div class="container">
+            <div class="container my-5">
                 <div class="row">
-                    <div class="col-md-9">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>[[#{doctor.listado}]]</h4>
+                    <div class="col-md-10 mx-auto">
+                        <div class="hospital-card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">[[#{doctor.listado}]]</h4>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarDoctor">
+                                    <i class="fas fa-plus me-2"></i> Agregar Doctor
+                                </button>
                             </div>
-                            <div th:if="${listaDoctores != null and !listaDoctores.empty}">
-                                <table class="table table-striped table-hover">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>[[#{doctor.telefono}]]</th>
-                                            <th>[[#{doctor.numLicencia}]]</th>
-                                            <th>[[#{doctor.idUsuario}]]</th>
-                                            <th>[[#{doctor.idDireccion}]]</th>
-                                            <th>[[#{usuario.activo}]]</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="doctor : ${listaDoctores}">
-                                            <td>[[${doctor.idDoctor}]]</td>
-                                            <td>[[${doctor.telefono}]]</td>
-                                            <td>[[${doctor.numLicencia}]]</td>
-                                            <td>[[${doctor.idUsuario}]]</td>
-                                            <td>[[${doctor.idDireccion}]]</td>
-                                            <td [[${usuario.activo}]]/>
-                                            
-                                            <td>
-                                                <a th:href="@{/producto/eliminar/}+${doctor.idDoctor}"
-
-                                                   class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a>
-                                                <a th:href="@{/producto/modificar/}+${doctor.idDoctor}"
-
-                                                   class="btn btn-success">
-                                                    <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="text-center p-2" th:if="${listaDoctores == null or listaDoctores.empty}">
-                                <span>[[#{lista.vacia}]]</span>
+                            <div class="card-body">
+                                <div th:if="${listaDoctores != null and !listaDoctores.empty}">
+                                    <table class="table-hospital">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>[[#{doctor.telefono}]]</th>
+                                                <th>[[#{doctor.numLicencia}]]</th>
+                                                <th>[[#{doctor.idUsuario}]]</th>
+                                                <th>[[#{doctor.idDireccion}]]</th>
+                                                <th>[[#{usuario.activo}]]</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="doctor : ${listaDoctores}">
+                                                <td>[[${doctor.idDoctor}]]</td>
+                                                <td>[[${doctor.telefono}]]</td>
+                                                <td>[[${doctor.numLicencia}]]</td>
+                                                <td>[[${doctor.idUsuario}]]</td>
+                                                <td>[[${doctor.idDireccion}]]</td>
+                                                <td>
+                                                    <span th:if="${doctor.activo}" class="badge bg-success rounded-pill">Activo</span>
+                                                    <span th:unless="${doctor.activo}" class="badge bg-danger rounded-pill">Inactivo</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a th:href="@{/producto/eliminar/}+${doctor.idDoctor}"
+                                                       class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">[[#{accion.eliminar}]]</span>
+                                                    </a>
+                                                    <a th:href="@{/producto/modificar/}+${doctor.idDoctor}"
+                                                       class="btn btn-success">
+                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">[[#{accion.actualizar}]]</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center p-4" th:if="${listaDoctores == null or listaDoctores.empty}">
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i> [[#{lista.vacia}]]
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!--<div class="col-md-3">
-                        <div class="card text-center bg-success text-white mb-3">
-                            <div class="card-body">
-                                <h3>[[#{producto.total}]]</h3>
-                                <h4 class="fs-2"><i class="fas fa-users"></i> [[${totalUsuarios}]]</h4>
-                            </div>
-                        </div>
-                    </div>-->
                 </div>
             </div>
         </section>
