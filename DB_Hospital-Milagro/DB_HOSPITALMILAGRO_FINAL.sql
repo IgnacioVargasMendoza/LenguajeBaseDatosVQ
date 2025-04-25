@@ -3033,72 +3033,6 @@ END transferir_inventario;
 /
 
 
---Procedimiento para consolidar tratamientos por paciente
-
-CREATE OR REPLACE PROCEDURE consolidar_tratamientos_paciente(
-  p_id_paciente NUMBER
-) AS
-  -- Cursor expl?cito para tratamientos activos del paciente
-  CURSOR c_tratamientos IS
-    SELECT t.ID_TRATAMIENTO, t.DESCRIPCION, t.FECHA_INICIO, t.FECHA_FIN
-    FROM FIDE_TRATAMIENTOS_TB t
-    WHERE t.ID_PACIENTE = p_id_paciente
-    AND t.ACTIVO = 1
-    ORDER BY t.FECHA_INICIO DESC;
-    
-  -- Cursor expl?cito anidado para procedimientos de cada tratamiento
-  CURSOR c_procedimientos(p_id_tratamiento NUMBER) IS
-    SELECT p.NOMBRE_PROCEDIMIENTO
-    FROM FIDE_PROCEDIMIENTOS_TB p
-    JOIN FIDE_TRATAMIENTOS_PROCEDIMIENTOS_TB tp ON p.ID_PROCEDIMIENTO = tp.ID_PROCEDIMIENTO
-    WHERE tp.ID_TRATAMIENTO = p_id_tratamiento;
-    
-  -- Cursor expl?cito anidado para medicamentos de cada tratamiento
-  CURSOR c_medicamentos(p_id_tratamiento NUMBER) IS
-    SELECT m.NOMBRE, tm.DOSIS
-    FROM FIDE_MEDICAMENTOS_TB m
-    JOIN FIDE_TRATAMIENTOS_MEDICAMENTOS_TB tm ON m.ID_MEDICAMENTO = tm.ID_MEDICAMENTO
-    WHERE tm.ID_TRATAMIENTO = p_id_tratamiento;
-    
-  v_nombre_paciente VARCHAR2(150);
-BEGIN
-  -- Obtener nombre del paciente (cursor impl?cito)
-  SELECT u.NOMBRE || ' ' || u.PRIMER_APELLIDO INTO v_nombre_paciente
-  FROM FIDE_PACIENTES_TB p
-  JOIN FIDE_USUARIOS_TB u ON p.ID_USUARIO = u.ID_USUARIO
-  WHERE p.ID_PACIENTE = p_id_paciente;
-  
-  DBMS_OUTPUT.PUT_LINE('REPORTE CONSOLIDADO DE TRATAMIENTOS');
-  DBMS_OUTPUT.PUT_LINE('Paciente: ' || v_nombre_paciente);
-  DBMS_OUTPUT.PUT_LINE('========================================');
-  
-  -- Recorrer tratamientos (cursor principal)
-  FOR r_trat IN c_tratamientos LOOP
-    DBMS_OUTPUT.PUT_LINE('TRATAMIENTO #' || r_trat.ID_TRATAMIENTO);
-    DBMS_OUTPUT.PUT_LINE('Descripci?n: ' || r_trat.DESCRIPCION);
-    DBMS_OUTPUT.PUT_LINE('Per?odo: ' || TO_CHAR(r_trat.FECHA_INICIO, 'DD/MM/YYYY') || 
-                         ' - ' || NVL(TO_CHAR(r_trat.FECHA_FIN, 'DD/MM/YYYY'), 'En curso'));
-    
-    -- Listar procedimientos (cursor anidado)
-    DBMS_OUTPUT.PUT_LINE('Procedimientos:');
-    FOR r_proc IN c_procedimientos(r_trat.ID_TRATAMIENTO) LOOP
-      DBMS_OUTPUT.PUT_LINE(' - ' || r_proc.NOMBRE_PROCEDIMIENTO);
-    END LOOP;
-    
-    -- Listar medicamentos (cursor anidado)
-    DBMS_OUTPUT.PUT_LINE('Medicamentos:');
-    FOR r_med IN c_medicamentos(r_trat.ID_TRATAMIENTO) LOOP
-      DBMS_OUTPUT.PUT_LINE(' - ' || r_med.NOMBRE || ' (Dosis: ' || r_med.DOSIS || ')');
-    END LOOP;
-    
-    DBMS_OUTPUT.PUT_LINE('----------------------------------------');
-  END LOOP;
-  
-  DBMS_OUTPUT.PUT_LINE('Total tratamientos activos: ' || c_tratamientos%ROWCOUNT);
-END consolidar_tratamientos_paciente;
-/
-
-
 --Procedimiento para migrar datos hist?ricos
 
 
@@ -3192,32 +3126,6 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Usuarios eliminados: ' || SQL%ROWCOUNT);
 END;
 /
-
-
-
-
--- 3. Actualizar licencias temporales para doctores nuevos
-CREATE OR REPLACE PROCEDURE actualizar_licencias_temp AS
-BEGIN
-    UPDATE FIDE_DOCTORES_TB 
-    SET NUMEROL_ICENCIA = 'TEMP_' || ID_DOCTOR
-    WHERE NUMEROL_ICENCIA IS NULL;
-END;
-/
-
--- 4. Desactivar doctores sin citas en los Ãºltimos 6 meses
-CREATE OR REPLACE PROCEDURE desactivar_doctores_inactivos AS
-BEGIN
-    UPDATE FIDE_DOCTORES_TB 
-    SET ACTIVO = 0
-    WHERE ID_DOCTOR NOT IN (
-        SELECT DISTINCT ID_DOCTOR FROM FIDE_CITAS_TB 
-        WHERE FECHA > ADD_MONTHS(SYSDATE, -6)
-    );
-END;
-/
-
-
 
 -- 5. Asignar direcciÃ³n genÃ©rica a pacientes sin direcciÃ³n
 CREATE OR REPLACE PROCEDURE asignar_direccion_default AS
