@@ -71,7 +71,7 @@
                             <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                         </a>
                     </div>
-                    <a th:href="@{/agendarCita/agendarCita}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block border border-white shadow-sm">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
+                    
                 </div>
             </nav>
         </header>
@@ -107,6 +107,9 @@
                 <div class="row g-0 align-items-center flex-column-reverse flex-lg-row">
                     <div class="col-lg-6 p-5 wow fadeIn" data-wow-delay="0.1s" style="margin: auto">
                         <h1 class="display-4 text-white mb-5" style="text-align: center;">[[#{plantilla.header}]]</h1>
+                        <div class="text-center mb-4">
+                            <a th:if="${session.usuario != null}" th:href="@{/agendarCita/agendarCita}" class="btn btn-primary rounded-0 py-4 px-lg-5 border border-white shadow-sm">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
+                        </div>
                         <div class="row g-4">
                             <div class="col-sm-4">
                                 <div class="border-start border-light ps-4">
