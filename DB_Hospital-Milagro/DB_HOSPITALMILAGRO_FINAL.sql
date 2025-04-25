@@ -3688,33 +3688,6 @@ EXCEPTION
 END CONTAR_PACIENTES_POR_DOCTOR;
 /
 
--- 5. Función para obtener información básica de doctor
-CREATE OR REPLACE FUNCTION OBTENER_INFO_DOCTOR(
-    p_id_doctor IN NUMBER
-) RETURN VARCHAR2
-AS
-    v_info VARCHAR2(500);
-BEGIN
-    SELECT 'Dr. ' || u.NOMBRE || ' ' || u.PRIMER_APELLIDO || 
-           ', Especialidad: ' || e.NOMBRE || 
-           ', Licencia: ' || d.NUMEROL_ICENCIA
-    INTO v_info
-    FROM FIDE_DOCTORES_TB d
-    JOIN FIDE_USUARIOS_TB u ON d.ID_USUARIO = u.ID_USUARIO
-    JOIN FIDE_DOCTORES_ESPECIALIDADES_TB de ON d.ID_DOCTOR = de.ID_DOCTOR
-    JOIN FIDE_ESPECIALIDADES_TB e ON de.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD
-    WHERE d.ID_DOCTOR = p_id_doctor
-    AND d.ACTIVO = 1
-    AND ROWNUM = 1;
-    
-    RETURN v_info;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN 'Doctor no encontrado';
-    WHEN OTHERS THEN
-        RETURN 'Error al obtener información';
-END OBTENER_INFO_DOCTOR;
-/
 
 -- 6. Función para verificar si un paciente tiene seguro
 CREATE OR REPLACE FUNCTION PACIENTE_TIENE_SEGURO(
@@ -3779,32 +3752,7 @@ EXCEPTION
 END CALCULAR_DURACION_PROMEDIO_TRATAMIENTOS;
 /
 
--- 9. Función para obtener próximo horario disponible de doctor
-CREATE OR REPLACE FUNCTION OBTENER_PROXIMO_HORARIO_DISPONIBLE(
-    p_id_doctor IN NUMBER,
-    p_fecha IN DATE
-) RETURN DATE
-AS
-    v_horario DATE;
-BEGIN
-    SELECT MIN(d.HORA_INICIO) INTO v_horario
-    FROM FIDE_DISPONIBILIDAD_TB d
-    LEFT JOIN FIDE_CITAS_TB c ON d.ID_DOCTOR = c.ID_DOCTOR 
-        AND TRUNC(d.HORA_INICIO) = TRUNC(p_fecha)
-        AND c.ACTIVO = 1
-    WHERE d.ID_DOCTOR = p_id_doctor
-    AND TRUNC(d.HORA_INICIO) = TRUNC(p_fecha)
-    AND d.ACTIVO = 1
-    AND c.ID_CITA IS NULL;
-    
-    RETURN v_horario;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-    WHEN OTHERS THEN
-        RETURN NULL;
-END OBTENER_PROXIMO_HORARIO_DISPONIBLE;
-/
+
 
 
 -- 10. Función para verificar disponibilidad de medicamento
