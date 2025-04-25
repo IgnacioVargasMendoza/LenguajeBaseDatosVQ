@@ -37,7 +37,11 @@
                                                 <td>[[${cita.idCita}]]</td>
                                                 <td>[[${#dates.format(cita.fecha, 'dd/MM/yyyy')}]]</td>
                                                 <td>[[${cita.horaCita}]]</td>
-                                                <td>[[${cita.nombreEstadoCita}]]</td>
+                                                <td>
+                                                    <span class="badge" th:classappend="${cita.nombreEstadoCita == 'Pendiente' ? 'bg-warning' : (cita.nombreEstadoCita == 'Completada' ? 'bg-success' : 'bg-danger')}">
+                                                        [[${cita.nombreEstadoCita}]]
+                                                    </span>
+                                                </td>
                                                 <td>[[${cita.nombreDoctor}]]</td>
                                                 <td>[[${cita.nombrePaciente}]]</td>
                                                 <td class="text-center">
@@ -45,20 +49,22 @@
                                                     <span th:unless="${cita.activo == 1}" class="badge bg-danger rounded-pill">Inactivo</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="#" 
-                                                       data-bs-toggle="modal" 
-                                                       th:data-bs-target="'#detallesCitaModal' + ${cita.idCita}"
-                                                       class="btn btn-info">
-                                                        <i class="fas fa-file-invoice"></i> <span class="d-none d-md-inline">Factura</span>
-                                                    </a>
-                                                    <a th:href="@{/citas/eliminar/}+${cita.idCita}"
-                                                       class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
-                                                    </a>
-                                                    <a th:href="@{/citas/editar/}+${cita.idCita}"
-                                                       class="btn btn-success">
-                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Editar</span>
-                                                    </a>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="#" 
+                                                           data-bs-toggle="modal" 
+                                                           th:data-bs-target="'#detallesCitaModal' + ${cita.idCita}"
+                                                           class="btn btn-info btn-sm">
+                                                            <i class="fas fa-file-invoice"></i>
+                                                        </a>
+                                                        <a th:href="@{/citas/editar/}+${cita.idCita}"
+                                                           class="btn btn-success btn-sm">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                        <a th:href="@{/citas/eliminar/}+${cita.idCita}"
+                                                           class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -96,13 +102,21 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="idPaciente" class="form-label">Paciente:</label>
-                                    <select class="form-select" id="idPaciente" name="idPaciente" required>
-                                        <option value="">Seleccionar un paciente</option>
-                                        <option th:each="paciente : ${pacientes}" 
-                                                th:value="${paciente.idPaciente}" 
-                                                th:text="${paciente.nombreUsuario}">
-                                        </option>
-                                    </select>
+                                    <div class="input-group">
+                                        <select id="idPaciente" name="idPaciente" class="form-select" required>
+                                            <option value="">Seleccione un paciente</option>
+                                            <option th:each="paciente : ${pacientes}" 
+                                                    th:value="${paciente.idPaciente}" 
+                                                    th:text="${paciente.nombreUsuario}">
+                                            </option>
+                                        </select>
+                                        <button type="button" class="btn btn-success" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#agregarPacienteModal"
+                                                title="Agregar nuevo paciente">
+                                            <i class="fas fa-user-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
@@ -213,13 +227,6 @@
                                                     <tr>
                                                         <td>Estado</td>
                                                         <td class="text-end">[[${cita.nombreEstadoCita}]]</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Activo</td>
-                                                        <td class="text-end">
-                                                            <span th:if="${cita.activo == 1}" class="badge bg-success rounded-pill">Sí</span>
-                                                            <span th:unless="${cita.activo == 1}" class="badge bg-danger rounded-pill">No</span>
-                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>

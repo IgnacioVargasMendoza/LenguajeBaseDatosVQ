@@ -55,7 +55,8 @@
                                 <option th:each="estado : ${estadosCita}" 
                                         th:value="${estado.idEstadoCita}" 
                                         th:text="${estado.nombreEstado}"
-                                        th:selected="${estado.idEstadoCita == cita.idEstadoCita}"></option>
+                                        th:selected="${estado.idEstadoCita == cita.idEstadoCita}">
+                                </option>
                             </select>
                         </div>
                         

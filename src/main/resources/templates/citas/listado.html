@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head th:replace="~{layout/plantilla :: head}">
         <title>Hospital el Milagro - Citas</title>
         <meta charset="UTF-8">
@@ -43,29 +43,41 @@
             <section th:replace="~{citas/fragmentos :: listadoCitas}"></section>
             <section th:replace="~{citas/fragmentos :: agendarCita}"></section>
             <section th:replace="~{citas/fragmentos :: detallesCita}"></section>
+            <section th:replace="paciente/fragmentos :: agregarPaciente"></section>
         </main>
 
         <footer th:replace="~{layout/plantilla :: footer}"></footer>
         
         <script th:inline="javascript">
+            // Función para limpiar backdrop modal
             function limpiarBackdrop() {
-                // Solución para quitar el backdrop cuando se cierra el modal
                 setTimeout(function() {
-                    const backdrops = document.getElementsByClassName('modal-backdrop');
-                    while(backdrops.length > 0) {
-                        backdrops[0].parentNode.removeChild(backdrops[0]);
-                    }
+                    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+                        backdrop.remove();
+                    });
                     document.body.classList.remove('modal-open');
                     document.body.style.overflow = '';
                     document.body.style.paddingRight = '';
                 }, 200);
             }
             
-            // Depuración de valores
             document.addEventListener('DOMContentLoaded', function() {
-                const form = document.querySelector('form[action*="/citas/guardar"]');
-                if (form) {
-                    form.addEventListener('submit', function(e) {
+                // Modificar la acción del formulario de paciente para que apunte al endpoint de citas
+                const pacienteForm = document.querySelector('#agregarPacienteModal form');
+                if (pacienteForm) {
+                    pacienteForm.action = '/citas/guardar-paciente';
+                    console.log('Acción del formulario de paciente modificada a: ' + pacienteForm.action);
+                    
+                    // Al enviar el formulario de paciente, indicar que debe volver al modal de citas
+                    pacienteForm.addEventListener('submit', function() {
+                        sessionStorage.setItem('abrirModalCitas', 'true');
+                    });
+                }
+                
+                // Depuración del formulario de citas
+                const formCita = document.querySelector('form[action*="/citas/guardar"]');
+                if (formCita) {
+                    formCita.addEventListener('submit', function() {
                         // Obtener valores del formulario
                         const doctor = document.getElementById('idDoctor').value;
                         const paciente = document.getElementById('idPaciente').value;
@@ -80,6 +92,20 @@
                         console.log('Hora:', hora);
                         console.log('Estado:', estado);
                     });
+                }
+                
+                // Si viene de agregar un paciente, abrir el modal de citas automáticamente
+                if (sessionStorage.getItem('abrirModalCitas') === 'true') {
+                    sessionStorage.removeItem('abrirModalCitas');
+                    // Damos tiempo a que se renderice la página
+                    setTimeout(function() {
+                        try {
+                            const citaModal = new bootstrap.Modal(document.getElementById('agendarCitaModal'));
+                            citaModal.show();
+                        } catch (e) {
+                            console.error('Error al mostrar el modal de citas:', e);
+                        }
+                    }, 500);
                 }
             });
         </script>

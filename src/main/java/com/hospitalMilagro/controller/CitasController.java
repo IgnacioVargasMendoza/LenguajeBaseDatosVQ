@@ -4,10 +4,14 @@ import com.hospitalMilagro.domain.AgendarCita;
 import com.hospitalMilagro.domain.Doctor;
 import com.hospitalMilagro.domain.EstadoCita;
 import com.hospitalMilagro.domain.Paciente;
+import com.hospitalMilagro.domain.Usuario;
+import com.hospitalMilagro.domain.Direccion;
 import com.hospitalMilagro.service.AgendarCitaService;
 import com.hospitalMilagro.service.DoctorService;
 import com.hospitalMilagro.service.EstadoCitaService;
 import com.hospitalMilagro.service.PacienteService;
+import com.hospitalMilagro.service.UsuarioService;
+import com.hospitalMilagro.service.DireccionService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +48,12 @@ public class CitasController {
     private EstadoCitaService estadoCitaService;
     
     @Autowired
+    private UsuarioService usuarioService;
+    
+    @Autowired
+    private DireccionService direccionService;
+    
+    @Autowired
     private JdbcTemplate jdbcTemplate;
     
     @InitBinder
@@ -63,11 +73,14 @@ public class CitasController {
             List<Paciente> pacientes = pacienteService.listaPacientes();
             List<EstadoCita> estadosCita = estadoCitaService.listaEstadosCita();
             
+            // Obtener listas de usuarios y direcciones para el formulario de paciente
+            List<Usuario> listaUsuarios = usuarioService.listaUsuarios();
+            List<Direccion> listaDirecciones = direccionService.listaDirecciones();
+            
             Long idEstadoPredeterminado = 1L; // Valor predeterminado por si no hay resultados
             
             // Verificar si hay estados de cita
             if (estadosCita == null || estadosCita.isEmpty()) {
-                // No hay estados de cita, intentar crearlos
                 try {
                     jdbcTemplate.update("INSERT INTO FIDE_ESTADOS_CITAS_TB (NOMBRE_ESTADO) VALUES ('Pendiente')");
                     jdbcTemplate.update("INSERT INTO FIDE_ESTADOS_CITAS_TB (NOMBRE_ESTADO) VALUES ('Completada')");
@@ -82,7 +95,6 @@ public class CitasController {
             }
             
             // Buscar el estado "Pendiente" para preseleccionarlo
-            // Obtener el ID directamente de la base de datos para asegurarnos que existe
             try {
                 idEstadoPredeterminado = jdbcTemplate.queryForObject(
                     "SELECT MIN(ID_ESTADO_CITA) FROM FIDE_ESTADOS_CITAS_TB WHERE ACTIVO = 1", Long.class);
@@ -92,14 +104,12 @@ public class CitasController {
                 logger.info("ID del estado predeterminado obtenido de la BD: " + idEstadoPredeterminado);
             } catch (Exception e) {
                 logger.severe("Error al obtener ID del estado predeterminado: " + e.getMessage());
-                // Mantener el valor predeterminado
             }
             
             logger.info("Citas encontradas: " + citas.size());
             logger.info("Doctores disponibles: " + doctores.size());
             logger.info("Pacientes disponibles: " + pacientes.size());
             logger.info("Estados de cita disponibles: " + (estadosCita != null ? estadosCita.size() : 0));
-            logger.info("ID del estado predeterminado: " + idEstadoPredeterminado);
             
             model.addAttribute("citas", citas);
             model.addAttribute("doctores", doctores);
@@ -107,6 +117,12 @@ public class CitasController {
             model.addAttribute("estadosCita", estadosCita);
             model.addAttribute("idEstadoPendiente", idEstadoPredeterminado);
             model.addAttribute("nuevaCita", new AgendarCita());
+            
+            // Agregar datos para el formulario de paciente
+            model.addAttribute("listaUsuarios", listaUsuarios);
+            model.addAttribute("listaDirecciones", listaDirecciones);
+            model.addAttribute("paciente", new Paciente());
+            
         } catch (Exception e) {
             logger.severe("Error al cargar la página de citas: " + e.getMessage());
             e.printStackTrace();
@@ -155,7 +171,6 @@ public class CitasController {
                 if (estadoId != null) {
                     cita.setIdEstadoCita(estadoId);
                 } else {
-                    // Intentar obtener el primer estado disponible
                     List<EstadoCita> estadosCita = estadoCitaService.listaEstadosCita();
                     if (estadosCita != null && !estadosCita.isEmpty()) {
                         cita.setIdEstadoCita(estadosCita.get(0).getIdEstadoCita());
@@ -175,6 +190,27 @@ public class CitasController {
             logger.severe("Error al guardar cita: " + e.getMessage());
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("mensaje", "Error al agendar cita: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipo", "error");
+            redirectAttributes.addFlashAttribute("error_detalle", e.toString());
+        }
+        return "redirect:/citas/listado";
+    }
+    
+    @PostMapping("/guardar-paciente")
+    public String guardarPacienteEnCitas(Paciente paciente, RedirectAttributes redirectAttributes) {
+        try {
+            logger.info("Guardando paciente desde módulo de citas");
+            pacienteService.registrarPaciente(paciente);
+            redirectAttributes.addFlashAttribute("mensaje", "Paciente agregado con éxito");
+            redirectAttributes.addFlashAttribute("tipo", "success");
+            
+            // Actualizamos la lista de pacientes para el formulario de citas
+            List<Paciente> pacientes = pacienteService.listaPacientes();
+            redirectAttributes.addFlashAttribute("pacientesActualizados", pacientes);
+        } catch (Exception e) {
+            logger.severe("Error al guardar paciente desde citas: " + e.getMessage());
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("mensaje", "Error al agregar paciente: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipo", "error");
             redirectAttributes.addFlashAttribute("error_detalle", e.toString());
         }

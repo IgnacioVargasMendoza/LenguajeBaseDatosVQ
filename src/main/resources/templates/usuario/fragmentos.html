@@ -210,19 +210,21 @@
                                                 <td>[[${usuario.primerApellido}]]</td>
                                                 <td>[[${usuario.segundoApellido}]]</td>
                                                 <td>[[${usuario.correo}]]</td>
-                                                <td class="text-center">
-                                                    <span th:if="${usuario.activo}" class="badge bg-success rounded-pill">Activo</span>
-                                                    <span th:unless="${usuario.activo}" class="badge bg-danger rounded-pill">Inactivo</span>
+                                                <td>
+                                                    <span th:if="${usuario.activo == 1}" class="badge bg-success">Activo</span>
+                                                    <span th:unless="${usuario.activo == 1}" class="badge bg-danger">Inactivo</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a th:href="@{/usuario/eliminar/}+${usuario.idUsuario}"
-                                                       class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
-                                                    </a>
-                                                    <a th:href="@{/usuario/editar/}+${usuario.idUsuario}"
-                                                       class="btn btn-success">
-                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Editar</span>
-                                                    </a>
+                                                    <div class="btn-group" role="group">
+                                                        <a th:href="@{/usuario/editar/}+${usuario.idUsuario}"
+                                                           class="btn btn-success btn-sm">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                        <a th:href="@{/usuario/eliminar/}+${usuario.idUsuario}"
+                                                           class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>

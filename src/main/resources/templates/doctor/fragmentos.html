@@ -235,14 +235,16 @@ n<!DOCTYPE html>
                                                     <span th:unless="${doctor.activo}" class="badge bg-danger rounded-pill">Inactivo</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a th:href="@{/doctor/eliminar/}+${doctor.idDoctor}"
-                                                       class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
-                                                    </a>
-                                                    <a th:href="@{/doctor/editar/}+${doctor.idDoctor}"
-                                                       class="btn btn-success">
-                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Editar</span>
-                                                    </a>
+                                                    <div class="btn-group" role="group">
+                                                        <a th:href="@{/doctor/editar/}+${doctor.idDoctor}"
+                                                           class="btn btn-success btn-sm">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                        <a th:href="@{/doctor/eliminar/}+${doctor.idDoctor}"
+                                                           class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>
