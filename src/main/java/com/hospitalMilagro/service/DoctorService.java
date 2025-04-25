@@ -7,4 +7,5 @@ public interface DoctorService {
     
     public List<Doctor> listaDoctores();
     
+    public void registrarDoctor(Doctor doctor);
 }

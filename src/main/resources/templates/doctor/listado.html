@@ -10,9 +10,28 @@
 
         <main>
             <section th:replace="~{doctor/fragmentos :: listadoDoctores}"></section>
+            <section th:replace="~{doctor/fragmentos :: agregarDoctor}"></section>
         </main>
 
         <footer th:replace="~{layout/plantilla :: footer}"></footer>
-
+        
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                // Manejador de evento para cuando el modal se oculta completamente
+                const modalElement = document.getElementById('agregarDoctorModal');
+                if (modalElement) {
+                    modalElement.addEventListener('hidden.bs.modal', function () {
+                        // Remover manualmente el backdrop y restaurar el desplazamiento
+                        const backdrops = document.getElementsByClassName('modal-backdrop');
+                        while(backdrops.length > 0) {
+                            backdrops[0].parentNode.removeChild(backdrops[0]);
+                        }
+                        document.body.classList.remove('modal-open');
+                        document.body.style.overflow = '';
+                        document.body.style.paddingRight = '';
+                    });
+                }
+            });
+        </script>
     </body>
 </html>

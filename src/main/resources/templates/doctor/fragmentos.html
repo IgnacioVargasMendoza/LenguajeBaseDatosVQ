@@ -205,7 +205,7 @@ n<!DOCTYPE html>
                         <div class="hospital-card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0">[[#{doctor.listado}]]</h4>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarDoctor">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarDoctorModal">
                                     <i class="fas fa-plus me-2"></i> Agregar Doctor
                                 </button>
                             </div>
@@ -217,8 +217,8 @@ n<!DOCTYPE html>
                                                 <th>ID</th>
                                                 <th>[[#{doctor.telefono}]]</th>
                                                 <th>[[#{doctor.numLicencia}]]</th>
-                                                <th>[[#{doctor.idUsuario}]]</th>
-                                                <th>[[#{doctor.idDireccion}]]</th>
+                                                <th>Usuario</th>
+                                                <th>Dirección</th>
                                                 <th>[[#{usuario.activo}]]</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -228,8 +228,8 @@ n<!DOCTYPE html>
                                                 <td>[[${doctor.idDoctor}]]</td>
                                                 <td>[[${doctor.telefono}]]</td>
                                                 <td>[[${doctor.numLicencia}]]</td>
-                                                <td>[[${doctor.idUsuario}]]</td>
-                                                <td>[[${doctor.idDireccion}]]</td>
+                                                <td>[[${doctor.nombreUsuario}]]</td>
+                                                <td>[[${doctor.direccionCompleta}]]</td>
                                                 <td>
                                                     <span th:if="${doctor.activo}" class="badge bg-success rounded-pill">Activo</span>
                                                     <span th:unless="${doctor.activo}" class="badge bg-danger rounded-pill">Inactivo</span>
@@ -255,6 +255,66 @@ n<!DOCTYPE html>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fragmento para agregar doctor, es la ventana modal -->
+        <section th:fragment="agregarDoctor">
+            <div id="agregarDoctorModal" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="agregarDoctorLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title" id="agregarDoctorLabel">Agregar Doctor</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="limpiarBackdrop()"></button>
+                        </div> 
+                        <form th:action="@{/doctor/guardar}"
+                              method="POST" 
+                              class="was-validated"
+                              onsubmit="limpiarBackdrop()">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="idUsuario" class="form-label">Usuario:</label>
+                                    <select class="form-select" id="idUsuario" name="idUsuario" required>
+                                        <option value="">Seleccionar un usuario</option>
+                                        <option th:each="usuario : ${listaUsuarios}" 
+                                                th:value="${usuario.idUsuario}" 
+                                                th:text="${usuario.nombre + ' ' + usuario.primerApellido + ' ' + usuario.segundoApellido}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="telefono" class="form-label">Teléfono:</label>
+                                    <input type="text" class="form-control" id="telefono" name="telefono" required/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="numLicencia" class="form-label">Número de Licencia:</label>
+                                    <input type="text" class="form-control" id="numLicencia" name="numLicencia" required/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="idDireccion" class="form-label">Dirección:</label>
+                                    <select class="form-select" id="idDireccion" name="idDireccion" required>
+                                        <option value="">Seleccionar una dirección</option>
+                                        <option th:each="direccion : ${listaDirecciones}" 
+                                                th:value="${direccion.idDireccion}" 
+                                                th:text="${direccion.nombrePais + ', ' + direccion.nombreCanton + ', ' + direccion.nombreDistrito}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="limpiarBackdrop()">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
