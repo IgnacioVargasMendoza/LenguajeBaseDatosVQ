@@ -1936,6 +1936,8 @@ BEGIN
 END FIDE_AUTENTICAR_USUARIO_SP;
 ---procedimientos_actualizar
 
+/
+
 -- 1. Procedimiento para actualizar FIDE_ESPECIALIDADES_TB
 CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_ESPECIALIDAD_TB_SP(
     p_id_especialidad fide_especialidades_tb.nombre%TYPE, 
