@@ -29,21 +29,7 @@ BEGIN
     COMMIT;
 END FIDE_REGISTRAR_PAIS_SP;
 /
-CREATE OR REPLACE PROCEDURE FIDE_REGISTRAR_PROVINCIA_SP (
-    p_nombre   fide_provincias_tb.nombre%TYPE,
-    p_id_pais  fide_provincias_tb.id_pais%TYPE
-) AS
-BEGIN
-    INSERT INTO FIDE_PROVINCIAS_TB (
-        NOMBRE,
-        ID_PAIS
-    ) VALUES (
-        p_nombre,
-        p_id_pais
-    );
-    COMMIT;
-END FIDE_REGISTRAR_PROVINCIA_SP;
-/
+
 
 CREATE OR REPLACE PROCEDURE FIDE_REGISTRAR_CANTON_SP(
     p_nombre fide_cantones_tb.nombre%TYPE,
