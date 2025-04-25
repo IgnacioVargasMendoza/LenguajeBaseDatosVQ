@@ -1,0 +1,112 @@
+.login-page {
+    background-color: #f8f9fa;
+    padding: 50px 0;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.login-header {
+    background-color: #2D304D;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 5px solid #39C9DB;
+}
+
+.login-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #e1e1e1;
+    width: 100%;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    border-color: #39C9DB;
+    box-shadow: 0 0 0 0.2rem rgba(57, 201, 219, 0.25);
+}
+
+.input-icon {
+    color: #2D304D;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2D304D;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.btn-login {
+    background-color: #39C9DB;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+}
+
+.btn-login:hover {
+    background-color: #2bb6c7;
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(57, 201, 219, 0.3);
+}
+
+.btn-register {
+    background-color: #F9589B;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+.btn-register:hover {
+    background-color: #e54989;
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(249, 88, 155, 0.3);
+}
+
+.login-error {
+    background-color: #fff2f4;
+    border-left: 4px solid #F9589B;
+    color: #d63384;
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: 6px;
+} 
