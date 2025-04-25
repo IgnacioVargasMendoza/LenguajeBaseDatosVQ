@@ -2,30 +2,25 @@ package com.hospitalMilagro.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "FIDE_ESTADOS_CITA_TB")
+@Table(name="FIDE_ESTADOS_CITAS_TB")
 public class EstadoCita implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_ESTADO_CITA")
+    @Column(name="ID_ESTADO_CITA")
     private Long idEstadoCita;
     
-    @Column(name = "NOMBRE")
-    private String nombre;
-    
-    @Column(name = "DESCRIPCION")
-    private String descripcion;
+    @Column(name="NOMBRE_ESTADO")
+    private String nombreEstado;
     
     @Column(name = "CREATION_DATE")
     private String creationDate;
@@ -38,4 +33,10 @@ public class EstadoCita implements Serializable {
     
     @Column(name = "LAST_UPDATE_BY")
     private String lastUpdateBy;
+    
+    @Transient
+    private String accion;
+    
+    @Column(name = "ACTIVO")
+    private byte activo;
 } 
