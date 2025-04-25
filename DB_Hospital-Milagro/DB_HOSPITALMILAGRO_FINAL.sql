@@ -2230,51 +2230,6 @@ EXCEPTION
 END FIDE_ACTUALIZAR_DISTRITO_TB_SP;
 /
 
--- 4. Procedimiento para actualizar FIDE_DIRECCION_TB
-CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_DIRECCION_TB_SP(
-    p_id_direccion fide_direccion_tb.id_direccion%TYPE,
-    p_id_pais fide_direccion_tb.id_direccion%TYPE,
-    p_id_provincia fide_direccion_tb.id_provincia%TYPE,
-    p_id_canton fide_direccion_tb.id_canton%TYPE,
-    p_id_distrito fide_direccion_tb.id_distrito%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_DIRECCION_TB
-    SET ID_PAIS = p_id_pais,
-        ID_CANTON = p_id_canton,
-        ID_DISTRITO = p_id_distrito
-    WHERE ID_DIRECCION = p_id_direccion;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_DIRECCION_TB_SP;
-/
-
--- 5. Procedimiento para actualizar FIDE_DISPONIBILIDAD_TB
-CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_DISPONIBILIDAD_TB_SP(
-    p_id_disponibilidad fide_disponibilidad_tb.id_disponibilidad%TYPE,
-    p_dia fide_disponibilidad_tb.dia%TYPE,
-    p_hora_inicio fide_disponibilidad_tb.hora_inicio%TYPE,
-    p_hora_fin fide_disponibilidad_tb.hora_fin%TYPE,
-    p_id_doctor fide_disponibilidad_tb.id_doctor%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_DISPONIBILIDAD_TB
-    SET DIA = p_dia,
-        HORA_INICIO = p_hora_inicio,
-        HORA_FIN = p_hora_fin,
-        ID_DOCTOR = p_id_doctor
-    WHERE ID_DISPONIBILIDAD = p_id_disponibilidad;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_DISPONIBILIDAD_TB_SP;
-/
-
 -- 1. Procedimiento para actualizar FIDE_USUARIOS_TB
 CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_USUARIO_TB_SP(
     p_id_usuario fide_usuarios_tb.id_usuario%TYPE,
