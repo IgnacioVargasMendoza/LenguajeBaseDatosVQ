@@ -3219,13 +3219,13 @@ BEGIN
 END;
 
 
--- 1. Actualizar contraseñas temporales para usuarios inactivos
+-- 1. Actualizar contraseÃ±as temporales para usuarios inactivos
 CREATE OR REPLACE PROCEDURE reset_pass_inactivos AS
 BEGIN
     UPDATE FIDE_USUARIOS_TB 
     SET CONTRASENA = 'Temp_' || TO_CHAR(SYSDATE, 'YYYYMMDD')
     WHERE ACTIVO = 0;
-    DBMS_OUTPUT.PUT_LINE('Contraseñas actualizadas: ' || SQL%ROWCOUNT);
+    DBMS_OUTPUT.PUT_LINE('ContraseÃ±as actualizadas: ' || SQL%ROWCOUNT);
 END;
 /
 
@@ -3250,7 +3250,7 @@ BEGIN
 END;
 /
 
--- 4. Desactivar doctores sin citas en los últimos 6 meses
+-- 4. Desactivar doctores sin citas en los Ãºltimos 6 meses
 CREATE OR REPLACE PROCEDURE desactivar_doctores_inactivos AS
 BEGIN
     UPDATE FIDE_DOCTORES_TB 
@@ -3264,16 +3264,16 @@ END;
 
 
 
--- 5. Asignar dirección genérica a pacientes sin dirección
+-- 5. Asignar direcciÃ³n genÃ©rica a pacientes sin direcciÃ³n
 CREATE OR REPLACE PROCEDURE asignar_direccion_default AS
 BEGIN
     UPDATE FIDE_PACIENTES_TB 
-    SET DIRECCION = 'Dirección no especificada'
+    SET DIRECCION = 'DirecciÃ³n no especificada'
     WHERE DIRECCION IS NULL;
 END;
 /
 
--- 6. Actualizar teléfonos en formato estándar
+-- 6. Actualizar telÃ©fonos en formato estÃ¡ndar
 CREATE OR REPLACE PROCEDURE estandarizar_telefonos AS
 BEGIN
     UPDATE FIDE_PACIENTES_TB 
@@ -3284,7 +3284,7 @@ END;
 
 
 
--- 7. Cancelar citas pendientes con más de 30 días
+-- 7. Cancelar citas pendientes con mÃ¡s de 30 dÃ­as
 CREATE OR REPLACE PROCEDURE cancelar_citas_antiguas AS
 BEGIN
     UPDATE FIDE_CITAS_TB 
@@ -3294,7 +3294,7 @@ BEGIN
 END;
 /
 
--- 8. Generar notificaciones para citas próximas
+-- 8. Generar notificaciones para citas prÃ³ximas
 CREATE OR REPLACE PROCEDURE notificar_citas_proximas AS
 BEGIN
     INSERT INTO FIDE_NOTIFICACIONES_TB (
@@ -3331,7 +3331,7 @@ BEGIN
 END;
 /
 
--- 10. Cerrar facturas pagadas hace más de 2 años
+-- 10. Cerrar facturas pagadas hace mÃ¡s de 2 aÃ±os
 CREATE OR REPLACE PROCEDURE archivar_facturas_antiguas AS
 BEGIN
     UPDATE FIDE_FACTURAS_TB 
@@ -3363,7 +3363,7 @@ END;
 /
 
 
--- 13. Normalizar nombres de países a mayúsculas
+-- 13. Normalizar nombres de paÃ­ses a mayÃºsculas
 CREATE OR REPLACE PROCEDURE normalizar_nombres_paises AS
 BEGIN
     UPDATE FIDE_PAISES_TB 
@@ -3382,7 +3382,7 @@ END;
 /
 
 
--- 15. Agregar prefijo a especialidades médicas
+-- 15. Agregar prefijo a especialidades mÃ©dicas
 CREATE OR REPLACE PROCEDURE prefijar_especialidades AS
 BEGIN
     UPDATE FIDE_ESPECIALIDADES_TB 
@@ -3390,11 +3390,11 @@ BEGIN
 END;
 /
 
--- 16. Actualizar descripciones vacías
+-- 16. Actualizar descripciones vacÃ­as
 CREATE OR REPLACE PROCEDURE actualizar_descripciones_vacias AS
 BEGIN
     UPDATE FIDE_ESPECIALIDADES_TB 
-    SET DESCRIPCION = 'Descripción no disponible'
+    SET DESCRIPCION = 'DescripciÃ³n no disponible'
     WHERE DESCRIPCION IS NULL;
 END;
 /
@@ -3409,7 +3409,7 @@ BEGIN
 END;
 /
 
--- 18. Asignar observación a tratamientos sin descripción
+-- 18. Asignar observaciÃ³n a tratamientos sin descripciÃ³n
 CREATE OR REPLACE PROCEDURE completar_descripciones_tratamientos AS
 BEGIN
     UPDATE FIDE_TRATAMIENTOS_TB 
@@ -3428,7 +3428,7 @@ BEGIN
 END;
 /
 
--- 20. Marcar como inactivas notificaciones leídas
+-- 20. Marcar como inactivas notificaciones leÃ­das
 CREATE OR REPLACE PROCEDURE desactivar_notificaciones_leidas AS
 BEGIN
     UPDATE FIDE_NOTIFICACIONES_TB 
@@ -3509,7 +3509,7 @@ CREATE OR REPLACE PROCEDURE validar_direcciones AS
 BEGIN
     FOR r IN c_direcciones LOOP
         DBMS_OUTPUT.PUT_LINE(
-            'Dirección ID ' || r.ID_DIRECCION || 
+            'DirecciÃ³n ID ' || r.ID_DIRECCION || 
             ' en ' || r.CANTON || ', ' || r.PAIS || ' no tiene distrito'
         );
     END LOOP;
@@ -3547,7 +3547,7 @@ BEGIN
 END;
 /
 
--- 26. Top 5 medicamentos más utilizados
+-- 26. Top 5 medicamentos mÃ¡s utilizados
 CREATE OR REPLACE PROCEDURE top_medicamentos_usados AS
     CURSOR c_medicamentos IS
         SELECT m.NOMBRE, COUNT(tm.ID_TRATAMIENTO) AS USOS
@@ -3586,13 +3586,13 @@ BEGIN
         GROUP BY ID_DOCTOR
     );
     
-    DBMS_OUTPUT.PUT_LINE('Citas mínimas: ' || v_min_citas || ', máximas: ' || v_max_citas);
+    DBMS_OUTPUT.PUT_LINE('Citas mÃ­nimas: ' || v_min_citas || ', mÃ¡ximas: ' || v_max_citas);
     
     FOR r IN c_doctores LOOP
         IF r.CITAS > v_min_citas + 5 THEN
             DBMS_OUTPUT.PUT_LINE(
                 'Doctor ID ' || r.ID_DOCTOR || 
-                ' tiene ' || r.CITAS || ' citas (necesita reducción)'
+                ' tiene ' || r.CITAS || ' citas (necesita reducciÃ³n)'
             );
         END IF;
     END LOOP;
@@ -3601,7 +3601,7 @@ END;
 
 
 
--- 28. Buscar pacientes por nombre (con parámetro)
+-- 28. Buscar pacientes por nombre (con parÃ¡metro)
 CREATE OR REPLACE PROCEDURE buscar_paciente(p_nombre IN VARCHAR2) AS
     CURSOR c_pacientes IS
         SELECT p.ID_PACIENTE, u.NOMBRE, u.PRIMER_APELLIDO
@@ -3697,7 +3697,7 @@ END;
 /
 
 
---32. Listar Medicamentos con Stock Crítico (<5 unidades)
+--32. Listar Medicamentos con Stock CrÃ­tico (<5 unidades)
 
 CREATE OR REPLACE PROCEDURE listar_medicamentos_stock_critico AS
     CURSOR c_medicamentos IS
@@ -3759,7 +3759,7 @@ BEGIN
         GROUP BY ID_DOCTOR
     );
     
-    DBMS_OUTPUT.PUT_LINE('=== PROMEDIO DE CITAS POR DOCTOR (ÚLTIMOS 3 MESES) ===');
+    DBMS_OUTPUT.PUT_LINE('=== PROMEDIO DE CITAS POR DOCTOR (ÃšLTIMOS 3 MESES) ===');
     DBMS_OUTPUT.PUT_LINE('Promedio general: ' || v_promedio);
     
     FOR r IN c_doctores LOOP
@@ -3926,7 +3926,7 @@ BEGIN
             CREATION_DATE, CREATED_BY, LAST_UPDATE, 
             LAST_UPDATE_BY, ACCION, ACTIVO
         ) VALUES (
-            SEQ_DIRECCION.NEXTVAL, 1, 1, 1, -- IDs por defecto (ajustar según tu DB)
+            SEQ_DIRECCION.NEXTVAL, 1, 1, 1, -- IDs por defecto (ajustar segÃºn tu DB)
             SYSDATE, 'MIGRACION', SYSDATE, 
             'MIGRACION', 'INSERT', 1
         ) RETURNING ID_DIRECCION INTO v_nueva_direccion;
