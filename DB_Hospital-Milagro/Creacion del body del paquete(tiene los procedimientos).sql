@@ -25,29 +25,14 @@ BEGIN
     );
     COMMIT;
 END FIDE_REGISTRAR_PAIS_SP;
-PROCEDURE FIDE_REGISTRAR_PROVINCIA_SP (
-    p_nombre   fide_provincias_tb.nombre%TYPE,
-    p_id_pais  fide_provincias_tb.id_pais%TYPE
-) AS
-BEGIN
-    INSERT INTO FIDE_PROVINCIAS_TB (
-        NOMBRE,
-        ID_PAIS
-    ) VALUES (
-        p_nombre,
-        p_id_pais
-    );
-    COMMIT;
-END FIDE_REGISTRAR_PROVINCIA_SP;
 PROCEDURE FIDE_REGISTRAR_CANTON_SP(
-    p_nombre fide_cantones_tb.nombre%TYPE,
-    p_id_provincia fide_cantones_tb.id_provincia%TYPE
+    p_nombre fide_cantones_tb.nombre%TYPE
 ) AS
 BEGIN
     INSERT INTO FIDE_CANTONES_TB (
-         NOMBRE, ID_PROVINCIA
+         NOMBRE
     ) VALUES (
-         p_nombre, p_id_provincia
+         p_nombre
     );
     COMMIT;
 END FIDE_REGISTRAR_CANTON_SP;
@@ -65,15 +50,14 @@ BEGIN
 END FIDE_REGISTRAR_DISTRITO_SP;
 PROCEDURE FIDE_REGISTRAR_DIRECCION_SP(
     p_id_pais fide_direccion_tb.id_pais%TYPE,
-    p_id_provincia fide_direccion_tb.id_provincia%TYPE,
     p_id_canton fide_direccion_tb.id_canton%TYPE,
     p_id_distrito fide_direccion_tb.id_distrito%TYPE
 ) AS
 BEGIN
     INSERT INTO FIDE_DIRECCION_TB (
-  ID_PAIS,ID_PROVINCIA, ID_CANTON, ID_DISTRITO
+  ID_PAIS, ID_CANTON, ID_DISTRITO
     ) VALUES (
-      p_id_pais, p_id_provincia, p_id_canton, p_id_distrito
+      p_id_pais, p_id_canton, p_id_distrito
     );
     COMMIT;
 END FIDE_REGISTRAR_DIRECCION_SP;
@@ -316,15 +300,13 @@ BEGIN
 END FIDE_GENERAR_FACTURA_SP;
 PROCEDURE FIDE_AGREGAR_DISPONIBILIDAD_SP(
     p_dia fide_disponibilidad_tb.dia%TYPE,
-    p_hora_inicio fide_disponibilidad_tb.hora_inicio%TYPE,
-    p_hora_fin fide_disponibilidad_tb.hora_fin%TYPE,
     p_id_doctor fide_disponibilidad_tb.id_doctor%TYPE
 ) AS
 BEGIN
     INSERT INTO FIDE_DISPONIBILIDAD_TB (
- DIA, HORA_INICIO, HORA_FIN, ID_DOCTOR
+ DIA, ID_DOCTOR
     ) VALUES (
-    p_dia, p_hora_inicio, p_hora_fin, p_id_doctor
+    p_dia, p_id_doctor
     );
     COMMIT;
 END FIDE_AGREGAR_DISPONIBILIDAD_SP;
@@ -603,31 +585,13 @@ EXCEPTION
         ROLLBACK;
         RAISE;
 END FIDE_ACTUALIZAR_PAIS_TB_SP;
-PROCEDURE FIDE_ACTUALIZAR_PROVINCIA_TB_SP(
-    p_id_provincia fide_provincias_tb.id_provincia%TYPE,
-    p_nombre   fide_provincias_tb.nombre%TYPE,
-    p_id_pais  fide_provincias_tb.id_pais%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_PROVINCIAS_TB
-    SET NOMBRE = p_nombre,
-        ID_PAIS = p_id_pais
-    WHERE ID_PROVINCIA = p_id_provincia;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_PROVINCIA_TB_SP;
 PROCEDURE FIDE_ACTUALIZAR_CANTON_TB_SP(
     p_id_canton fide_cantones_tb.id_canton%TYPE,
-    p_nombre fide_cantones_tb.nombre%TYPE,
-    p_id_provincia fide_cantones_tb.id_provincia%TYPE
+    p_nombre fide_cantones_tb.nombre%TYPE
 ) AS
 BEGIN
     UPDATE FIDE_CANTONES_TB
-    SET NOMBRE = p_nombre,
-        ID_provincia = p_id_provincia
+    SET NOMBRE = p_nombre
     WHERE ID_CANTON = p_id_canton;
     COMMIT;
 EXCEPTION
@@ -654,7 +618,6 @@ END FIDE_ACTUALIZAR_DISTRITO_TB_SP;
 PROCEDURE FIDE_ACTUALIZAR_DIRECCION_TB_SP(
     p_id_direccion fide_direccion_tb.id_direccion%TYPE,
     p_id_pais fide_direccion_tb.id_direccion%TYPE,
-    p_id_provincia fide_direccion_tb.id_provincia%TYPE,
     p_id_canton fide_direccion_tb.id_canton%TYPE,
     p_id_distrito fide_direccion_tb.id_distrito%TYPE
 ) AS
@@ -673,15 +636,11 @@ END FIDE_ACTUALIZAR_DIRECCION_TB_SP;
 PROCEDURE FIDE_ACTUALIZAR_DISPONIBILIDAD_TB_SP(
     p_id_disponibilidad fide_disponibilidad_tb.id_disponibilidad%TYPE,
     p_dia fide_disponibilidad_tb.dia%TYPE,
-    p_hora_inicio fide_disponibilidad_tb.hora_inicio%TYPE,
-    p_hora_fin fide_disponibilidad_tb.hora_fin%TYPE,
     p_id_doctor fide_disponibilidad_tb.id_doctor%TYPE
 ) AS
 BEGIN
     UPDATE FIDE_DISPONIBILIDAD_TB
     SET DIA = p_dia,
-        HORA_INICIO = p_hora_inicio,
-        HORA_FIN = p_hora_fin,
         ID_DOCTOR = p_id_doctor
     WHERE ID_DISPONIBILIDAD = p_id_disponibilidad;
     COMMIT;
@@ -1040,20 +999,6 @@ EXCEPTION
         ROLLBACK;
         RAISE;
 END FIDE_DESACTIVAR_PAIS_TB_SP;
-
-PROCEDURE FIDE_DESACTIVAR_PROVINCIA_TB_SP(
-    p_id_provincia fide_provincias_tb.id_provincia%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_PROVINCIAS_TB
-    SET ACTIVO = 0
-    WHERE ID_PROVINCIA = p_id_provincia;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_DESACTIVAR_PROVINCIA_TB_SP;
 
 PROCEDURE FIDE_DESACTIVAR_CANTON_TB_SP(
     p_id_canton fide_cantones_tb.id_canton%TYPE
