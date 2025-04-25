@@ -8,64 +8,340 @@
     <body>
         <!-- 1 nuevo.html fragmento que se utiliza para el registro inicial de un usuario nuevo -->
         <section th:fragment="nuevo">
-            <div class="row p-2 justify-content-center">
+            <style>
+                .registro-page {
+                    background-color: #f8f9fa;
+                    padding: 50px 0;
+                    min-height: 80vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
                 
-                <div class="col-md-3">
-                    <a th:href="@{/}" class="btn btn-primary">
-                        <i class="fas fa-arrow-left">[[#{accion.regresar}]]</i>
-                    </a>
-                </div>
+                .registro-card {
+                    background-color: white;
+                    border-radius: 15px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                    overflow: hidden;
+                    transition: all 0.3s ease;
+                    max-width: 500px;
+                    width: 100%;
+                    margin: 0 auto;
+                }
                 
-                <div class="row p-2 justify-content-center">
-                    <div class="col-md-3">
-                        <form method="POST"
-                              th:action="@{/registro/crear}" 
-                              th:object="${usuario}"
-                              class="was-validated">                          
-                            <div class="card">
+                .registro-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+                }
+                
+                .registro-header {
+                    background-color: #2D304D;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                    border-bottom: 5px solid #F9589B;
+                }
+                
+                .registro-body {
+                    padding: 30px;
+                }
+                
+                .btn-back {
+                    color: #2D304D;
+                    background-color: white;
+                    border: 2px solid #2D304D;
+                    border-radius: 8px;
+                    padding: 10px 20px;
+                    font-weight: 600;
+                    margin-bottom: 20px;
+                    transition: all 0.3s;
+                    display: inline-block;
+                }
+                
+                .btn-back:hover {
+                    background-color: #2D304D;
+                    color: white;
+                    transform: scale(1.02);
+                }
+                
+                .btn-register-submit {
+                    background-color: #F9589B;
+                    color: white;
+                    border: none;
+                    padding: 12px 25px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    width: 100%;
+                    transition: all 0.3s;
+                    margin-top: 10px;
+                }
+                
+                .btn-register-submit:hover {
+                    background-color: #e54989;
+                    transform: scale(1.02);
+                    box-shadow: 0 5px 15px rgba(249, 88, 155, 0.3);
+                }
+                
+                .form-field {
+                    margin-bottom: 20px;
+                }
+                
+                .form-control {
+                    border-radius: 8px;
+                    padding: 12px 15px;
+                    border: 1px solid #e1e1e1;
+                    width: 100%;
+                    font-size: 16px;
+                    transition: all 0.3s;
+                }
+                
+                .form-control:focus {
+                    border-color: #F9589B;
+                    box-shadow: 0 0 0 0.2rem rgba(249, 88, 155, 0.25);
+                }
+                
+                .form-label {
+                    font-weight: 600;
+                    color: #2D304D;
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 8px;
+                }
+                
+                .input-icon {
+                    color: #2D304D;
+                    margin-right: 10px;
+                    font-size: 18px;
+                }
+                
+                /* Estilos para el modal */
+                .modal-registro {
+                    display: none;
+                    position: fixed;
+                    z-index: 1000;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    overflow: auto;
+                    animation: fadeIn 0.3s ease-out;
+                }
+                
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                    }
+                    to {
+                        opacity: 1;
+                    }
+                }
+                
+                .modal-contenido {
+                    background-color: white;
+                    border-radius: 15px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                    width: 90%;
+                    max-width: 500px;
+                    margin: 10% auto;
+                    position: relative;
+                    animation: slideIn 0.4s ease-out;
+                }
+                
+                @keyframes slideIn {
+                    from {
+                        transform: translateY(-50px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+                
+                .modal-header {
+                    background-color: #2D304D;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                    border-radius: 15px 15px 0 0;
+                    border-bottom: 5px solid #39C9DB;
+                }
+                
+                .modal-body {
+                    padding: 30px;
+                    text-align: center;
+                }
+                
+                .success-icon {
+                    font-size: 80px;
+                    color: #39C9DB;
+                    margin: 10px 0 20px;
+                }
+                
+                .modal-footer {
+                    padding: 20px;
+                    text-align: center;
+                }
+                
+                .btn-login-modal {
+                    background-color: #39C9DB;
+                    color: white;
+                    border: none;
+                    padding: 12px 25px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    transition: all 0.3s;
+                    margin-bottom: 15px;
+                    text-decoration: none;
+                    display: inline-block;
+                }
+                
+                .btn-login-modal:hover {
+                    background-color: #2bb6c7;
+                    transform: scale(1.05);
+                    box-shadow: 0 5px 15px rgba(57, 201, 219, 0.3);
+                    color: white;
+                    text-decoration: none;
+                }
+                
+                .btn-home-modal {
+                    background-color: white;
+                    color: #2D304D;
+                    border: 2px solid #2D304D;
+                    padding: 12px 25px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    transition: all 0.3s;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin-left: 10px;
+                }
+                
+                .btn-home-modal:hover {
+                    background-color: #2D304D;
+                    color: white;
+                    transform: scale(1.05);
+                    text-decoration: none;
+                }
+            </style>
+
+            <div class="registro-page">
+                <div class="container">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <a th:href="@{/}" class="btn-back">
+                                <i class="fas fa-arrow-left me-2"></i>[[#{accion.regresar}]]
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="registro-card">
+                        <div class="registro-header">
+                            <h2>[[#{usuario.agregar}]]</h2>
+                            <p class="mb-0">Crea tu cuenta para acceder a nuestros servicios médicos</p>
+                        </div>
+                        
+                        <div class="registro-body">
+                            <form id="registroForm" method="POST" 
+                                th:action="@{/registro/crear}" 
+                                th:object="${usuario}"
+                                class="was-validated">
                                 
-                                <div class="card-header bg-primary text-center text-white"><h4>[[#{usuario.agregar}]]</h4></div>
-                              
-                                <div class="card-body">
-                                    
-                                    <div class="form-group mb-3">
-                                        <label>[[#{usuario.nombre}]]</label>
-                                        <input type="text" class="form-control" name="nombre" maxlength="20" required="true"/>
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label>[[#{usuario.primerApellido}]]</label>
-                                        <input type="text" class="form-control" name="primerApellido" maxlength="30" required="true"/>    
-                                    </div>
-                                    
-                                    <div class="form-group mb-3">
-                                        <label>[[#{usuario.segundoApellido}]]</label>
-                                        <input type="text" class="form-control" name="segundoApellido" maxlength="30" required="true"/>      
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label>[[#{usuario.correo}]]</label>
-                                        <input type="email" class="form-control" name="correo" maxlength="40" required="true"/>    
-                                    </div>
-                                    
-                                    <div class="form-group mb-3">
-                                        <label>[[#{usuario.password}]]</label>
-                                        <input type="password" class="form-control" name="contrasena" maxlength="40" required="true"/> 
-                                    </div>
-                                    
+                                <div class="form-field">
+                                    <label class="form-label" for="nombre">
+                                        <i class="fas fa-user input-icon"></i>
+                                        [[#{usuario.nombre}]]
+                                    </label>
+                                    <input type="text" class="form-control" name="nombre" maxlength="20" required="true" placeholder="Ingresa tu nombre"/>
                                 </div>
                                 
-                                <div class="card-footer text-center text-white">
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-envelope"></i> [[#{usuario.activacion}]]
+                                <div class="form-field">
+                                    <label class="form-label" for="primerApellido">
+                                        <i class="fas fa-user-tag input-icon"></i>
+                                        [[#{usuario.primerApellido}]]
+                                    </label>
+                                    <input type="text" class="form-control" name="primerApellido" maxlength="30" required="true" placeholder="Ingresa tu primer apellido"/>
+                                </div>
+                                
+                                <div class="form-field">
+                                    <label class="form-label" for="segundoApellido">
+                                        <i class="fas fa-user-tag input-icon"></i>
+                                        [[#{usuario.segundoApellido}]]
+                                    </label>
+                                    <input type="text" class="form-control" name="segundoApellido" maxlength="30" required="true" placeholder="Ingresa tu segundo apellido"/>
+                                </div>
+                                
+                                <div class="form-field">
+                                    <label class="form-label" for="correo">
+                                        <i class="fas fa-envelope input-icon"></i>
+                                        [[#{usuario.correo}]]
+                                    </label>
+                                    <input type="email" class="form-control" name="correo" maxlength="40" required="true" placeholder="Ingresa tu correo electrónico"/>
+                                </div>
+                                
+                                <div class="form-field">
+                                    <label class="form-label" for="contrasena">
+                                        <i class="fas fa-key input-icon"></i>
+                                        [[#{usuario.password}]]
+                                    </label>
+                                    <input type="password" class="form-control" name="contrasena" maxlength="40" required="true" placeholder="Ingresa tu contraseña"/>
+                                </div>
+                                
+                                <div class="form-field mb-0">
+                                    <button type="submit" class="btn-register-submit">
+                                        <i class="fas fa-user-plus me-2"></i> Crear cuenta
                                     </button>
                                 </div>
-                                
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
+            
+            <!-- Modal de registro exitoso usando Bootstrap -->
+            <div class="modal fade" id="registroExitosoModal" tabindex="-1" aria-labelledby="registroExitosoModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #2D304D; color: white; border-bottom: 5px solid #39C9DB;">
+                            <h5 class="modal-title" id="registroExitosoModalLabel">Registro Exitoso</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center p-4">
+                            <div style="font-size: 80px; color: #39C9DB; margin: 20px 0;">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="fs-5 mb-4">Su cuenta ha sido creada correctamente</p>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <a href="/login" class="btn" style="background-color: #39C9DB; color: white; border-radius: 8px; padding: 10px 20px; font-weight: 600;">
+                                <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+                            </a>
+                            <a href="/" class="btn" style="background-color: white; color: #2D304D; border: 2px solid #2D304D; border-radius: 8px; padding: 10px 20px; font-weight: 600;">
+                                <i class="fas fa-home me-2"></i> Volver al Inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script th:inline="javascript">
+                // Mostrar el modal si hay un parámetro de éxito en la URL
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Verificar si acaba de registrarse correctamente
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.get('registroExitoso') === 'true') {
+                        // Usar jQuery para mostrar el modal
+                        $('#registroExitosoModal').modal('show');
+                    }
+                    
+                    // Interceptar el envío del formulario para mostrar el modal
+                    document.getElementById('registroForm').addEventListener('submit', function(event) {
+                        // Guardamos una marca en localStorage para mostrar el modal después
+                        localStorage.setItem('mostrarModalRegistro', 'true');
+                    });
+                });
+            </script>
         </section>
 
 

@@ -2,15 +2,139 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
     <head th:replace="~{layout/plantilla :: head}">
-        <title>TechShop</title>
+        <title>Hospital el Milagro</title>
         <meta charset="UTF-8">
     </head>
+    <style>
+        .success-page {
+            background-color: #f8f9fa;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+        
+        .success-modal {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+            animation: modalFadeIn 0.5s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-header {
+            background-color: #2D304D;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid #39C9DB;
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            color: #39C9DB;
+            margin: 20px 0;
+        }
+        
+        .success-body {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .success-message {
+            color: #2D304D;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .btn-login-redirect {
+            background-color: #39C9DB;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-login-redirect:hover {
+            background-color: #2bb6c7;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(57, 201, 219, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-home {
+            background-color: white;
+            color: #2D304D;
+            border: 2px solid #2D304D;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .btn-home:hover {
+            background-color: #2D304D;
+            color: white;
+            transform: scale(1.05);
+            text-decoration: none;
+        }
+    </style>
     <body>
         <header th:replace="~{layout/plantilla :: header}"/>
         
-        <section th:replace="~{registro/fragmentos :: salida}"/>
+        <div class="success-page">
+            <div class="container">
+                <div class="success-modal">
+                    <div class="success-header">
+                        <h2>[[${titulo}]]</h2>
+                    </div>
+                    <div class="success-body">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        
+                        <div class="success-message">
+                            <p>[[${mensaje}]]</p>
+                        </div>
+                        
+                        <div class="success-actions">
+                            <a th:href="@{/login}" class="btn-login-redirect">
+                                <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+                            </a>
+                            
+                            <a th:href="@{/}" class="btn-home">
+                                <i class="fas fa-home me-2"></i> Volver al Inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <footer th:replace="~{layout/plantilla :: footer}"/>
-
     </body>
 </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Hospital el Milagro</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"/>
+        
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow-lg border-0 rounded-lg">
+                        <div class="card-header" style="background-color: #2D304D; color: white; border-bottom: 5px solid #39C9DB;">
+                            <h3 class="text-center font-weight-light my-2">Registro Exitoso</h3>
+                        </div>
+                        <div class="card-body text-center p-5">
+                            <div style="font-size: 80px; color: #39C9DB; margin: 20px 0;">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="fs-5 mb-4">Su cuenta ha sido creada correctamente</p>
+                            
+                            <div class="mt-4">
+                                <a th:href="@{/login}" class="btn btn-lg m-2" style="background-color: #39C9DB; color: white; border-radius: 8px; padding: 15px 30px; font-weight: 600;">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+                                </a>
+                                <a th:href="@{/}" class="btn btn-lg m-2" style="background-color: white; color: #2D304D; border: 2px solid #2D304D; border-radius: 8px; padding: 15px 30px; font-weight: 600;">
+                                    <i class="fas fa-home me-2"></i> Volver al Inicio
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer th:replace="~{layout/plantilla :: footer}"/>
+    </body>
+</html> 
