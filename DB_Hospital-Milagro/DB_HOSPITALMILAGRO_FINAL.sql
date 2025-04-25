@@ -2210,24 +2210,6 @@ EXCEPTION
         RAISE;
 END FIDE_ACTUALIZAR_PROVINCIA_TB_SP;
 /
--- 2. Procedimiento para actualizar FIDE_CANTONES_TB
-CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_CANTON_TB_SP(
-    p_id_canton fide_cantones_tb.id_canton%TYPE,
-    p_nombre fide_cantones_tb.nombre%TYPE,
-    p_id_provincia fide_cantones_tb.id_provincia%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_CANTONES_TB
-    SET NOMBRE = p_nombre,
-        ID_provincia = p_id_provincia
-    WHERE ID_CANTON = p_id_canton;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_CANTON_TB_SP;
-/
 
 -- 3. Procedimiento para actualizar FIDE_DISTRITOS_TB
 CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_DISTRITO_TB_SP(
