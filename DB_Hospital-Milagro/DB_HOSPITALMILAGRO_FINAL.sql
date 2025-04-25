@@ -2599,20 +2599,7 @@ EXCEPTION
         RAISE;
 END FIDE_DESACTIVAR_PAIS_TB_SP;
 /
-CREATE OR REPLACE PROCEDURE FIDE_DESACTIVAR_PROVINCIA_TB_SP(
-    p_id_provincia fide_provincias_tb.id_provincia%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_PROVINCIAS_TB
-    SET ACTIVO = 0
-    WHERE ID_PROVINCIA = p_id_provincia;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_DESACTIVAR_PROVINCIA_TB_SP;
-/
+
 CREATE OR REPLACE PROCEDURE FIDE_DESACTIVAR_CANTON_TB_SP(
     p_id_canton fide_cantones_tb.id_canton%TYPE
 ) AS
@@ -2860,148 +2847,6 @@ END generar_reporte_medicamentos;
 /
 
 
---Procedimiento para transferir inventario entre ubicaciones
-
-CREATE OR REPLACE PROCEDURE transferir_inventario(
-  p_id_medicamento NUMBER,
-  p_cantidad NUMBER,
-  p_origen NUMBER,
-  p_destino NUMBER
-) AS
-  -- Variables para validaci?n
-  v_stock_origen NUMBER;
-  v_existe_destino NUMBER := 0;
-  
-  -- Cursor expl?cito para registro de inventario destino
-  CURSOR c_inventario_destino IS
-    SELECT ID_INVENTARIO, CANTIDAD
-    FROM FIDE_INVENTARIO_MEDICAMENTOS_TB
-    WHERE ID_MEDICAMENTO = p_id_medicamento
-    AND ID_UBICACION = p_destino;
-    
-  r_destino c_inventario_destino%ROWTYPE;
-BEGIN
-  -- Validar stock en origen (cursor impl?cito)
-  SELECT CANTIDAD INTO v_stock_origen
-  FROM FIDE_INVENTARIO_MEDICAMENTOS_TB
-  WHERE ID_MEDICAMENTO = p_id_medicamento
-  AND ID_UBICACION = p_origen;
-  
-  IF v_stock_origen < p_cantidad THEN
-    RAISE_APPLICATION_ERROR(-20001, 'Stock insuficiente en ubicaci?n origen');
-  END IF;
-  
-  -- Verificar si existe registro en destino (cursor expl?cito)
-  OPEN c_inventario_destino;
-  FETCH c_inventario_destino INTO r_destino;
-  v_existe_destino := c_inventario_destino%ROWCOUNT;
-  CLOSE c_inventario_destino;
-  
-  -- Actualizar origen (cursor impl?cito)
-  UPDATE FIDE_INVENTARIO_MEDICAMENTOS_TB
-  SET CANTIDAD = CANTIDAD - p_cantidad,
-      LAST_UPDATE = SYSDATE,
-      LAST_UPDATE_BY = USER
-  WHERE ID_MEDICAMENTO = p_id_medicamento
-  AND ID_UBICACION = p_origen;
-  
-  -- Actualizar o insertar destino
-  IF v_existe_destino > 0 THEN
-    UPDATE FIDE_INVENTARIO_MEDICAMENTOS_TB
-    SET CANTIDAD = CANTIDAD + p_cantidad,
-        LAST_UPDATE = SYSDATE,
-        LAST_UPDATE_BY = USER
-    WHERE ID_INVENTARIO = r_destino.ID_INVENTARIO;
-  ELSE
-    INSERT INTO FIDE_INVENTARIO_MEDICAMENTOS_TB (
-      ID_INVENTARIO, ID_MEDICAMENTO, ID_UBICACION,
-      CANTIDAD, CREATION_DATE, CREATED_BY,
-      LAST_UPDATE, LAST_UPDATE_BY, ACCION, ACTIVO
-    ) VALUES (
-      SEQ_INVENTARIO.NEXTVAL, p_id_medicamento, p_destino,
-      p_cantidad, SYSDATE, USER,
-      SYSDATE, USER, 'TRANSFERENCIA', 1
-    );
-  END IF;
-  
-  COMMIT;
-  DBMS_OUTPUT.PUT_LINE('Transferencia realizada con ?xito');
-EXCEPTION
-  WHEN NO_DATA_FOUND THEN
-    ROLLBACK;
-    DBMS_OUTPUT.PUT_LINE('Error: No se encontr? el medicamento en la ubicaci?n origen');
-  WHEN OTHERS THEN
-    ROLLBACK;
-    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END transferir_inventario;
-/
-
-
---Procedimiento para migrar datos hist?ricos
-
-
-CREATE OR REPLACE PROCEDURE migrar_historial_citas_antiguas(
-  p_anio NUMBER
-) AS
-  -- Cursor expl?cito para citas antiguas
-  CURSOR c_citas_antiguas IS
-    SELECT c.ID_CITA, c.FECHA, c.ID_ESTADO_CITA, c.ID_DOCTOR, c.ID_PACIENTE
-    FROM FIDE_CITAS_TB c
-    WHERE EXTRACT(YEAR FROM c.FECHA) < p_anio
-    AND c.ACTIVO = 1;
-    
-  -- Contadores
-  v_total_migradas NUMBER := 0;
-  v_total_errores NUMBER := 0;
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Iniciando migraci?n de citas anteriores a ' || p_anio);
-  
-  -- Procesar cada cita antigua
-  FOR r_cita IN c_citas_antiguas LOOP
-    BEGIN
-      -- Insertar en tabla hist?rica (cursor impl?cito)
-      INSERT INTO FIDE_HISTORIAL_CITAS_TB (
-        ID_HISTORIAL, ID_CITA, FECHA_CAMBIO,
-        ID_ESTADO_ANTERIOR, ID_ESTADO_NUEVO,
-        OBSERVACIONES, ACTIVO
-      ) VALUES (
-        SEQ_HISTORIAL.NEXTVAL, r_cita.ID_CITA, SYSDATE,
-        r_cita.ID_ESTADO_CITA, r_cita.ID_ESTADO_CITA,
-        'Migraci?n hist?rica de datos', 1
-      );
-      
-      -- Marcar como inactiva en tabla original (cursor impl?cito)
-      UPDATE FIDE_CITAS_TB
-      SET ACTIVO = 0,
-          LAST_UPDATE = SYSDATE,
-          LAST_UPDATE_BY = USER,
-          ACCION = 'MIGRADO A HIST?RICO'
-      WHERE ID_CITA = r_cita.ID_CITA;
-      
-      v_total_migradas := v_total_migradas + 1;
-      
-      -- Commit cada 100 registros
-      IF MOD(v_total_migradas, 100) = 0 THEN
-        COMMIT;
-        DBMS_OUTPUT.PUT_LINE('Migradas ' || v_total_migradas || ' citas...');
-      END IF;
-    EXCEPTION
-      WHEN OTHERS THEN
-        v_total_errores := v_total_errores + 1;
-        DBMS_OUTPUT.PUT_LINE('Error migrando cita ' || r_cita.ID_CITA || ': ' || SQLERRM);
-    END;
-  END LOOP;
-  
-  COMMIT;
-  DBMS_OUTPUT.PUT_LINE('Migraci?n completada');
-  DBMS_OUTPUT.PUT_LINE('Total citas migradas: ' || v_total_migradas);
-  DBMS_OUTPUT.PUT_LINE('Total errores: ' || v_total_errores);
-EXCEPTION
-  WHEN OTHERS THEN
-    ROLLBACK;
-    DBMS_OUTPUT.PUT_LINE('Error en migraci?n: ' || SQLERRM);
-END migrar_historial_citas_antiguas;
-/
 CREATE OR REPLACE PROCEDURE FIDE_LISTAR_USUARIOS_SP(
     LISTA_USUARIOS OUT SYS_REFCURSOR
 ) AS
@@ -3058,31 +2903,6 @@ BEGIN
     SET ID_ESTADO_CITA = 3 -- Cancelado
     WHERE FECHA < SYSDATE - 30
     AND ID_ESTADO_CITA = 1; -- Pendiente
-END;
-/
-
--- 8. Generar notificaciones para citas prÃ³ximas
-CREATE OR REPLACE PROCEDURE notificar_citas_proximas AS
-BEGIN
-    INSERT INTO FIDE_NOTIFICACIONES_TB (
-        ID_NOTIFICACION, MENSAJE, TIPO, ID_USUARIO, 
-        CREATION_DATE, CREATED_BY, LAST_UPDATE, 
-        LAST_UPDATE_BY, ACCION, ACTIVO
-    )
-    SELECT 
-        SEQ_NOTIF.NEXTVAL, 
-        'Cita programada para ' || TO_CHAR(c.FECHA, 'DD/MM/YYYY'), 
-        'RECORDATORIO', 
-        p.ID_USUARIO,
-        SYSDATE, 
-        'SISTEMA', 
-        SYSDATE, 
-        'SISTEMA', 
-        'INSERT', 
-        1
-    FROM FIDE_CITAS_TB c
-    JOIN FIDE_PACIENTES_TB p ON c.ID_PACIENTE = p.ID_PACIENTE
-    WHERE c.FECHA BETWEEN SYSDATE AND SYSDATE + 2;
 END;
 /
 
@@ -3675,42 +3495,6 @@ BEGIN
     END LOOP;
 END;
 /
-
-
---40. Migrar Datos de Direcciones Antiguas
-
-
-CREATE OR REPLACE PROCEDURE migrar_direcciones_antiguas AS
-    CURSOR c_direcciones_viejas IS
-        SELECT ID_DIRECCION, DIRECCION 
-        FROM FIDE_PACIENTES_TB
-        WHERE ID_DIRECCION IS NULL
-        FOR UPDATE;
-BEGIN
-    FOR r IN c_direcciones_viejas LOOP
-        INSERT INTO FIDE_DIRECCION_TB (
-            ID_DIRECCION, ID_PAIS, ID_CANTON, ID_DISTRITO,
-            CREATION_DATE, CREATED_BY, LAST_UPDATE, 
-            LAST_UPDATE_BY, ACCION, ACTIVO
-        ) VALUES (
-            SEQ_DIRECCION.NEXTVAL, 1, 1, 1, -- IDs por defecto (ajustar segÃºn tu DB)
-            SYSDATE, 'MIGRACION', SYSDATE, 
-            'MIGRACION', 'INSERT', 1
-        ) RETURNING ID_DIRECCION INTO v_nueva_direccion;
-        
-        UPDATE FIDE_PACIENTES_TB
-        SET ID_DIRECCION = v_nueva_direccion
-        WHERE CURRENT OF c_direcciones_viejas;
-    END LOOP;
-    COMMIT;
-    DBMS_OUTPUT.PUT_LINE('Direcciones migradas: ' || c_direcciones_viejas%ROWCOUNT);
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
 
 
 --Taer los usuarios de la BD
