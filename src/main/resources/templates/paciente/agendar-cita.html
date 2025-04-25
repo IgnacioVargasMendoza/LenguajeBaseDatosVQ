@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Hospital el Milagro - Agendar Cita</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"/>
+        
+        <main>
+            <div class="container my-5">
+                <div class="row">
+                    <div class="col-md-10 mx-auto">
+                        <!-- Mensajes de error o éxito -->
+                        <div class="alert alert-danger" th:if="${error != null}" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i> <span th:text="${error}"></span>
+                        </div>
+                        
+                        <div class="alert" th:if="${mensaje != null}" th:class="'alert alert-' + ${tipo}" role="alert">
+                            <i class="fas" th:classappend="${tipo == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                            <span th:text="${mensaje}"></span>
+                        </div>
+                        
+                        <div class="hospital-card">
+                            <div class="card-header">
+                                <h4 class="mb-0">Agendar Nueva Cita</h4>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/paciente/guardar-cita}" method="post" id="formCita">
+                                    <input type="hidden" name="idPaciente" th:value="${session.usuarioId}">
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="especialidad" class="form-label">Especialidad:</label>
+                                            <select class="form-select" id="especialidad" name="idEspecialidad" required>
+                                                <option value="">Seleccione una especialidad</option>
+                                                <option th:each="especialidad : ${especialidades}" 
+                                                        th:value="${especialidad.idEspecialidad}" 
+                                                        th:text="${especialidad.nombreEspecialidad}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="doctor" class="form-label">Doctor:</label>
+                                            <select class="form-select" id="doctor" name="idDoctor" required>
+                                                <option value="">Primero seleccione una especialidad</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="fecha" class="form-label">Fecha:</label>
+                                            <input type="date" class="form-control" id="fecha" name="fecha" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="hora" class="form-label">Hora:</label>
+                                            <select class="form-select" id="hora" name="horaCita" required>
+                                                <option value="">Seleccione un horario</option>
+                                                <option value="08:00">08:00 AM</option>
+                                                <option value="09:00">09:00 AM</option>
+                                                <option value="10:00">10:00 AM</option>
+                                                <option value="11:00">11:00 AM</option>
+                                                <option value="13:00">01:00 PM</option>
+                                                <option value="14:00">02:00 PM</option>
+                                                <option value="15:00">03:00 PM</option>
+                                                <option value="16:00">04:00 PM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="motivo" class="form-label">Motivo de la consulta:</label>
+                                        <textarea class="form-control" id="motivo" name="motivo" rows="3"></textarea>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between">
+                                        <a th:href="@{/paciente/citas}" class="btn btn-secondary">
+                                            <i class="fas fa-arrow-left me-2"></i> Volver
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-calendar-check me-2"></i> Agendar Cita
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer th:replace="~{layout/plantilla :: footer}"/>
+        
+        <script>
+            // Configurar fecha mínima como hoy
+            document.addEventListener('DOMContentLoaded', function() {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                let mm = today.getMonth() + 1;
+                let dd = today.getDate();
+                
+                if (dd < 10) dd = '0' + dd;
+                if (mm < 10) mm = '0' + mm;
+                
+                const formattedToday = yyyy + '-' + mm + '-' + dd;
+                document.getElementById('fecha').setAttribute('min', formattedToday);
+                
+                // Cargar doctores cuando cambia la especialidad
+                document.getElementById('especialidad').addEventListener('change', function() {
+                    const especialidadId = this.value;
+                    const doctorSelect = document.getElementById('doctor');
+                    
+                    // Limpiar select de doctores
+                    doctorSelect.innerHTML = '<option value="">Cargando doctores...</option>';
+                    
+                    if (especialidadId) {
+                        // Hacer la petición para obtener doctores por especialidad
+                        fetch('/api/doctores-por-especialidad/' + especialidadId)
+                            .then(response => response.json())
+                            .then(data => {
+                                doctorSelect.innerHTML = '<option value="">Seleccione un doctor</option>';
+                                data.forEach(doctor => {
+                                    const option = document.createElement('option');
+                                    option.value = doctor.idDoctor;
+                                    option.textContent = doctor.nombreDoctor + ' ' + doctor.apellidoDoctor;
+                                    doctorSelect.appendChild(option);
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                doctorSelect.innerHTML = '<option value="">Error al cargar doctores</option>';
+                            });
+                    } else {
+                        doctorSelect.innerHTML = '<option value="">Primero seleccione una especialidad</option>';
+                    }
+                });
+                
+                // Validar formulario antes de enviar
+                document.getElementById('formCita').addEventListener('submit', function(e) {
+                    const especialidad = document.getElementById('especialidad').value;
+                    const doctor = document.getElementById('doctor').value;
+                    const fecha = document.getElementById('fecha').value;
+                    const hora = document.getElementById('hora').value;
+                    
+                    if (!especialidad || !doctor || !fecha || !hora) {
+                        e.preventDefault();
+                        alert('Por favor complete todos los campos obligatorios');
+                    }
+                });
+            });
+        </script>
+    </body>
+</html> 

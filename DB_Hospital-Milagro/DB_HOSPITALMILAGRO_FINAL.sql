@@ -4049,7 +4049,7 @@ BEGIN
     COMMIT;
 END FIDE_AGREGAR_ESTADO_CITA_SP;
 /
-
+SELECT * FROM FIDE_USUARIOS_TB;
 ---------------------FUNCIONES------------------------------------------------
 -- 1. Función para autenticación (login)
 CREATE OR REPLACE FUNCTION AUTENTICAR_USUARIO(
