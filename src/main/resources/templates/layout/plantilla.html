@@ -11,37 +11,90 @@
         <script th:src="@{/js/rutinas.js}" type="text/javascript"></script>
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>    
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+        <style>
+            body {
+                background-color: white;
+                color: black;
+            }
+            nav{
+                background-color: #2D304D;
+                border-bottom: 0.5px solid lightgray;
+                border-color: #cccccc;
+                color: white;
+            }
+            #tittle{
+                color: white;
+            }
+            #login{
+                color:#39C9DB; 
+                border-color: #39C9DB;
+            }
+            #login:hover{
+                background-color: #39C9DB;
+                color: white;
+                transform: scale(1.05);
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+            }
+            #exit{
+                color:#F9589B; 
+                border-color: #F9589B;
+            }
+            #exit:hover{
+                background-color: #F9589B;
+                color: white;
+                transform: scale(1.05);
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+            }
+            #agendarCitaBtn{
+                border: 2px dotted #F9589B;
+                color: #F9589B;
+                font-weight: bold;
+                font-size: 20px;
+            }
+            #agendarCitaBtn:hover {
+                background-color: #F9589B;
+                color: white;
+                transform: scale(1.05);
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+            }
+            #service-container a{
+                color:#39C9DB; 
+            }
+            #service-container a:hover{
+                color:white;
+            }
+        </style>
     </head>
     <body>
         <header th:fragment="header" class="header">
-            <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+            <nav class="navbar navbar-expand-lg  p-0 wow fadeIn" data-wow-delay="0.1s">
                 <a th:href="@{/index}" class="navbar-brand">
-                    <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>[[#{aplicacion.titulo}]]</h1>
+                    <h1 id="tittle" class="m-0"><i class="far fa-hospital me-3"></i>[[#{aplicacion.titulo}]]</h1>
                 </a>
                 <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto p-4 p-lg-0">
-                        <a th:href="@{/index}" class="nav-item nav-link active" style="color: black">[[#{plantilla.inicio}]]</a>
-                        <a th:href="@{/about/about}" class="nav-item nav-link" style="color: black">[[#{plantilla.acerca}]]</a>
+                        <a th:href="@{/index}" class="nav-item nav-link" style="color:white">[[#{plantilla.inicio}]]</a>
+                        <a th:href="@{/about/about}" class="nav-item nav-link" style="color:white">[[#{plantilla.acerca}]]</a>
                         <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" th:href="@{/servicios/listado}" style="color: black">[[#{plantilla.servicios}]]</a>
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" th:href="@{/servicios/listado}" style="color:white">[[#{plantilla.servicios}]]</a>
                             <div class="dropdown-menu rounded-0 rounded-bottom m-0">
-                                <a th:href="@{/}" class="dropdown-item" style="color: black">Feature</a>
-                                <a th:href="@{/}" class="dropdown-item" style="color: black">Our Doctor</a>
-                                <a th:href="@{/}" class="dropdown-item" style="color: black">Appointment</a>
-                                <a th:href="@{/}" class="dropdown-item" style="color: black">Testimonial</a>
-                                <a th:href="@{/}" class="dropdown-item" style="color: black">404 Page</a>
+                                <a th:href="@{/}" class="dropdown-item">Feature</a>
+                                <a th:href="@{/}" class="dropdown-item">Our Doctor</a>
+                                <a th:href="@{/}" class="dropdown-item">Appointment</a>
+                                <a th:href="@{/}" class="dropdown-item">Testimonial</a>
+                                <a th:href="@{/}" class="dropdown-item">404 Page</a>
                             </div>
                         </div>
 
-                        <a th:href="@{/especialidades/listado}" class="nav-item nav-link" style="color: black">[[#{plantilla.especialidades}]]</a>
-                        <a th:href="@{/doctor/listado}" class="nav-item nav-link" style="color: black">[[#{plantilla.doctores}]]</a>
-                        <a th:href="@{/usuario/listado}" class="nav-item nav-link" style="color: black">[[#{plantilla.usuarios}]]</a>
+                        <a th:href="@{/especialidades/listado}" class="nav-item nav-link" style="color:white">[[#{plantilla.especialidades}]]</a>
+                        <a th:href="@{/doctor/listado}" class="nav-item nav-link" style="color:white">[[#{plantilla.doctores}]]</a>
+                        <a th:href="@{/usuario/listado}" class="nav-item nav-link" style="color:white">[[#{plantilla.usuarios}]]</a>
                         <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color: black">Lang</a>                            
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color:white">Lang</a>                            
                             <div class="dropdown-menu rounded-0 rounded-bottom m-0">
                                 <a class="dropdown-item"  th:href="@{/(lang=es)}">ES</a>
                                 <a class="dropdown-item" th:href="@{/(lang=en)}">EN</a>
@@ -54,11 +107,11 @@
                             <li class="nav-item text-white my-auto d-flex align-items-center">
                                 <i class="fas fa-user-circle fa-2x me-2" style="color: #3498db;"></i>
                                 <div>
-                                    <span style="color: black; font-weight: bold;" th:text="${session.usuario.nombre}">Usuario</span>
-                                    <span style="color: black; font-size: 0.8em; display: block;" th:text="${session.usuario.correo}">correo@ejemplo.com</span>
+                                    <span style="color: white; font-weight: bold;" th:text="${session.usuario.nombre}">Usuario</span>
+                                    <span style="color: white; font-size: 0.8em; display: block;" th:text="${session.usuario.correo}">correo@ejemplo.com</span>
                                 </div>
                                 <div class="ms-3">
-                                    <a th:href="@{/login/logout}" class="btn btn-outline-danger btn-sm">
+                                    <a id="exit" th:href="@{/login/logout}" class="btn btn-sm">
                                         <i class="fas fa-sign-out-alt"></i> Salir
                                     </a>
                                 </div>
@@ -67,7 +120,7 @@
                     </div>
                     <!-- Botón de login cuando no hay sesión -->
                     <div th:unless="${session.usuario != null}" class="me-3">
-                        <a th:href="@{/login}" class="btn btn-outline-primary">
+                        <a id="login" th:href="@{/login}" class="btn">
                             <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                         </a>
                     </div>
@@ -103,12 +156,12 @@
         
         //INFO CONTAINER
         <section th:fragment="header-info">
-            <div class="container-fluid header bg-primary p-0 mb-5">
+            <div class="container-fluid header p-0 mb-5">
                 <div class="row g-0 align-items-center flex-column-reverse flex-lg-row">
                     <div class="col-lg-6 p-5 wow fadeIn" data-wow-delay="0.1s" style="margin: auto">
-                        <h1 class="display-4 text-white mb-5" style="text-align: center;">[[#{plantilla.header}]]</h1>
+                        <h1 id="a" class="display-4 mb-5" style="text-align: center;">[[#{plantilla.header}]]</h1>
                         <div class="text-center mb-4">
-                            <a th:if="${session.usuario != null}" th:href="@{/agendarCita/agendarCita}" class="btn btn-primary rounded-0 py-4 px-lg-5 border border-white shadow-sm">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
+                            <a id="agendarCitaBtn" th:if="${session.usuario != null}" th:href="@{/agendarCita/agendarCita}" class="btn rounded-0 py-4 px-lg-5" style="border-style: dotted !important; transition: all 0.3s ease;">[[#{plantilla.agendarCita}]]<i class="fa fa-arrow-right ms-3"></i></a>
                         </div>
                         <div class="row g-4">
                             <div class="col-sm-4">
@@ -136,14 +189,14 @@
         </section>
         
         <section th:fragment= "feature">
-            <div class="container-fluid bg-primary overflow-hidden px-lg-0" style="margin: 6rem 0;">
+            <div class="container-fluid overflow-hidden px-lg-0" style="margin: 6rem 0;">
                 <div class="container feature px-lg-0">
                     <div class="row g-0 mx-lg-0">
                         <div class="col-lg-6 feature-text py-5 wow fadeIn" data-wow-delay="0.1s">
                             <div class="p-lg-5 ps-lg-0">
-                                <p class="d-inline-block border rounded-pill text-light py-1 px-4">[[#{plantilla.features.tittle}]]</p>
-                                <h1 class="text-white mb-4">[[#{plantilla.features.subTittle}]]</h1>
-                                <p class="text-white mb-4 pb-2">[[#{plantilla.features.description}]]</p>
+                                <p class="d-inline-block border rounded-pill py-1 px-4">[[#{plantilla.features.tittle}]]</p>
+                                <h1 class="mb-4">[[#{plantilla.features.subTittle}]]</h1>
+                                <p class="mb-4 pb-2">[[#{plantilla.features.description}]]</p>
                                 <div class="row g-4">
                                     <div class="col-6">
                                         <div class="d-flex align-items-center">
@@ -151,8 +204,8 @@
                                                 <i class="fa fa-user-md text-primary"></i>
                                             </div>
                                             <div class="ms-4">
-                                                <p class="text-white mb-2">[[#{plantilla.features.firstCrTittle}]]</p>
-                                                <h5 class="text-white mb-0">[[#{plantilla.features.firstCr}]]</h5>
+                                                <p class="mb-2">[[#{plantilla.features.firstCrTittle}]]</p>
+                                                <h5 class="mb-0">[[#{plantilla.features.firstCr}]]</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -162,8 +215,8 @@
                                                 <i class="fa fa-check text-primary"></i>
                                             </div>
                                             <div class="ms-4">
-                                                <p class="text-white mb-2">[[#{plantilla.features.secondCrTittle}]]</p>
-                                                <h5 class="text-white mb-0">[[#{plantilla.features.secondCr}]]</h5>
+                                                <p class="mb-2">[[#{plantilla.features.secondCrTittle}]]</p>
+                                                <h5 class="mb-0">[[#{plantilla.features.secondCr}]]</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -173,8 +226,8 @@
                                                 <i class="fa fa-comment-medical text-primary"></i>
                                             </div>
                                             <div class="ms-4">
-                                                <p class="text-white mb-2">[[#{plantilla.features.thirdCrTittle}]]</p>
-                                                <h5 class="text-white mb-0">[[#{plantilla.features.thirdCr}]]</h5>
+                                                <p class="mb-2">[[#{plantilla.features.thirdCrTittle}]]</p>
+                                                <h5 class="mb-0">[[#{plantilla.features.thirdCr}]]</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -184,8 +237,8 @@
                                                 <i class="fa fa-headphones text-primary"></i>
                                             </div>
                                             <div class="ms-4">
-                                                <p class="text-white mb-2">[[#{plantilla.features.forthCrTittle}]]</p>
-                                                <h5 class="text-white mb-0">[[#{plantilla.features.forthCr}]]</h5>
+                                                <p class="mb-2">[[#{plantilla.features.forthCrTittle}]]</p>
+                                                <h5 class="mb-0">[[#{plantilla.features.forthCr}]]</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -205,8 +258,8 @@
         
         
         <footer th:fragment="footer">
-            <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
-                <div class="container py-5">
+            <div class="container-fluid bg-dark text-light footer mt-5 pt-5 wow fadeIn " data-wow-delay="0.1s">
+                <div id='service-container' class="container py-5">
                     <div class="row g-5">
                         <div class="col-lg-3 col-md-6">
                             <h5 class="text-light mb-4">Address</h5>
@@ -222,40 +275,20 @@
                         </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-light mb-4">Services</h5>
-                        <a class="btn btn-link" href="">Cardiology</a>
-                        <a class="btn btn-link" href="">Pulmonary</a>
-                        <a class="btn btn-link" href="">Neurology</a>
-                        <a class="btn btn-link" href="">Orthopedics</a>
-                        <a class="btn btn-link" href="">Laboratory</a>
+                        <a class="btn" href="">Cardiology</a>
+                        <a class="btn" href="">Pulmonary</a>
+                        <a class="btn" href="">Neurology</a>
+                        <a class="btn" href="">Orthopedics</a>
+                        <a class="btn" href="">Laboratory</a>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-light mb-4">Quick Links</h5>
-                        <a class="btn btn-link" href="">About Us</a>
-                        <a class="btn btn-link" href="">Contact Us</a>
-                        <a class="btn btn-link" href="">Our Services</a>
-                        <a class="btn btn-link" href="">Terms & Condition</a>
-                        <a class="btn btn-link" href="">Support</a>
+                        <a class="btn" href="">About Us</a>
+                        <a class="btn" href="">Contact Us</a>
+                        <a class="btn" href="">Our Services</a>
+                        <a class="btn" href="">Terms & Condition</a>
+                        <a class="btn" href="">Support</a>
                     </div>
-                    <div class="col-lg-3 col-md-6">
-                        <h5 class="text-light mb-4">Newsletter</h5>
-                        <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                        <div class="position-relative mx-auto" style="max-width: 400px;">
-                            <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                            <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="copyright">
-                        <div class="row">
-                            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                                &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
-                            </div>
-                            <div class="col-md-6 text-center text-md-end">
-                                Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

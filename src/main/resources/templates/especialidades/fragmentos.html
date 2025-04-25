@@ -6,7 +6,7 @@
         <meta charset="UTF-8">
     </head>
     <body>
-
+        
         <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
             <div class="container">
@@ -178,6 +178,7 @@
                 </div>
             </div>
         </section>
+        
         <section th:fragment="listadoEspecialidades">
             <div class="container">
                 <div class="row">
@@ -187,7 +188,7 @@
                                 <h4>[[#{especialidad.listado}]]</h4>
                             </div>
                             <div th:if="${listaEspecialidades != null and !listaEspecialidades.empty}">
-                                <table class="table table-striped table-hover">
+                                <table class="table table-striped table-bordered">
                                     <thead class="table-dark">
                                         <tr>
                                             <th> ID </th>
@@ -230,6 +231,7 @@
                     </div>
                  </div>> -->
             </div>
+                
         </section>
 
     </body>
