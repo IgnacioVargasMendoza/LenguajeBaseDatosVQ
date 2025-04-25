@@ -25,9 +25,10 @@
                                                 <th>ID</th>
                                                 <th>Fecha</th>
                                                 <th>Hora</th>
-                                                <th>Estado</th>
+                                                <th>Estado cita</th>
                                                 <th>Doctor</th>
                                                 <th>Paciente</th>
+                                                <th>Activo</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
@@ -40,13 +41,17 @@
                                                 <td>[[${cita.nombreDoctor}]]</td>
                                                 <td>[[${cita.nombrePaciente}]]</td>
                                                 <td class="text-center">
+                                                    <span th:if="${cita.activo == 1}" class="badge bg-success rounded-pill">Activo</span>
+                                                    <span th:unless="${cita.activo == 1}" class="badge bg-danger rounded-pill">Inactivo</span>
+                                                </td>
+                                                <td class="text-center">
                                                     <a th:href="@{/citas/eliminar/}+${cita.idCita}"
                                                        class="btn btn-danger">
                                                         <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
                                                     </a>
-                                                    <a th:href="@{/citas/modificar/}+${cita.idCita}"
+                                                    <a th:href="@{/citas/editar/}+${cita.idCita}"
                                                        class="btn btn-success">
-                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Actualizar</span>
+                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Editar</span>
                                                     </a>
                                                 </td>
                                             </tr>
