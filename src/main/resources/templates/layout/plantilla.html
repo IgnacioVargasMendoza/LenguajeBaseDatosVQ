@@ -246,6 +246,8 @@
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" th:href="@{/servicios/listado}" style="color:white">[[#{plantilla.servicios}]]</a>
                             <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                                <a th:href="@{/citas/listado}" class="dropdown-item">Agendar Citas</a>
+                                <a th:href="@{/paciente/listado}" class="dropdown-item">Gestión de Pacientes</a>
                                 <a th:href="@{/}" class="dropdown-item">Feature</a>
                                 <a th:href="@{/}" class="dropdown-item">Our Doctor</a>
                                 <a th:href="@{/}" class="dropdown-item">Appointment</a>

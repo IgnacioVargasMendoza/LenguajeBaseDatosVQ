@@ -194,8 +194,9 @@
                                         <thead>
                                             <tr>
                                                 <th width="10%"> ID </th>
-                                                <th width="25%">[[#{especialidad.nombre}]]</th>
-                                                <th width="45%">[[#{especialidad.descripcion}]]</th>
+                                                <th width="20%">[[#{especialidad.nombre}]]</th>
+                                                <th width="35%">[[#{especialidad.descripcion}]]</th>
+                                                <th width="15%">Estado</th>
                                                 <th width="20%">Acciones</th>
                                             </tr>
                                         </thead>
@@ -205,13 +206,17 @@
                                                 <td>[[${especialidades.nombre}]]</td>
                                                 <td>[[${especialidades.descripcion}]]</td>
                                                 <td class="text-center">
-                                                    <a th:href="@{/producto/eliminar/}+${especialidades.idEspecialidad}"
+                                                    <span th:if="${especialidades.activo == 1}" class="badge bg-success rounded-pill">Activo</span>
+                                                    <span th:unless="${especialidades.activo == 1}" class="badge bg-danger rounded-pill">Inactivo</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a th:href="@{/especialidades/eliminar/}+${especialidades.idEspecialidad}"
                                                        class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">[[#{accion.eliminar}]]</span>
+                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
                                                     </a>
-                                                    <a th:href="@{/producto/modificar/}+${especialidades.idEspecialidad}"
+                                                    <a th:href="@{/especialidades/editar/}+${especialidades.idEspecialidad}"
                                                        class="btn btn-success">
-                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">[[#{accion.actualizar}]]</span>
+                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Editar</span>
                                                     </a>
                                                 </td>
                                             </tr>

@@ -11,46 +11,54 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="FIDE_CITAS_TB")
-public class AgendarCita implements Serializable{
+@Table(name="FIDE_PACIENTES_TB")
+public class Paciente implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
     @Id
-    @Column(name = "ID_CITA")
-    private Long idCita;
-    
-    @Column(name="FECHA")
-    private Date fecha;
-    @Column(name="HORA_CITA")
-    private String horaCita;
-    @Column(name="ID_ESTADO_CITA")
-    private Long idEstadoCita;
-    @Column(name="ID_DOCTOR")
-    private Long idDoctor;
     @Column(name="ID_PACIENTE")
     private Long idPaciente;
+    
+    @Column(name="FECHA_NACIMIENTO")
+    private Date fechaNacimiento;
+    
+    @Column(name="NUMERO_SEGURO")
+    private String numeroSeguro;
+    
+    @Column(name="DIRECCION")
+    private String direccion;
+    
+    @Column(name="TELEFONO")
+    private String telefono;
+    
+    @Column(name="ID_USUARIO")
+    private Long idUsuario;
+    
+    @Column(name="ID_DIRECCION")
+    private Long idDireccion;
+    
     @Column(name = "CREATION_DATE")
     private String creationDate;
+    
     @Column(name = "CREATED_BY")
     private String createdBy;
+    
     @Column(name = "LAST_UPDATE")
     private String lastUpdate;
+    
     @Column(name = "LAST_UPDATE_BY")
     private String lastUpdateBy;
     
-    @Column(name = "ACCION")
+    @Transient
     private String accion;
     
     @Column(name = "ACTIVO")
     private byte activo;
     
     @Transient
-    private String nombreDoctor;
+    private String nombreUsuario;
     
     @Transient
-    private String nombrePaciente;
-    
-    @Transient
-    private String nombreEstadoCita;
-}
+    private String direccionCompleta;
+} 

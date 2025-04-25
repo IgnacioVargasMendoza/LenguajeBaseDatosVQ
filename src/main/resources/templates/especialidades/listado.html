@@ -10,6 +10,14 @@
         <header th:replace="~{layout/plantilla :: header}"/>
         
         <main>
+            <!-- Mensajes de error o éxito -->
+            <div class="container mt-3" th:if="${mensaje != null}">
+                <div th:class="'alert alert-' + ${tipo}" role="alert">
+                    <i class="fas" th:classappend="${tipo == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                    <span th:text="${mensaje}"></span>
+                </div>
+            </div>
+            
             <section th:replace="~{especialidades/fragmentos :: listadoEspecialidades}"></section>
             <section th:replace="~{especialidades/fragmentos :: agregarEspecialidad}"></section>
         </main>
@@ -49,6 +57,19 @@
                     }
                 }
             });
+            
+            function limpiarBackdrop() {
+                // Solución para quitar el backdrop cuando se cierra el modal
+                setTimeout(function() {
+                    const backdrops = document.getElementsByClassName('modal-backdrop');
+                    while(backdrops.length > 0) {
+                        backdrops[0].parentNode.removeChild(backdrops[0]);
+                    }
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                }, 200);
+            }
         </script>
     </body>
 </html>

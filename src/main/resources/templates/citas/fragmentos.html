@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Hospital el Milagro - Citas</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <section th:fragment="listadoCitas">
+            <div class="container my-5">
+                <div class="row">
+                    <div class="col-md-10 mx-auto">
+                        <div class="hospital-card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">Listado de Citas</h4>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agendarCitaModal">
+                                    <i class="fas fa-plus me-2"></i> Agendar Nueva Cita
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${citas != null and !citas.empty}">
+                                    <table class="table-hospital">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Estado</th>
+                                                <th>Doctor</th>
+                                                <th>Paciente</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="cita : ${citas}">
+                                                <td>[[${cita.idCita}]]</td>
+                                                <td>[[${#dates.format(cita.fecha, 'dd/MM/yyyy')}]]</td>
+                                                <td>[[${cita.horaCita}]]</td>
+                                                <td>[[${cita.nombreEstadoCita}]]</td>
+                                                <td>[[${cita.nombreDoctor}]]</td>
+                                                <td>[[${cita.nombrePaciente}]]</td>
+                                                <td class="text-center">
+                                                    <a th:href="@{/citas/eliminar/}+${cita.idCita}"
+                                                       class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
+                                                    </a>
+                                                    <a th:href="@{/citas/modificar/}+${cita.idCita}"
+                                                       class="btn btn-success">
+                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Actualizar</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center p-4" th:if="${citas == null or citas.empty}">
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i> No hay citas registradas
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fragmento para agendar cita, es la ventana modal -->
+        <section th:fragment="agendarCita">
+            <div id="agendarCitaModal" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="agendarCitaLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title" id="agendarCitaLabel">Agendar Nueva Cita</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="limpiarBackdrop()"></button>
+                        </div> 
+                        <form th:action="@{/citas/guardar}"
+                              method="POST" 
+                              class="was-validated"
+                              onsubmit="limpiarBackdrop()">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="idPaciente" class="form-label">Paciente:</label>
+                                    <select class="form-select" id="idPaciente" name="idPaciente" required>
+                                        <option value="">Seleccionar un paciente</option>
+                                        <option th:each="paciente : ${pacientes}" 
+                                                th:value="${paciente.idPaciente}" 
+                                                th:text="${paciente.nombreUsuario}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="idDoctor" class="form-label">Doctor:</label>
+                                    <select class="form-select" id="idDoctor" name="idDoctor" required>
+                                        <option value="">Seleccionar un doctor</option>
+                                        <option th:each="doctor : ${doctores}" 
+                                                th:value="${doctor.idDoctor}" 
+                                                th:text="${doctor.nombreUsuario}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="fecha" class="form-label">Fecha:</label>
+                                    <input type="date" class="form-control" id="fecha" name="fecha" required/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="horaCita" class="form-label">Hora:</label>
+                                    <input type="time" class="form-control" id="horaCita" name="horaCita" required/>
+                                </div>
+
+                                <!-- Campo oculto para asignar automáticamente el estado "Pendiente" -->
+                                <input type="hidden" name="idEstadoCita" th:value="${idEstadoPendiente}" />
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="limpiarBackdrop()">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html> 

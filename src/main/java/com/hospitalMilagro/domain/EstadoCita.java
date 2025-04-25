@@ -6,51 +6,37 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name="FIDE_CITAS_TB")
-public class AgendarCita implements Serializable{
+@Table(name="FIDE_ESTADOS_CITAS_TB")
+public class EstadoCita implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
     @Id
-    @Column(name = "ID_CITA")
-    private Long idCita;
-    
-    @Column(name="FECHA")
-    private Date fecha;
-    @Column(name="HORA_CITA")
-    private String horaCita;
     @Column(name="ID_ESTADO_CITA")
     private Long idEstadoCita;
-    @Column(name="ID_DOCTOR")
-    private Long idDoctor;
-    @Column(name="ID_PACIENTE")
-    private Long idPaciente;
+    
+    @Column(name="NOMBRE_ESTADO")
+    private String nombreEstado;
+    
     @Column(name = "CREATION_DATE")
     private String creationDate;
+    
     @Column(name = "CREATED_BY")
     private String createdBy;
+    
     @Column(name = "LAST_UPDATE")
     private String lastUpdate;
+    
     @Column(name = "LAST_UPDATE_BY")
     private String lastUpdateBy;
     
-    @Column(name = "ACCION")
+    @Transient
     private String accion;
     
     @Column(name = "ACTIVO")
     private byte activo;
-    
-    @Transient
-    private String nombreDoctor;
-    
-    @Transient
-    private String nombrePaciente;
-    
-    @Transient
-    private String nombreEstadoCita;
-}
+} 

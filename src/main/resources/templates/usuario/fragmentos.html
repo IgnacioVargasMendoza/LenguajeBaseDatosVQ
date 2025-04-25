@@ -215,13 +215,13 @@
                                                     <span th:unless="${usuario.activo}" class="badge bg-danger rounded-pill">Inactivo</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a th:href="@{/producto/eliminar/}+${usuario.idUsuario}"
+                                                    <a th:href="@{/usuario/eliminar/}+${usuario.idUsuario}"
                                                        class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">[[#{accion.eliminar}]]</span>
+                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
                                                     </a>
-                                                    <a th:href="@{/producto/modificar/}+${usuario.idUsuario}"
+                                                    <a th:href="@{/usuario/editar/}+${usuario.idUsuario}"
                                                        class="btn btn-success">
-                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">[[#{accion.actualizar}]]</span>
+                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Editar</span>
                                                     </a>
                                                 </td>
                                             </tr>

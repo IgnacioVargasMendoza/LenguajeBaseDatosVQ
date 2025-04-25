@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout/plantilla :: head">
+        <title>Editar Especialidad</title>
+    </head>
+    <body>
+        <header th:replace="layout/plantilla :: header"/>
+        
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4><i class="fas fa-stethoscope"></i> Editar Especialidad</h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/especialidades/actualizar}" method="POST" th:object="${especialidad}">
+                        <input type="hidden" th:field="*{idEspecialidad}" />
+                        
+                        <div class="form-group mb-3">
+                            <label for="nombre" class="form-label">Nombre:</label>
+                            <input type="text" class="form-control" th:field="*{nombre}" id="nombre" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="descripcion" class="form-label">Descripción:</label>
+                            <textarea class="form-control" th:field="*{descripcion}" id="descripcion" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a th:href="@{/especialidades/listado}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Actualizar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <footer th:replace="layout/plantilla :: footer"/>
+    </body>
+</html> 

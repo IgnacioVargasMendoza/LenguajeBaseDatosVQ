@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head>
+        <title>Fragmentos Pacientes</title>
+    </head>
+    <body>
+        <!-- Fragmento para mostrar la lista de pacientes -->
+        <section th:fragment="listadoPacientes">
+            <div class="container my-5">
+                <div class="row">
+                    <div class="col-md-10 mx-auto">
+                        <div class="hospital-card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">Listado de Pacientes</h4>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarPacienteModal">
+                                    <i class="fas fa-plus me-2"></i> Agregar Paciente
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                
+                                <table class="table-hospital" th:if="${not #lists.isEmpty(listaPacientes)}">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Fecha Nacimiento</th>
+                                            <th>Número Seguro</th>
+                                            <th>Teléfono</th>
+                                            <th>Usuario</th>
+                                            <th>Dirección</th>
+                                            <th>Activo</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="paciente : ${listaPacientes}">
+                                            <td th:text="${paciente.idPaciente}"></td>
+                                            <td th:text="${#dates.format(paciente.fechaNacimiento, 'dd/MM/yyyy')}"></td>
+                                            <td th:text="${paciente.numeroSeguro}"></td>
+                                            <td th:text="${paciente.telefono}"></td>
+                                            <td th:text="${paciente.nombreUsuario}"></td>
+                                            <td th:text="${paciente.direccionCompleta}"></td>
+                                            <td>
+                                                <span th:if="${paciente.activo == 1}" class="badge bg-success">Activo</span>
+                                                <span th:unless="${paciente.activo == 1}" class="badge bg-danger">Inactivo</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <button class="btn btn-sm btn-outline-warning">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                                <div class="text-center p-4" th:if="${listaPacientes == null or listaPacientes.empty}">
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i> No hay pacientes registrados
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fragmento para agregar paciente, es la ventana modal -->
+        <section th:fragment="agregarPaciente">
+            <div id="agregarPacienteModal" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="agregarPacienteLabel" 
+                 aria-hidden="true">
+                
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="agregarPacienteLabel">Agregar Nuevo Paciente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{/paciente/guardar}" 
+                              method="POST" 
+                              th:object="${paciente}" 
+                              class="was-validated">
+                            <div class="modal-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+                                        <input type="date" 
+                                               class="form-control" 
+                                               id="fechaNacimiento" 
+                                               name="fechaNacimiento" 
+                                               required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="numeroSeguro" class="form-label">Número de Seguro:</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="numeroSeguro" 
+                                               name="numeroSeguro" 
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="telefono" class="form-label">Teléfono:</label>
+                                        <input type="tel" 
+                                               class="form-control" 
+                                               id="telefono" 
+                                               name="telefono" 
+                                               required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="direccion" class="form-label">Dirección Detallada:</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="direccion" 
+                                               name="direccion" 
+                                               placeholder="Ej: 100m este del parque central" 
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="idUsuario" class="form-label">Usuario:</label>
+                                        <select class="form-select" 
+                                                id="idUsuario" 
+                                                name="idUsuario" 
+                                                required>
+                                            <option value="">Seleccione un usuario</option>
+                                            <option th:each="usuario : ${listaUsuarios}" 
+                                                    th:value="${usuario.idUsuario}" 
+                                                    th:text="${usuario.nombre + ' ' + usuario.primerApellido + ' ' + usuario.segundoApellido}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="idDireccion" class="form-label">Ubicación:</label>
+                                        <select class="form-select" 
+                                                id="idDireccion" 
+                                                name="idDireccion" 
+                                                required>
+                                            <option value="">Seleccione una ubicación</option>
+                                            <option th:each="direccion : ${listaDirecciones}" 
+                                                    th:value="${direccion.idDireccion}" 
+                                                    th:text="${direccion.nombrePais + ', ' + direccion.nombreCanton + ', ' + direccion.nombreDistrito}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html> 

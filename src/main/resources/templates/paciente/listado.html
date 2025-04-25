@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Hospital el Milagro - Pacientes</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"></header>
+
+        <main>
+            <section th:replace="~{paciente/fragmentos :: listadoPacientes}"></section>
+            <section th:replace="~{paciente/fragmentos :: agregarPaciente}"></section>
+        </main>
+
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                // Manejador de evento para cuando el modal se oculta completamente
+                const modalElement = document.getElementById('agregarPacienteModal');
+                if (modalElement) {
+                    modalElement.addEventListener('hidden.bs.modal', function () {
+                        // Remover manualmente el backdrop y restaurar el desplazamiento
+                        const backdrops = document.getElementsByClassName('modal-backdrop');
+                        while(backdrops.length > 0) {
+                            backdrops[0].parentNode.removeChild(backdrops[0]);
+                        }
+                        document.body.classList.remove('modal-open');
+                        document.body.style.overflow = '';
+                        document.body.style.paddingRight = '';
+                    });
+                }
+            });
+        </script>
+    </body>
+</html> 

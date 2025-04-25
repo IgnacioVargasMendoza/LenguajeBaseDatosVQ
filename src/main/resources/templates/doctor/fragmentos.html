@@ -235,13 +235,13 @@ n<!DOCTYPE html>
                                                     <span th:unless="${doctor.activo}" class="badge bg-danger rounded-pill">Inactivo</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a th:href="@{/producto/eliminar/}+${doctor.idDoctor}"
+                                                    <a th:href="@{/doctor/eliminar/}+${doctor.idDoctor}"
                                                        class="btn btn-danger">
-                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">[[#{accion.eliminar}]]</span>
+                                                        <i class="fas fa-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
                                                     </a>
-                                                    <a th:href="@{/producto/modificar/}+${doctor.idDoctor}"
+                                                    <a th:href="@{/doctor/editar/}+${doctor.idDoctor}"
                                                        class="btn btn-success">
-                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">[[#{accion.actualizar}]]</span>
+                                                        <i class="fas fa-pencil-alt"></i> <span class="d-none d-md-inline">Editar</span>
                                                     </a>
                                                 </td>
                                             </tr>
