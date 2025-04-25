@@ -1803,22 +1803,7 @@ BEGIN
     );
     COMMIT;
 END FIDE_GENERAR_FACTURA_SP;
-/
 
-CREATE OR REPLACE PROCEDURE FIDE_AGREGAR_DISPONIBILIDAD_SP(
-    p_dia fide_disponibilidad_tb.dia%TYPE,
-    p_hora_inicio fide_disponibilidad_tb.hora_inicio%TYPE,
-    p_hora_fin fide_disponibilidad_tb.hora_fin%TYPE,
-    p_id_doctor fide_disponibilidad_tb.id_doctor%TYPE
-) AS
-BEGIN
-    INSERT INTO FIDE_DISPONIBILIDAD_TB (
- DIA, HORA_INICIO, HORA_FIN, ID_DOCTOR
-    ) VALUES (
-    p_dia, p_hora_inicio, p_hora_fin, p_id_doctor
-    );
-    COMMIT;
-END FIDE_AGREGAR_DISPONIBILIDAD_SP;
 /
 ---FUNCIONA
 CREATE OR REPLACE PROCEDURE FIDE_CREAR_ROL_SP(
@@ -2192,42 +2177,6 @@ EXCEPTION
         RAISE;
 END FIDE_ACTUALIZAR_PAIS_TB_SP;
 /
--- 2. Procedimiento para actualizar FIDE_PROVINCIAS_TB
-CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_PROVINCIA_TB_SP(
-    p_id_provincia fide_provincias_tb.id_provincia%TYPE,
-    p_nombre   fide_provincias_tb.nombre%TYPE,
-    p_id_pais  fide_provincias_tb.id_pais%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_PROVINCIAS_TB
-    SET NOMBRE = p_nombre,
-        ID_PAIS = p_id_pais
-    WHERE ID_PROVINCIA = p_id_provincia;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_PROVINCIA_TB_SP;
-/
--- 2. Procedimiento para actualizar FIDE_CANTONES_TB
-CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_CANTON_TB_SP(
-    p_id_canton fide_cantones_tb.id_canton%TYPE,
-    p_nombre fide_cantones_tb.nombre%TYPE,
-    p_id_provincia fide_cantones_tb.id_provincia%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_CANTONES_TB
-    SET NOMBRE = p_nombre,
-        ID_provincia = p_id_provincia
-    WHERE ID_CANTON = p_id_canton;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_CANTON_TB_SP;
-/
 
 -- 3. Procedimiento para actualizar FIDE_DISTRITOS_TB
 CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_DISTRITO_TB_SP(
@@ -2246,51 +2195,6 @@ EXCEPTION
         ROLLBACK;
         RAISE;
 END FIDE_ACTUALIZAR_DISTRITO_TB_SP;
-/
-
--- 4. Procedimiento para actualizar FIDE_DIRECCION_TB
-CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_DIRECCION_TB_SP(
-    p_id_direccion fide_direccion_tb.id_direccion%TYPE,
-    p_id_pais fide_direccion_tb.id_direccion%TYPE,
-    p_id_provincia fide_direccion_tb.id_provincia%TYPE,
-    p_id_canton fide_direccion_tb.id_canton%TYPE,
-    p_id_distrito fide_direccion_tb.id_distrito%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_DIRECCION_TB
-    SET ID_PAIS = p_id_pais,
-        ID_CANTON = p_id_canton,
-        ID_DISTRITO = p_id_distrito
-    WHERE ID_DIRECCION = p_id_direccion;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_DIRECCION_TB_SP;
-/
-
--- 5. Procedimiento para actualizar FIDE_DISPONIBILIDAD_TB
-CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_DISPONIBILIDAD_TB_SP(
-    p_id_disponibilidad fide_disponibilidad_tb.id_disponibilidad%TYPE,
-    p_dia fide_disponibilidad_tb.dia%TYPE,
-    p_hora_inicio fide_disponibilidad_tb.hora_inicio%TYPE,
-    p_hora_fin fide_disponibilidad_tb.hora_fin%TYPE,
-    p_id_doctor fide_disponibilidad_tb.id_doctor%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_DISPONIBILIDAD_TB
-    SET DIA = p_dia,
-        HORA_INICIO = p_hora_inicio,
-        HORA_FIN = p_hora_fin,
-        ID_DOCTOR = p_id_doctor
-    WHERE ID_DISPONIBILIDAD = p_id_disponibilidad;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_DISPONIBILIDAD_TB_SP;
 /
 
 -- 1. Procedimiento para actualizar FIDE_USUARIOS_TB
@@ -2695,20 +2599,7 @@ EXCEPTION
         RAISE;
 END FIDE_DESACTIVAR_PAIS_TB_SP;
 /
-CREATE OR REPLACE PROCEDURE FIDE_DESACTIVAR_PROVINCIA_TB_SP(
-    p_id_provincia fide_provincias_tb.id_provincia%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_PROVINCIAS_TB
-    SET ACTIVO = 0
-    WHERE ID_PROVINCIA = p_id_provincia;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_DESACTIVAR_PROVINCIA_TB_SP;
-/
+
 CREATE OR REPLACE PROCEDURE FIDE_DESACTIVAR_CANTON_TB_SP(
     p_id_canton fide_cantones_tb.id_canton%TYPE
 ) AS
@@ -2904,52 +2795,6 @@ END FIDE_DESACTIVAR_HISTORIAL_CITA_TB_SP;
 --Procedimiento para actualizar estado de citas vencidas
 
 
-CREATE OR REPLACE PROCEDURE actualizar_citas_vencidas AS
-  -- Cursor expl?cito para citas pendientes vencidas
-  CURSOR c_citas_vencidas IS
-    SELECT c.ID_CITA
-    FROM FIDE_CITAS_TB c
-    JOIN FIDE_ESTADOS_CITAS_TB e ON c.ID_ESTADO_CITA = e.ID_ESTADO_CITA
-    WHERE c.FECHA < SYSDATE
-    AND e.NOMBRE_ESTADO = 'PENDIENTE';
-    
-  v_id_estado_vencido NUMBER;
-BEGIN
-  -- Obtener ID para estado "VENCIDO" (cursor impl?cito)
-  SELECT ID_ESTADO_CITA INTO v_id_estado_vencido
-  FROM FIDE_ESTADOS_CITAS_TB
-  WHERE NOMBRE_ESTADO = 'VENCIDA';
-  
-  -- Procesar citas vencidas con cursor expl?cito
-  FOR r_cita IN c_citas_vencidas LOOP
-    UPDATE FIDE_CITAS_TB
-    SET ID_ESTADO_CITA = v_id_estado_vencido,
-        LAST_UPDATE = SYSDATE,
-        LAST_UPDATE_BY = USER
-    WHERE ID_CITA = r_cita.ID_CITA;
-    
-    -- Registrar en historial (cursor impl?cito)
-    INSERT INTO FIDE_HISTORIAL_CITAS_TB (
-      ID_HISTORIAL, ID_CITA, FECHA_CAMBIO, 
-      ID_ESTADO_ANTERIOR, ID_ESTADO_NUEVO, 
-      OBSERVACIONES, ACTIVO
-    ) VALUES (
-      SEQ_HISTORIAL.NEXTVAL, r_cita.ID_CITA, SYSDATE,
-      (SELECT ID_ESTADO_CITA FROM FIDE_ESTADOS_CITAS_TB WHERE NOMBRE_ESTADO = 'PENDIENTE'),
-      v_id_estado_vencido,
-      'Actualizaci?n autom?tica por vencimiento', 1
-    );
-  END LOOP;
-  
-  COMMIT;
-  DBMS_OUTPUT.PUT_LINE('Se actualizaron ' || c_citas_vencidas%ROWCOUNT || ' citas vencidas');
-EXCEPTION
-  WHEN OTHERS THEN
-    ROLLBACK;
-    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END actualizar_citas_vencidas;
-/
-
 
 
 --Procedimiento para generar reporte de medicamentos
@@ -3002,214 +2847,6 @@ END generar_reporte_medicamentos;
 /
 
 
---Procedimiento para transferir inventario entre ubicaciones
-
-CREATE OR REPLACE PROCEDURE transferir_inventario(
-  p_id_medicamento NUMBER,
-  p_cantidad NUMBER,
-  p_origen NUMBER,
-  p_destino NUMBER
-) AS
-  -- Variables para validaci?n
-  v_stock_origen NUMBER;
-  v_existe_destino NUMBER := 0;
-  
-  -- Cursor expl?cito para registro de inventario destino
-  CURSOR c_inventario_destino IS
-    SELECT ID_INVENTARIO, CANTIDAD
-    FROM FIDE_INVENTARIO_MEDICAMENTOS_TB
-    WHERE ID_MEDICAMENTO = p_id_medicamento
-    AND ID_UBICACION = p_destino;
-    
-  r_destino c_inventario_destino%ROWTYPE;
-BEGIN
-  -- Validar stock en origen (cursor impl?cito)
-  SELECT CANTIDAD INTO v_stock_origen
-  FROM FIDE_INVENTARIO_MEDICAMENTOS_TB
-  WHERE ID_MEDICAMENTO = p_id_medicamento
-  AND ID_UBICACION = p_origen;
-  
-  IF v_stock_origen < p_cantidad THEN
-    RAISE_APPLICATION_ERROR(-20001, 'Stock insuficiente en ubicaci?n origen');
-  END IF;
-  
-  -- Verificar si existe registro en destino (cursor expl?cito)
-  OPEN c_inventario_destino;
-  FETCH c_inventario_destino INTO r_destino;
-  v_existe_destino := c_inventario_destino%ROWCOUNT;
-  CLOSE c_inventario_destino;
-  
-  -- Actualizar origen (cursor impl?cito)
-  UPDATE FIDE_INVENTARIO_MEDICAMENTOS_TB
-  SET CANTIDAD = CANTIDAD - p_cantidad,
-      LAST_UPDATE = SYSDATE,
-      LAST_UPDATE_BY = USER
-  WHERE ID_MEDICAMENTO = p_id_medicamento
-  AND ID_UBICACION = p_origen;
-  
-  -- Actualizar o insertar destino
-  IF v_existe_destino > 0 THEN
-    UPDATE FIDE_INVENTARIO_MEDICAMENTOS_TB
-    SET CANTIDAD = CANTIDAD + p_cantidad,
-        LAST_UPDATE = SYSDATE,
-        LAST_UPDATE_BY = USER
-    WHERE ID_INVENTARIO = r_destino.ID_INVENTARIO;
-  ELSE
-    INSERT INTO FIDE_INVENTARIO_MEDICAMENTOS_TB (
-      ID_INVENTARIO, ID_MEDICAMENTO, ID_UBICACION,
-      CANTIDAD, CREATION_DATE, CREATED_BY,
-      LAST_UPDATE, LAST_UPDATE_BY, ACCION, ACTIVO
-    ) VALUES (
-      SEQ_INVENTARIO.NEXTVAL, p_id_medicamento, p_destino,
-      p_cantidad, SYSDATE, USER,
-      SYSDATE, USER, 'TRANSFERENCIA', 1
-    );
-  END IF;
-  
-  COMMIT;
-  DBMS_OUTPUT.PUT_LINE('Transferencia realizada con ?xito');
-EXCEPTION
-  WHEN NO_DATA_FOUND THEN
-    ROLLBACK;
-    DBMS_OUTPUT.PUT_LINE('Error: No se encontr? el medicamento en la ubicaci?n origen');
-  WHEN OTHERS THEN
-    ROLLBACK;
-    DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END transferir_inventario;
-/
-
-
---Procedimiento para consolidar tratamientos por paciente
-
-CREATE OR REPLACE PROCEDURE consolidar_tratamientos_paciente(
-  p_id_paciente NUMBER
-) AS
-  -- Cursor expl?cito para tratamientos activos del paciente
-  CURSOR c_tratamientos IS
-    SELECT t.ID_TRATAMIENTO, t.DESCRIPCION, t.FECHA_INICIO, t.FECHA_FIN
-    FROM FIDE_TRATAMIENTOS_TB t
-    WHERE t.ID_PACIENTE = p_id_paciente
-    AND t.ACTIVO = 1
-    ORDER BY t.FECHA_INICIO DESC;
-    
-  -- Cursor expl?cito anidado para procedimientos de cada tratamiento
-  CURSOR c_procedimientos(p_id_tratamiento NUMBER) IS
-    SELECT p.NOMBRE_PROCEDIMIENTO
-    FROM FIDE_PROCEDIMIENTOS_TB p
-    JOIN FIDE_TRATAMIENTOS_PROCEDIMIENTOS_TB tp ON p.ID_PROCEDIMIENTO = tp.ID_PROCEDIMIENTO
-    WHERE tp.ID_TRATAMIENTO = p_id_tratamiento;
-    
-  -- Cursor expl?cito anidado para medicamentos de cada tratamiento
-  CURSOR c_medicamentos(p_id_tratamiento NUMBER) IS
-    SELECT m.NOMBRE, tm.DOSIS
-    FROM FIDE_MEDICAMENTOS_TB m
-    JOIN FIDE_TRATAMIENTOS_MEDICAMENTOS_TB tm ON m.ID_MEDICAMENTO = tm.ID_MEDICAMENTO
-    WHERE tm.ID_TRATAMIENTO = p_id_tratamiento;
-    
-  v_nombre_paciente VARCHAR2(150);
-BEGIN
-  -- Obtener nombre del paciente (cursor impl?cito)
-  SELECT u.NOMBRE || ' ' || u.PRIMER_APELLIDO INTO v_nombre_paciente
-  FROM FIDE_PACIENTES_TB p
-  JOIN FIDE_USUARIOS_TB u ON p.ID_USUARIO = u.ID_USUARIO
-  WHERE p.ID_PACIENTE = p_id_paciente;
-  
-  DBMS_OUTPUT.PUT_LINE('REPORTE CONSOLIDADO DE TRATAMIENTOS');
-  DBMS_OUTPUT.PUT_LINE('Paciente: ' || v_nombre_paciente);
-  DBMS_OUTPUT.PUT_LINE('========================================');
-  
-  -- Recorrer tratamientos (cursor principal)
-  FOR r_trat IN c_tratamientos LOOP
-    DBMS_OUTPUT.PUT_LINE('TRATAMIENTO #' || r_trat.ID_TRATAMIENTO);
-    DBMS_OUTPUT.PUT_LINE('Descripci?n: ' || r_trat.DESCRIPCION);
-    DBMS_OUTPUT.PUT_LINE('Per?odo: ' || TO_CHAR(r_trat.FECHA_INICIO, 'DD/MM/YYYY') || 
-                         ' - ' || NVL(TO_CHAR(r_trat.FECHA_FIN, 'DD/MM/YYYY'), 'En curso'));
-    
-    -- Listar procedimientos (cursor anidado)
-    DBMS_OUTPUT.PUT_LINE('Procedimientos:');
-    FOR r_proc IN c_procedimientos(r_trat.ID_TRATAMIENTO) LOOP
-      DBMS_OUTPUT.PUT_LINE(' - ' || r_proc.NOMBRE_PROCEDIMIENTO);
-    END LOOP;
-    
-    -- Listar medicamentos (cursor anidado)
-    DBMS_OUTPUT.PUT_LINE('Medicamentos:');
-    FOR r_med IN c_medicamentos(r_trat.ID_TRATAMIENTO) LOOP
-      DBMS_OUTPUT.PUT_LINE(' - ' || r_med.NOMBRE || ' (Dosis: ' || r_med.DOSIS || ')');
-    END LOOP;
-    
-    DBMS_OUTPUT.PUT_LINE('----------------------------------------');
-  END LOOP;
-  
-  DBMS_OUTPUT.PUT_LINE('Total tratamientos activos: ' || c_tratamientos%ROWCOUNT);
-END consolidar_tratamientos_paciente;
-/
-
-
---Procedimiento para migrar datos hist?ricos
-
-
-CREATE OR REPLACE PROCEDURE migrar_historial_citas_antiguas(
-  p_anio NUMBER
-) AS
-  -- Cursor expl?cito para citas antiguas
-  CURSOR c_citas_antiguas IS
-    SELECT c.ID_CITA, c.FECHA, c.ID_ESTADO_CITA, c.ID_DOCTOR, c.ID_PACIENTE
-    FROM FIDE_CITAS_TB c
-    WHERE EXTRACT(YEAR FROM c.FECHA) < p_anio
-    AND c.ACTIVO = 1;
-    
-  -- Contadores
-  v_total_migradas NUMBER := 0;
-  v_total_errores NUMBER := 0;
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Iniciando migraci?n de citas anteriores a ' || p_anio);
-  
-  -- Procesar cada cita antigua
-  FOR r_cita IN c_citas_antiguas LOOP
-    BEGIN
-      -- Insertar en tabla hist?rica (cursor impl?cito)
-      INSERT INTO FIDE_HISTORIAL_CITAS_TB (
-        ID_HISTORIAL, ID_CITA, FECHA_CAMBIO,
-        ID_ESTADO_ANTERIOR, ID_ESTADO_NUEVO,
-        OBSERVACIONES, ACTIVO
-      ) VALUES (
-        SEQ_HISTORIAL.NEXTVAL, r_cita.ID_CITA, SYSDATE,
-        r_cita.ID_ESTADO_CITA, r_cita.ID_ESTADO_CITA,
-        'Migraci?n hist?rica de datos', 1
-      );
-      
-      -- Marcar como inactiva en tabla original (cursor impl?cito)
-      UPDATE FIDE_CITAS_TB
-      SET ACTIVO = 0,
-          LAST_UPDATE = SYSDATE,
-          LAST_UPDATE_BY = USER,
-          ACCION = 'MIGRADO A HIST?RICO'
-      WHERE ID_CITA = r_cita.ID_CITA;
-      
-      v_total_migradas := v_total_migradas + 1;
-      
-      -- Commit cada 100 registros
-      IF MOD(v_total_migradas, 100) = 0 THEN
-        COMMIT;
-        DBMS_OUTPUT.PUT_LINE('Migradas ' || v_total_migradas || ' citas...');
-      END IF;
-    EXCEPTION
-      WHEN OTHERS THEN
-        v_total_errores := v_total_errores + 1;
-        DBMS_OUTPUT.PUT_LINE('Error migrando cita ' || r_cita.ID_CITA || ': ' || SQLERRM);
-    END;
-  END LOOP;
-  
-  COMMIT;
-  DBMS_OUTPUT.PUT_LINE('Migraci?n completada');
-  DBMS_OUTPUT.PUT_LINE('Total citas migradas: ' || v_total_migradas);
-  DBMS_OUTPUT.PUT_LINE('Total errores: ' || v_total_errores);
-EXCEPTION
-  WHEN OTHERS THEN
-    ROLLBACK;
-    DBMS_OUTPUT.PUT_LINE('Error en migraci?n: ' || SQLERRM);
-END migrar_historial_citas_antiguas;
-/
 CREATE OR REPLACE PROCEDURE FIDE_LISTAR_USUARIOS_SP(
     LISTA_USUARIOS OUT SYS_REFCURSOR
 ) AS
@@ -3220,13 +2857,13 @@ BEGIN
 END;
 
 
--- 1. Actualizar contraseñas temporales para usuarios inactivos
+-- 1. Actualizar contraseÃ±as temporales para usuarios inactivos
 CREATE OR REPLACE PROCEDURE reset_pass_inactivos AS
 BEGIN
     UPDATE FIDE_USUARIOS_TB 
     SET CONTRASENA = 'Temp_' || TO_CHAR(SYSDATE, 'YYYYMMDD')
     WHERE ACTIVO = 0;
-    DBMS_OUTPUT.PUT_LINE('Contraseñas actualizadas: ' || SQL%ROWCOUNT);
+    DBMS_OUTPUT.PUT_LINE('ContraseÃ±as actualizadas: ' || SQL%ROWCOUNT);
 END;
 /
 
@@ -3239,42 +2876,16 @@ BEGIN
 END;
 /
 
-
-
-
--- 3. Actualizar licencias temporales para doctores nuevos
-CREATE OR REPLACE PROCEDURE actualizar_licencias_temp AS
-BEGIN
-    UPDATE FIDE_DOCTORES_TB 
-    SET NUMEROL_ICENCIA = 'TEMP_' || ID_DOCTOR
-    WHERE NUMEROL_ICENCIA IS NULL;
-END;
-/
-
--- 4. Desactivar doctores sin citas en los últimos 6 meses
-CREATE OR REPLACE PROCEDURE desactivar_doctores_inactivos AS
-BEGIN
-    UPDATE FIDE_DOCTORES_TB 
-    SET ACTIVO = 0
-    WHERE ID_DOCTOR NOT IN (
-        SELECT DISTINCT ID_DOCTOR FROM FIDE_CITAS_TB 
-        WHERE FECHA > ADD_MONTHS(SYSDATE, -6)
-    );
-END;
-/
-
-
-
--- 5. Asignar dirección genérica a pacientes sin dirección
+-- 5. Asignar direcciÃ³n genÃ©rica a pacientes sin direcciÃ³n
 CREATE OR REPLACE PROCEDURE asignar_direccion_default AS
 BEGIN
     UPDATE FIDE_PACIENTES_TB 
-    SET DIRECCION = 'Dirección no especificada'
+    SET DIRECCION = 'DirecciÃ³n no especificada'
     WHERE DIRECCION IS NULL;
 END;
 /
 
--- 6. Actualizar teléfonos en formato estándar
+-- 6. Actualizar telÃ©fonos en formato estÃ¡ndar
 CREATE OR REPLACE PROCEDURE estandarizar_telefonos AS
 BEGIN
     UPDATE FIDE_PACIENTES_TB 
@@ -3285,38 +2896,13 @@ END;
 
 
 
--- 7. Cancelar citas pendientes con más de 30 días
+-- 7. Cancelar citas pendientes con mÃ¡s de 30 dÃ­as
 CREATE OR REPLACE PROCEDURE cancelar_citas_antiguas AS
 BEGIN
     UPDATE FIDE_CITAS_TB 
     SET ID_ESTADO_CITA = 3 -- Cancelado
     WHERE FECHA < SYSDATE - 30
     AND ID_ESTADO_CITA = 1; -- Pendiente
-END;
-/
-
--- 8. Generar notificaciones para citas próximas
-CREATE OR REPLACE PROCEDURE notificar_citas_proximas AS
-BEGIN
-    INSERT INTO FIDE_NOTIFICACIONES_TB (
-        ID_NOTIFICACION, MENSAJE, TIPO, ID_USUARIO, 
-        CREATION_DATE, CREATED_BY, LAST_UPDATE, 
-        LAST_UPDATE_BY, ACCION, ACTIVO
-    )
-    SELECT 
-        SEQ_NOTIF.NEXTVAL, 
-        'Cita programada para ' || TO_CHAR(c.FECHA, 'DD/MM/YYYY'), 
-        'RECORDATORIO', 
-        p.ID_USUARIO,
-        SYSDATE, 
-        'SISTEMA', 
-        SYSDATE, 
-        'SISTEMA', 
-        'INSERT', 
-        1
-    FROM FIDE_CITAS_TB c
-    JOIN FIDE_PACIENTES_TB p ON c.ID_PACIENTE = p.ID_PACIENTE
-    WHERE c.FECHA BETWEEN SYSDATE AND SYSDATE + 2;
 END;
 /
 
@@ -3332,7 +2918,7 @@ BEGIN
 END;
 /
 
--- 10. Cerrar facturas pagadas hace más de 2 años
+-- 10. Cerrar facturas pagadas hace mÃ¡s de 2 aÃ±os
 CREATE OR REPLACE PROCEDURE archivar_facturas_antiguas AS
 BEGIN
     UPDATE FIDE_FACTURAS_TB 
@@ -3364,7 +2950,7 @@ END;
 /
 
 
--- 13. Normalizar nombres de países a mayúsculas
+-- 13. Normalizar nombres de paÃ­ses a mayÃºsculas
 CREATE OR REPLACE PROCEDURE normalizar_nombres_paises AS
 BEGIN
     UPDATE FIDE_PAISES_TB 
@@ -3383,7 +2969,7 @@ END;
 /
 
 
--- 15. Agregar prefijo a especialidades médicas
+-- 15. Agregar prefijo a especialidades mÃ©dicas
 CREATE OR REPLACE PROCEDURE prefijar_especialidades AS
 BEGIN
     UPDATE FIDE_ESPECIALIDADES_TB 
@@ -3391,11 +2977,11 @@ BEGIN
 END;
 /
 
--- 16. Actualizar descripciones vacías
+-- 16. Actualizar descripciones vacÃ­as
 CREATE OR REPLACE PROCEDURE actualizar_descripciones_vacias AS
 BEGIN
     UPDATE FIDE_ESPECIALIDADES_TB 
-    SET DESCRIPCION = 'Descripción no disponible'
+    SET DESCRIPCION = 'DescripciÃ³n no disponible'
     WHERE DESCRIPCION IS NULL;
 END;
 /
@@ -3410,7 +2996,7 @@ BEGIN
 END;
 /
 
--- 18. Asignar observación a tratamientos sin descripción
+-- 18. Asignar observaciÃ³n a tratamientos sin descripciÃ³n
 CREATE OR REPLACE PROCEDURE completar_descripciones_tratamientos AS
 BEGIN
     UPDATE FIDE_TRATAMIENTOS_TB 
@@ -3429,7 +3015,7 @@ BEGIN
 END;
 /
 
--- 20. Marcar como inactivas notificaciones leídas
+-- 20. Marcar como inactivas notificaciones leÃ­das
 CREATE OR REPLACE PROCEDURE desactivar_notificaciones_leidas AS
 BEGIN
     UPDATE FIDE_NOTIFICACIONES_TB 
@@ -3510,7 +3096,7 @@ CREATE OR REPLACE PROCEDURE validar_direcciones AS
 BEGIN
     FOR r IN c_direcciones LOOP
         DBMS_OUTPUT.PUT_LINE(
-            'Dirección ID ' || r.ID_DIRECCION || 
+            'DirecciÃ³n ID ' || r.ID_DIRECCION || 
             ' en ' || r.CANTON || ', ' || r.PAIS || ' no tiene distrito'
         );
     END LOOP;
@@ -3548,7 +3134,7 @@ BEGIN
 END;
 /
 
--- 26. Top 5 medicamentos más utilizados
+-- 26. Top 5 medicamentos mÃ¡s utilizados
 CREATE OR REPLACE PROCEDURE top_medicamentos_usados AS
     CURSOR c_medicamentos IS
         SELECT m.NOMBRE, COUNT(tm.ID_TRATAMIENTO) AS USOS
@@ -3587,13 +3173,13 @@ BEGIN
         GROUP BY ID_DOCTOR
     );
     
-    DBMS_OUTPUT.PUT_LINE('Citas mínimas: ' || v_min_citas || ', máximas: ' || v_max_citas);
+    DBMS_OUTPUT.PUT_LINE('Citas mÃ­nimas: ' || v_min_citas || ', mÃ¡ximas: ' || v_max_citas);
     
     FOR r IN c_doctores LOOP
         IF r.CITAS > v_min_citas + 5 THEN
             DBMS_OUTPUT.PUT_LINE(
                 'Doctor ID ' || r.ID_DOCTOR || 
-                ' tiene ' || r.CITAS || ' citas (necesita reducción)'
+                ' tiene ' || r.CITAS || ' citas (necesita reducciÃ³n)'
             );
         END IF;
     END LOOP;
@@ -3602,7 +3188,7 @@ END;
 
 
 
--- 28. Buscar pacientes por nombre (con parámetro)
+-- 28. Buscar pacientes por nombre (con parÃ¡metro)
 CREATE OR REPLACE PROCEDURE buscar_paciente(p_nombre IN VARCHAR2) AS
     CURSOR c_pacientes IS
         SELECT p.ID_PACIENTE, u.NOMBRE, u.PRIMER_APELLIDO
@@ -3698,7 +3284,7 @@ END;
 /
 
 
---32. Listar Medicamentos con Stock Crítico (<5 unidades)
+--32. Listar Medicamentos con Stock CrÃ­tico (<5 unidades)
 
 CREATE OR REPLACE PROCEDURE listar_medicamentos_stock_critico AS
     CURSOR c_medicamentos IS
@@ -3760,7 +3346,7 @@ BEGIN
         GROUP BY ID_DOCTOR
     );
     
-    DBMS_OUTPUT.PUT_LINE('=== PROMEDIO DE CITAS POR DOCTOR (ÚLTIMOS 3 MESES) ===');
+    DBMS_OUTPUT.PUT_LINE('=== PROMEDIO DE CITAS POR DOCTOR (ÃLTIMOS 3 MESES) ===');
     DBMS_OUTPUT.PUT_LINE('Promedio general: ' || v_promedio);
     
     FOR r IN c_doctores LOOP
@@ -3911,42 +3497,6 @@ END;
 /
 
 
---40. Migrar Datos de Direcciones Antiguas
-
-
-CREATE OR REPLACE PROCEDURE migrar_direcciones_antiguas AS
-    CURSOR c_direcciones_viejas IS
-        SELECT ID_DIRECCION, DIRECCION 
-        FROM FIDE_PACIENTES_TB
-        WHERE ID_DIRECCION IS NULL
-        FOR UPDATE;
-BEGIN
-    FOR r IN c_direcciones_viejas LOOP
-        INSERT INTO FIDE_DIRECCION_TB (
-            ID_DIRECCION, ID_PAIS, ID_CANTON, ID_DISTRITO,
-            CREATION_DATE, CREATED_BY, LAST_UPDATE, 
-            LAST_UPDATE_BY, ACCION, ACTIVO
-        ) VALUES (
-            SEQ_DIRECCION.NEXTVAL, 1, 1, 1, -- IDs por defecto (ajustar según tu DB)
-            SYSDATE, 'MIGRACION', SYSDATE, 
-            'MIGRACION', 'INSERT', 1
-        ) RETURNING ID_DIRECCION INTO v_nueva_direccion;
-        
-        UPDATE FIDE_PACIENTES_TB
-        SET ID_DIRECCION = v_nueva_direccion
-        WHERE CURRENT OF c_direcciones_viejas;
-    END LOOP;
-    COMMIT;
-    DBMS_OUTPUT.PUT_LINE('Direcciones migradas: ' || c_direcciones_viejas%ROWCOUNT);
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-
-
 --Taer los usuarios de la BD
 CREATE OR REPLACE PROCEDURE FIDE_LISTAR_USUARIOS_SP(
     LISTA_USUARIOS OUT SYS_REFCURSOR
@@ -4051,7 +3601,7 @@ END FIDE_AGREGAR_ESTADO_CITA_SP;
 /
 SELECT * FROM FIDE_USUARIOS_TB;
 ---------------------FUNCIONES------------------------------------------------
--- 1. Funci�n para autenticaci�n (login)
+-- 1. Función para autenticación (login)
 CREATE OR REPLACE FUNCTION AUTENTICAR_USUARIO(
     p_correo IN VARCHAR2,
     p_contrasena IN VARCHAR2
@@ -4078,7 +3628,7 @@ EXCEPTION
 END AUTENTICAR_USUARIO;
 /
 
--- 2. Funci�n para verificar si un correo ya existe
+-- 2. Función para verificar si un correo ya existe
 CREATE OR REPLACE FUNCTION CORREO_EXISTE(
     p_correo IN VARCHAR2
 ) RETURN NUMBER
@@ -4096,7 +3646,7 @@ EXCEPTION
 END CORREO_EXISTE;
 /
 
--- 3. Funci�n para obtener el rol de un usuario
+-- 3. Función para obtener el rol de un usuario
 CREATE OR REPLACE FUNCTION OBTENER_ROL_USUARIO(
     p_id_usuario IN NUMBER
 ) RETURN VARCHAR2
@@ -4119,7 +3669,7 @@ END OBTENER_ROL_USUARIO;
 /
 
 
--- 4. Funci�n para contar pacientes por doctor
+-- 4. Función para contar pacientes por doctor
 CREATE OR REPLACE FUNCTION CONTAR_PACIENTES_POR_DOCTOR(
     p_id_doctor IN NUMBER
 ) RETURN NUMBER
@@ -4138,7 +3688,7 @@ EXCEPTION
 END CONTAR_PACIENTES_POR_DOCTOR;
 /
 
--- 5. Funci�n para obtener informaci�n b�sica de doctor
+-- 5. Función para obtener información básica de doctor
 CREATE OR REPLACE FUNCTION OBTENER_INFO_DOCTOR(
     p_id_doctor IN NUMBER
 ) RETURN VARCHAR2
@@ -4162,11 +3712,11 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RETURN 'Doctor no encontrado';
     WHEN OTHERS THEN
-        RETURN 'Error al obtener informaci�n';
+        RETURN 'Error al obtener información';
 END OBTENER_INFO_DOCTOR;
 /
 
--- 6. Funci�n para verificar si un paciente tiene seguro
+-- 6. Función para verificar si un paciente tiene seguro
 CREATE OR REPLACE FUNCTION PACIENTE_TIENE_SEGURO(
     p_id_paciente IN NUMBER
 ) RETURN NUMBER
@@ -4192,7 +3742,7 @@ END PACIENTE_TIENE_SEGURO;
 /
 
 
--- 7. Funci�n para contar citas por estado
+-- 7. Función para contar citas por estado
 CREATE OR REPLACE FUNCTION CONTAR_CITAS_POR_ESTADO(
     p_id_estado IN NUMBER
 ) RETURN NUMBER
@@ -4211,7 +3761,7 @@ EXCEPTION
 END CONTAR_CITAS_POR_ESTADO;
 /
 
--- 8. Funci�n para calcular duraci�n promedio de tratamientos
+-- 8. Función para calcular duración promedio de tratamientos
 CREATE OR REPLACE FUNCTION CALCULAR_DURACION_PROMEDIO_TRATAMIENTOS
 RETURN NUMBER
 AS
@@ -4229,7 +3779,7 @@ EXCEPTION
 END CALCULAR_DURACION_PROMEDIO_TRATAMIENTOS;
 /
 
--- 9. Funci�n para obtener pr�ximo horario disponible de doctor
+-- 9. Función para obtener próximo horario disponible de doctor
 CREATE OR REPLACE FUNCTION OBTENER_PROXIMO_HORARIO_DISPONIBLE(
     p_id_doctor IN NUMBER,
     p_fecha IN DATE
@@ -4257,7 +3807,7 @@ END OBTENER_PROXIMO_HORARIO_DISPONIBLE;
 /
 
 
--- 10. Funci�n para verificar disponibilidad de medicamento
+-- 10. Función para verificar disponibilidad de medicamento
 CREATE OR REPLACE FUNCTION VERIFICAR_DISPONIBILIDAD_MEDICAMENTO(
     p_id_medicamento IN NUMBER
 ) RETURN NUMBER
@@ -4278,7 +3828,7 @@ EXCEPTION
 END VERIFICAR_DISPONIBILIDAD_MEDICAMENTO;
 /
 
--- 11. Funci�n para calcular valor total del inventario
+-- 11. Función para calcular valor total del inventario
 CREATE OR REPLACE FUNCTION CALCULAR_VALOR_TOTAL_INVENTARIO
 RETURN NUMBER
 AS
@@ -4297,7 +3847,7 @@ EXCEPTION
 END CALCULAR_VALOR_TOTAL_INVENTARIO;
 /
 
--- 12. Funci�n para obtener medicamentos en riesgo de agotarse
+-- 12. Función para obtener medicamentos en riesgo de agotarse
 CREATE OR REPLACE FUNCTION MEDICAMENTOS_BAJO_STOCK(
     p_minimo IN NUMBER
 ) RETURN SYS_REFCURSOR
@@ -4316,14 +3866,14 @@ BEGIN
     RETURN v_cursor;
 EXCEPTION
     WHEN OTHERS THEN
-        -- Retornar un cursor vac�o en caso de error
+        -- Retornar un cursor vacío en caso de error
         OPEN v_cursor FOR 
         SELECT NULL AS NOMBRE, NULL AS CANTIDAD FROM DUAL WHERE 1=0;
         RETURN v_cursor;
 END MEDICAMENTOS_BAJO_STOCK;
 /
 ---------------------VISTAS------------------------------------------------
---1. Vista para Factura (Detalle de Facturaci�n)
+--1. Vista para Factura (Detalle de Facturación)
 
 CREATE OR REPLACE VIEW V_FACTURA_DETALLE AS
 SELECT 
@@ -4409,7 +3959,7 @@ GROUP BY
     
     
 /    
---4. Vista Detalle de Facturaci�n con Citas 
+--4. Vista Detalle de Facturación con Citas 
 
 CREATE OR REPLACE VIEW V_DETALLE_FACTURA_CITAS AS
 SELECT 
@@ -4504,7 +4054,7 @@ JOIN
 JOIN 
     FIDE_USUARIOS_TB U_DOC ON D.ID_USUARIO = U_DOC.ID_USUARIO
 WHERE 
-    EC.NOMBRE_ESTADO = 'PENDIENTE' -- Ajusta seg�n tus valores reales
+    EC.NOMBRE_ESTADO = 'PENDIENTE' -- Ajusta según tus valores reales
     AND C.ACTIVO = 1;
     
 /    
@@ -4517,7 +4067,7 @@ SELECT
     I.CANTIDAD,
     M.PRECIO,
     CASE 
-        WHEN I.CANTIDAD < 10 THEN 'CR�TICO'
+        WHEN I.CANTIDAD < 10 THEN 'CRÍTICO'
         WHEN I.CANTIDAD BETWEEN 10 AND 20 THEN 'BAJO'
         ELSE 'SUFICIENTE'
     END AS ESTADO_STOCK
@@ -4553,7 +4103,7 @@ ORDER BY
     HC.FECHA_CAMBIO DESC;
 /   
     
---10.Disponibilidad de Doctores por D�a
+--10.Disponibilidad de Doctores por Día
 
 CREATE OR REPLACE VIEW V_DISPONIBILIDAD_DOCTORES AS
 SELECT 
@@ -4575,7 +4125,7 @@ ORDER BY
 /   
     
     
---11.   Procedimientos M�s Comunes en Tratamientos
+--11.   Procedimientos Más Comunes en Tratamientos
 
 CREATE OR REPLACE VIEW V_PROCEDIMIENTOS_COMUNES AS
 SELECT 
@@ -4653,7 +4203,7 @@ LEFT JOIN
 WHERE 
     C.ACTIVO = 1;
 /
---15. Doctores con Mayor N�mero de Citas Atendidas
+--15. Doctores con Mayor Número de Citas Atendidas
 
 
 CREATE OR REPLACE VIEW V_DOCTORES_TOP_CITAS AS
@@ -4674,7 +4224,7 @@ JOIN
 JOIN 
     FIDE_ESPECIALIDADES_TB E ON DE.ID_ESPECIALIDAD = E.ID_ESPECIALIDAD
 WHERE 
-    C.ID_ESTADO_CITA = (SELECT ID_ESTADO_CITA FROM FIDE_ESTADOS_CITAS_TB WHERE NOMBRE_ESTADO = 'COMPLETADA') -- Ajustar seg�n valores reales
+    C.ID_ESTADO_CITA = (SELECT ID_ESTADO_CITA FROM FIDE_ESTADOS_CITAS_TB WHERE NOMBRE_ESTADO = 'COMPLETADA') -- Ajustar según valores reales
 GROUP BY 
     D.ID_DOCTOR, U.NOMBRE, U.PRIMER_APELLIDO, E.NOMBRE
 ORDER BY 
