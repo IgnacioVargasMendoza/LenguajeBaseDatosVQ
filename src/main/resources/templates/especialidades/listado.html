@@ -11,8 +11,44 @@
         
         <main>
             <section th:replace="~{especialidades/fragmentos :: listadoEspecialidades}"></section>
+            <section th:replace="~{especialidades/fragmentos :: agregarEspecialidad}"></section>
         </main>
         
         <footer th:replace="~{layout/plantilla :: footer}"/> 
+        
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                // Manejador de evento para cuando el modal se oculta completamente
+                const modalElement = document.getElementById('agregarEspecialidadModal');
+                if (modalElement) {
+                    modalElement.addEventListener('hidden.bs.modal', function () {
+                        // Remover manualmente el backdrop y restaurar el desplazamiento
+                        const backdrops = document.getElementsByClassName('modal-backdrop');
+                        while(backdrops.length > 0) {
+                            backdrops[0].parentNode.removeChild(backdrops[0]);
+                        }
+                        document.body.classList.remove('modal-open');
+                        document.body.style.overflow = '';
+                        document.body.style.paddingRight = '';
+                    });
+                }
+                
+                // Inicialización del modal si es necesario
+                var btnAgregar = document.querySelector('[data-bs-target="#agregarEspecialidadModal"]');
+                if (btnAgregar) {
+                    if (typeof bootstrap !== 'undefined') {
+                        btnAgregar.addEventListener('click', function(e) {
+                            var modalElement = document.getElementById('agregarEspecialidadModal');
+                            if (modalElement) {
+                                var modalInstance = new bootstrap.Modal(modalElement);
+                                modalInstance.show();
+                            }
+                        });
+                    } else {
+                        console.error('Bootstrap is not defined. Make sure bootstrap.js is loaded.');
+                    }
+                }
+            });
+        </script>
     </body>
 </html>

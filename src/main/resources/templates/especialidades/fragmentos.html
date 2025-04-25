@@ -16,66 +16,64 @@
                                 sec:authorize="hasRole('ROLE_ADMIN')"
                                 class="btn btn-primary btn-block" 
                                 data-bs-toggle="modal" 
-                                data-bs-target="#agregarUsuario">
+                                data-bs-target="#agregarEspecialidad">
                             <i class="fas fa-plus"></i> [[#{usuario.agregar}]]
                         </button>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- 2 Fragmento para agregar producto, es la ventana modal -->
-        <section th:fragment="agregarUsuario">
-            <div id="agregarUsuario" 
+        <!-- 2 Fragmento para agregar especialidad, es la ventana modal -->
+        <section th:fragment="agregarEspecialidad">
+            <div id="agregarEspecialidadModal" 
                  class="modal fade" 
                  tabindex="-1" 
-                 aria-labelledby="exampleModalLabel" 
+                 aria-labelledby="agregarEspecialidadLabel" 
                  aria-hidden="true">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header bg-info text-white">
-                            <h5 class="modal-title">[[#{usuario.agregar}]]</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title" id="agregarEspecialidadLabel">Agregar Especialidad</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="limpiarBackdrop()"></button>
                         </div> 
-                        <form th:action="@{/usuario/guardar}"
-                              th:object="${usuario}"
+                        <form th:action="@{/especialidades/guardar}"
                               method="POST" 
-                              class="was-validated" 
-                              enctype="multipart/form-data">
+                              class="was-validated"
+                              onsubmit="limpiarBackdrop()">
                             <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">[[#{especialidad.nombre}]]</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" maxlength="20" required="true"/>
+                                </div>
 
                                 <div class="mb-3">
-                                    <label>[[#{usuario.nombre}]]</label>
-                                    <input type="text" class="form-control" name="nombre" maxlength="20" required="true"/>
+                                    <label for="descripcion" class="form-label">[[#{especialidad.descripcion}]]</label>
+                                    <input type="text" class="form-control" id="descripcion" name="descripcion" maxlength="30" required="true"/>    
                                 </div>
-
-                                <div class="form-group mb-3">
-                                        <label>[[#{usuario.primerApellido}]]</label>
-                                        <input type="text" class="form-control" name="primerApellido" maxlength="30" required="true"/>    
-                                    </div>
-
-                                <div class="form-group mb-3">
-                                        <label>[[#{usuario.segundoApellido}]]</label>
-                                        <input type="text" class="form-control" name="segundoApellido" maxlength="30" required="true"/>      
-                                </div>
-
-                                <div class="form-group mb-3">
-                                        <label>[[#{usuario.correo}]]</label>
-                                        <input type="email" class="form-control" name="correo" maxlength="40" required="true"/>    
-                                </div>
-
-                                <div class="form-group mb-3">
-                                        <label>[[#{usuario.password}]]</label>
-                                        <input type="password" class="form-control" name="contrasena" maxlength="40" required="true"/> 
-                                </div>
-
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-primary" type="submit">Guardar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="limpiarBackdrop()">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+            
+            <script>
+                function limpiarBackdrop() {
+                    setTimeout(function() {
+                        // Remover manualmente el backdrop y restaurar el desplazamiento
+                        const backdrops = document.getElementsByClassName('modal-backdrop');
+                        while(backdrops.length > 0) {
+                            backdrops[0].parentNode.removeChild(backdrops[0]);
+                        }
+                        document.body.classList.remove('modal-open');
+                        document.body.style.overflow = '';
+                        document.body.style.paddingRight = '';
+                    }, 200);
+                }
+            </script>
         </section>
         <!-- 4 Fragmento que se utiliza en la página modifca.html -->
         <section th:fragment="editarUsuario">
@@ -186,7 +184,7 @@
                         <div class="hospital-card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h4 class="mb-0">[[#{especialidad.listado}]]</h4>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarEspecialidad">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarEspecialidadModal">
                                     <i class="fas fa-plus me-2"></i> Agregar Especialidad
                                 </button>
                             </div>

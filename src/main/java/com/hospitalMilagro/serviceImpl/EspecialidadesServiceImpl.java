@@ -20,5 +20,13 @@ public class EspecialidadesServiceImpl implements EspecialidadesService{
         List listaEspecialidades=especialidadesDao.listaEspecialidades();
         return listaEspecialidades;
     }
+
+    @Override
+    public void insertarEspecialidad(Especialidades especialidades) {
+        especialidadesDao.insertarEspecialidad(
+                especialidades.getNombre(), 
+                especialidades.getDescripcion()
+        );
+    }
     
 }
