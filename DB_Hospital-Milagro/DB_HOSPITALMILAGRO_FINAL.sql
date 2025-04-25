@@ -1803,22 +1803,7 @@ BEGIN
     );
     COMMIT;
 END FIDE_GENERAR_FACTURA_SP;
-/
 
-CREATE OR REPLACE PROCEDURE FIDE_AGREGAR_DISPONIBILIDAD_SP(
-    p_dia fide_disponibilidad_tb.dia%TYPE,
-    p_hora_inicio fide_disponibilidad_tb.hora_inicio%TYPE,
-    p_hora_fin fide_disponibilidad_tb.hora_fin%TYPE,
-    p_id_doctor fide_disponibilidad_tb.id_doctor%TYPE
-) AS
-BEGIN
-    INSERT INTO FIDE_DISPONIBILIDAD_TB (
- DIA, HORA_INICIO, HORA_FIN, ID_DOCTOR
-    ) VALUES (
-    p_dia, p_hora_inicio, p_hora_fin, p_id_doctor
-    );
-    COMMIT;
-END FIDE_AGREGAR_DISPONIBILIDAD_SP;
 /
 ---FUNCIONA
 CREATE OR REPLACE PROCEDURE FIDE_CREAR_ROL_SP(
@@ -2191,24 +2176,6 @@ EXCEPTION
         ROLLBACK;
         RAISE;
 END FIDE_ACTUALIZAR_PAIS_TB_SP;
-/
--- 2. Procedimiento para actualizar FIDE_PROVINCIAS_TB
-CREATE OR REPLACE PROCEDURE FIDE_ACTUALIZAR_PROVINCIA_TB_SP(
-    p_id_provincia fide_provincias_tb.id_provincia%TYPE,
-    p_nombre   fide_provincias_tb.nombre%TYPE,
-    p_id_pais  fide_provincias_tb.id_pais%TYPE
-) AS
-BEGIN
-    UPDATE FIDE_PROVINCIAS_TB
-    SET NOMBRE = p_nombre,
-        ID_PAIS = p_id_pais
-    WHERE ID_PROVINCIA = p_id_provincia;
-    COMMIT;
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        RAISE;
-END FIDE_ACTUALIZAR_PROVINCIA_TB_SP;
 /
 
 -- 3. Procedimiento para actualizar FIDE_DISTRITOS_TB
